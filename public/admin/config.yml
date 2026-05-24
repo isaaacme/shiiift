@@ -30,13 +30,21 @@ collections:
     summary: "{{title}} — {{date}} [{{locales}}]"
     preview_path: "{{locale}}/thinking/{{slug}}"
     fields:
-      - { label: "כותרת / Title",       name: title,       widget: string,   i18n: true }
-      - { label: "תיאור / Description", name: description, widget: string,   i18n: true }
-      - { label: "תאריך / Date",        name: date,        widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
-      - { label: "שפה / Language",      name: lang,        widget: select,   options: [he, en, es, ru], i18n: duplicate }
-      - { label: "קטגוריה / Category",  name: category,    widget: string,   i18n: true }
-      - { label: "טיוטה / Draft",       name: draft,       widget: boolean,  default: true, i18n: duplicate }
-      - { label: "תוכן / Body",         name: body,        widget: markdown, i18n: true }
+      - { label: "כותרת / Title",              name: title,            widget: string,   i18n: true }
+      - { label: "תיאור / Description",         name: description,      widget: string,   i18n: true }
+      - { label: "מטא תיאור / Meta Description", name: meta_description, widget: string,   required: false, hint: "SEO — up to 160 chars", i18n: true }
+      - { label: "תמונה ראשית / Featured Image", name: featured_image,   widget: image,    required: false, i18n: duplicate }
+      - { label: "תאריך / Date",                name: date,             widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
+      - { label: "שפה / Language",              name: lang,             widget: select,   options: [he, en, es, ru], i18n: duplicate }
+      - { label: "קטגוריה / Category",          name: category,         widget: select,   options: ["אוטומציה / Automation", "אתרים / Websites", "AI", "CRM", "אסטרטגיה / Strategy", "כלים / Tools"], i18n: duplicate }
+      - label: "תגיות / Tags"
+        name: tags
+        widget: list
+        required: false
+        i18n: duplicate
+        field: { label: Tag, name: tag, widget: string }
+      - { label: "טיוטה / Draft",               name: draft,            widget: boolean,  default: true, i18n: duplicate }
+      - { label: "תוכן / Body",                 name: body,             widget: markdown, i18n: true }
 
   - name: case-studies
     label: "תיקי עבודות / Case Studies"
@@ -51,12 +59,20 @@ collections:
     summary: "{{title}} — {{date}} [{{locales}}]"
     preview_path: "{{locale}}/case-studies"
     fields:
-      - { label: "כותרת / Title",          name: title,        widget: string,   i18n: true }
-      - { label: "תאריך / Date",           name: date,         widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
-      - { label: "שפה / Language",         name: lang,         widget: select,   options: [he, en, es, ru], i18n: duplicate }
-      - { label: "תגית / Tag",             name: tag,          widget: string,   i18n: true }
-      - { label: "בעיה / Problem",         name: problem,      widget: string,   i18n: true }
-      - { label: "התערבות / Intervention", name: intervention, widget: string,   i18n: true }
-      - { label: "תוצאה / Result",         name: result,       widget: string,   i18n: true }
-      - { label: "טיוטה / Draft",          name: draft,        widget: boolean,  default: true, i18n: duplicate }
-      - { label: "תוכן / Body",            name: body,         widget: markdown, required: false, i18n: true }
+      - { label: "כותרת / Title",              name: title,            widget: string,   i18n: true }
+      - { label: "מטא תיאור / Meta Description", name: meta_description, widget: string,   required: false, hint: "SEO — up to 160 chars", i18n: true }
+      - { label: "תמונה ראשית / Featured Image", name: featured_image,   widget: image,    required: false, i18n: duplicate }
+      - { label: "תאריך / Date",                name: date,             widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
+      - { label: "שפה / Language",              name: lang,             widget: select,   options: [he, en, es, ru], i18n: duplicate }
+      - { label: "תגית / Tag",                 name: tag,              widget: string,   i18n: true }
+      - label: "תגיות / Tags"
+        name: tags
+        widget: list
+        required: false
+        i18n: duplicate
+        field: { label: Tag, name: tag, widget: string }
+      - { label: "בעיה / Problem",             name: problem,          widget: string,   i18n: true }
+      - { label: "התערבות / Intervention",     name: intervention,     widget: string,   i18n: true }
+      - { label: "תוצאה / Result",             name: result,           widget: string,   i18n: true }
+      - { label: "טיוטה / Draft",              name: draft,            widget: boolean,  default: true, i18n: duplicate }
+      - { label: "תוכן / Body",               name: body,             widget: markdown, required: false, i18n: true }

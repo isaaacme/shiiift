@@ -1,9 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string;
+let _client: ReturnType<typeof createClient> | null = null;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+function getSupabase() {
+  if (typeof window === 'undefined') return null;
+  if (!_client) {
+    _client = createClient(
+      import.meta.env.PUBLIC_SUPABASE_URL as string,
+      import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string,
+    );
+  }
+  return _client;
+}
 
 export type ToolResult = {
   tool_id: string;
@@ -21,13 +29,17 @@ export type NewsletterSignup = {
 };
 
 export async function saveToolResult(data: ToolResult) {
-  const { error } = await supabase.from('tool_results').insert(data);
+  const client = getSupabase();
+  if (!client) return false;
+  const { error } = await client.from('tool_results').insert(data);
   if (error) console.error('[supabase] saveToolResult:', error.message);
   return !error;
 }
 
 export async function saveNewsletterSignup(data: NewsletterSignup) {
-  const { error } = await supabase
+  const client = getSupabase();
+  if (!client) return false;
+  const { error } = await client
     .from('newsletter_signups')
     .upsert(data, { onConflict: 'email' });
   if (error) console.error('[supabase] saveNewsletterSignup:', error.message);

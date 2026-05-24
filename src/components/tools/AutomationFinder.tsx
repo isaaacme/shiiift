@@ -152,7 +152,7 @@ export default function AutomationFinder({ t }: { t: T }) {
       <div className="flex items-center justify-between">
         <button
           onClick={() => { if (step === 0) return; const pq = QS[step-1]; setSession((s) => ({...s, step:s.step-1, selected: s.answers[pq.id]||[]})); }}
-          disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}
+          disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">{lang === 'he' ? '→' : '←'} {t.back}
         </button>
         <button
           onClick={() => { if (!selected.length) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]:selected}, selected:[], step:s.step+1})); }}
@@ -160,7 +160,7 @@ export default function AutomationFinder({ t }: { t: T }) {
           className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           style={{ background: 'linear-gradient(180deg,#ff9070 0%,#ff7a59 45%,#e05535 100%)', color: '#fff', boxShadow: '0 1px 0 0 rgba(255,255,255,0.2) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(255,122,89,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
         >
-          {step === QS.length - 1 ? t.seeResults : t.next} →
+          {step === QS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>
       </div>
     </div>

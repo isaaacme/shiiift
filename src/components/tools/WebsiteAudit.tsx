@@ -159,14 +159,14 @@ export default function WebsiteAudit({ t }: Props) {
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <button onClick={() => { if (step === 0) return; const pq = QUESTIONS[step-1]; setSession((s) => ({...s, step: s.step-1, selected: s.answers[pq.id]||''})); }} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 transition-colors font-mono">← {t.back}</button>
+        <button onClick={() => { if (step === 0) return; const pq = QUESTIONS[step-1]; setSession((s) => ({...s, step: s.step-1, selected: s.answers[pq.id]||''})); }} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 transition-colors font-mono">{lang === 'he' ? '→' : '←'} {t.back}</button>
         <button
           onClick={() => { if (!selected) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]:selected}, selected:'', step:s.step+1})); }}
           disabled={!selected}
           className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 1px 0 0 rgba(255,255,255,0.22) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
         >
-          {step === QUESTIONS.length - 1 ? t.seeResults : t.next} →
+          {step === QUESTIONS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>
       </div>
     </div>

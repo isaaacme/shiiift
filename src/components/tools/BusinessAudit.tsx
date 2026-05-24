@@ -308,7 +308,7 @@ export default function BusinessAudit({ t }: Props) {
       {/* Navigation */}
       <div className="flex items-center justify-between">
         <button onClick={handleBack} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-mono">
-          ← {t.back}
+          {lang === 'he' ? '→' : '←'} {t.back}
         </button>
         <button
           onClick={step === QUESTIONS.length - 1
@@ -318,7 +318,7 @@ export default function BusinessAudit({ t }: Props) {
           className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           style={{ background: 'linear-gradient(180deg,#d6ff5e 0%,#c7ff4a 45%,#aee038 100%)', color: '#0E1117', boxShadow: 'var(--v-shadow-accent)', border: '1px solid rgba(255,255,255,0.15)' }}
         >
-          {step === QUESTIONS.length - 1 ? t.seeResults : t.next} →
+          {step === QUESTIONS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>
       </div>
     </div>

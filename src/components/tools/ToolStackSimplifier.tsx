@@ -152,14 +152,14 @@ export default function ToolStackSimplifier({ t }: { t: T }) {
       </div>
 
       <div className="flex items-center justify-between">
-        <button onClick={() => step > 0 && setSession((s) => ({...s, step:s.step-1}))} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}</button>
+        <button onClick={() => step > 0 && setSession((s) => ({...s, step:s.step-1}))} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">{lang === 'he' ? '→' : '←'} {t.back}</button>
         <button
           onClick={() => setSession((s) => ({...s, step:s.step+1}))}
           disabled={step === 0 ? tools.length === 0 : pains.length === 0}
           className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 1px 0 0 rgba(255,255,255,0.22) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
         >
-          {step === 1 ? t.seeResults : t.next} →
+          {step === 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>
       </div>
     </div>

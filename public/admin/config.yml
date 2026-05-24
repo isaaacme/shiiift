@@ -8,13 +8,21 @@ backend:
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
-# RTL-first locale — Sveltia auto-detects UI direction from locale
-locale: he
-
+# All 4 language panels open simultaneously when editing an entry.
+# Sveltia UI is English-only for now; RTL is auto-detected per locale.
 i18n:
   structure: multiple_files
-  locales: [he, en, es, ru]
+  locales:
+    - code: he
+      name: "עברית"
+    - code: en
+      name: "English"
+    - code: es
+      name: "Español"
+    - code: ru
+      name: "Русский"
   default_locale: he
+  initial_locales: all
 
 collections:
   - name: thinking
@@ -27,7 +35,8 @@ collections:
     format: frontmatter
     i18n: true
     sortable_fields: [date, title]
-    summary: "{{title}} — {{date}}"
+    summary: "{{title}} — {{date}} [{{locales}}]"
+    preview_path: "{{locale}}/thinking/{{slug}}"
     fields:
       - { label: "כותרת / Title",       name: title,       widget: string,   i18n: true }
       - { label: "תיאור / Description", name: description, widget: string,   i18n: true }
@@ -47,14 +56,15 @@ collections:
     format: frontmatter
     i18n: true
     sortable_fields: [date, title]
-    summary: "{{title}} — {{date}}"
+    summary: "{{title}} — {{date}} [{{locales}}]"
+    preview_path: "{{locale}}/case-studies"
     fields:
-      - { label: "כותרת / Title",        name: title,        widget: string,   i18n: true }
-      - { label: "תאריך / Date",         name: date,         widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
-      - { label: "שפה / Language",       name: lang,         widget: select,   options: [he, en, es, ru], i18n: duplicate }
-      - { label: "תגית / Tag",           name: tag,          widget: string,   i18n: true }
-      - { label: "בעיה / Problem",       name: problem,      widget: string,   i18n: true }
-      - { label: "התערבות / Intervention", name: intervention, widget: string, i18n: true }
-      - { label: "תוצאה / Result",       name: result,       widget: string,   i18n: true }
-      - { label: "טיוטה / Draft",        name: draft,        widget: boolean,  default: true, i18n: duplicate }
-      - { label: "תוכן / Body",          name: body,         widget: markdown, required: false, i18n: true }
+      - { label: "כותרת / Title",          name: title,        widget: string,   i18n: true }
+      - { label: "תאריך / Date",           name: date,         widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
+      - { label: "שפה / Language",         name: lang,         widget: select,   options: [he, en, es, ru], i18n: duplicate }
+      - { label: "תגית / Tag",             name: tag,          widget: string,   i18n: true }
+      - { label: "בעיה / Problem",         name: problem,      widget: string,   i18n: true }
+      - { label: "התערבות / Intervention", name: intervention, widget: string,   i18n: true }
+      - { label: "תוצאה / Result",         name: result,       widget: string,   i18n: true }
+      - { label: "טיוטה / Draft",          name: draft,        widget: boolean,  default: true, i18n: duplicate }
+      - { label: "תוכן / Body",            name: body,         widget: markdown, required: false, i18n: true }

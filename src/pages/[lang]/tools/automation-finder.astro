@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AutomationFinderTool from '../../../components/tools/AutomationFinder';
+import { LOCALES, useTranslations, type Locale } from '../../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+const tProps = {
+  back: t('tool.back'), next: t('tool.next'), seeResults: t('tool.seeResults'),
+  startOver: t('tool.startOver'), yourScore: t('tool.yourScore'),
+  topFindings: t('tool.topFindings'), quickWins: t('tool.quickWins'),
+  nextActions: t('tool.nextActions'), relatedTools: t('tool.relatedTools'),
+  newsletterTitle: t('tool.newsletter.title'), newsletterPlaceholder: t('tool.newsletter.placeholder'),
+  newsletterCta: t('tool.newsletter.cta'), newsletterDisclaimer: t('tool.newsletter.disclaimer'),
+  lang,
+};
+---
+<BaseLayout title={t('tools.automationFinder.title')} description={t('tools.automationFinder.desc')} lang={lang}>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container max-w-2xl">
+      <div class="mb-10">
+        <a href={`/${lang}/tools`} class="shift-btn-ghost text-sm mb-6 inline-flex">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180 rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          {t('tool.back')}
+        </a>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="shift-label">{t('nav.tools')}</span>
+          <span class="font-mono text-xs text-shift-muted border border-shift-line px-2 py-0.5 rounded-md">{t('tools.automationFinder.time')} {t('tools.time')}</span>
+        </div>
+        <h1 class="shift-heading-lg mb-3">{t('tools.automationFinder.title')}</h1>
+        <p class="shift-body">{t('tools.automationFinder.desc')}</p>
+      </div>
+      <AutomationFinderTool client:load t={tProps} />
+    </div>
+  </div>
+</BaseLayout>

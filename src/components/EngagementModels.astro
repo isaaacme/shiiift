@@ -1,0 +1,86 @@
+---
+import { useTranslations, type Locale } from '../i18n/index';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const models = [
+  {
+    key: 'audit',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
+    accent: 'group-hover:text-shift-accent',
+    border: 'group-hover:border-shift-accent/30',
+  },
+  {
+    key: 'sprint',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+    accent: 'group-hover:text-shift-warm',
+    border: 'group-hover:border-shift-warm/30',
+  },
+  {
+    key: 'partner',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    accent: 'group-hover:text-shift-accent-2',
+    border: 'group-hover:border-shift-accent-2/30',
+  },
+  {
+    key: 'whitelabel',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="3" x2="21" y1="15" y2="15"/><line x1="9" x2="9" y1="9" y2="21"/><line x1="15" x2="15" y1="9" y2="21"/></svg>`,
+    accent: 'group-hover:text-shift-accent',
+    border: 'group-hover:border-shift-accent/30',
+  },
+] as const;
+---
+
+<section class="py-16 lg:py-24 border-t border-shift-line">
+  <div class="shift-container">
+    <div class="mb-10">
+      <p class="shift-label mb-2">{t('services.label')}</p>
+      <h2 class="shift-heading-lg">{t('services.title')}</h2>
+      <p class="mt-2 shift-body max-w-lg">{t('services.subtitle')}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {models.map((model) => (
+        <div class={`shift-card group flex flex-col gap-4 ${model.border} transition-all duration-200`}>
+          <div class="flex items-start gap-4">
+            <div class={`w-11 h-11 rounded-xl bg-shift-surface-soft border border-shift-line flex items-center justify-center text-shift-muted ${model.accent} ${model.border} transition-colors flex-shrink-0`}>
+              <Fragment set:html={model.icon} />
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-heading font-semibold text-shift-text text-base leading-snug">
+                {t(`services.${model.key}.title` as any)}
+              </h3>
+              <p class={`font-mono text-xs mt-0.5 text-shift-muted ${model.accent} transition-colors`}>
+                {t(`services.${model.key}.for` as any)}
+              </p>
+            </div>
+          </div>
+
+          <p class="text-sm text-shift-muted leading-relaxed flex-1">
+            {t(`services.${model.key}.desc` as any)}
+          </p>
+
+          <div class="pt-3 border-t border-shift-line">
+            <p class="font-mono text-xs text-shift-muted/60">
+              Output: <span class="text-shift-text">{t(`services.${model.key}.output` as any)}</span>
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href={`/${lang}/services`} class="shift-btn-secondary">
+        {t('services.label')}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

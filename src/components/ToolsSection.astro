@@ -1,0 +1,77 @@
+---
+import { useTranslations, type Locale } from '../i18n/index';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const tools = [
+  { key: 'businessAudit', href: 'tools/business-audit', color: 'accent' },
+  { key: 'websiteAudit', href: 'tools/website-audit', color: 'accent-2' },
+  { key: 'automationFinder', href: 'tools/automation-finder', color: 'warm' },
+  { key: 'aiReadiness', href: 'tools/ai-readiness', color: 'accent' },
+  { key: 'toolStack', href: 'tools/tool-stack', color: 'accent-2' },
+  { key: 'leadFlow', href: 'tools/lead-flow', color: 'warm' },
+] as const;
+
+const colorMap = {
+  accent: 'text-shift-accent border-shift-accent/20 bg-shift-accent/5',
+  'accent-2': 'text-shift-accent-2 border-shift-accent-2/20 bg-shift-accent-2/5',
+  warm: 'text-shift-warm border-shift-warm/20 bg-shift-warm/5',
+};
+---
+
+<section class="py-16 lg:py-24 border-t border-shift-line">
+  <div class="shift-container">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
+      <div>
+        <p class="shift-label mb-2">{t('nav.tools')}</p>
+        <h2 class="shift-heading-lg">{t('tools.section.title')}</h2>
+        <p class="mt-2 shift-body max-w-lg">{t('tools.section.subtitle')}</p>
+      </div>
+      <a href={`/${lang}/tools`} class="shift-btn-ghost flex-shrink-0">
+        {t('tools.section.title')}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {tools.map((tool) => (
+        <a
+          href={`/${lang}/${tool.href}`}
+          class="shift-card-hover group flex flex-col gap-4 no-underline"
+        >
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-heading font-semibold text-shift-text text-base group-hover:text-shift-accent transition-colors leading-snug">
+              {t(`tools.${tool.key}.title` as any)}
+            </h3>
+            <span class={`flex-shrink-0 font-mono text-xs px-2 py-0.5 rounded-md border ${colorMap[tool.color]}`}>
+              {t(`tools.${tool.key}.time` as any)} {t('tools.time')}
+            </span>
+          </div>
+
+          <p class="text-sm text-shift-muted leading-relaxed flex-1">
+            {t(`tools.${tool.key}.desc` as any)}
+          </p>
+
+          <div class="flex items-center justify-between pt-2 border-t border-shift-line">
+            <span class="text-xs font-mono text-shift-muted/70">
+              {t(`tools.${tool.key}.output` as any)}
+            </span>
+            <span class="shift-btn-ghost text-xs gap-1 group-hover:text-shift-accent">
+              {t('tools.cta')}
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

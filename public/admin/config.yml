@@ -1,0 +1,49 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/shiiift
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+i18n:
+  structure: multiple_files
+  locales: [he, en, es, ru]
+  default_locale: he
+
+collections:
+  - name: thinking
+    label: Thinking / Articles
+    label_singular: Article
+    folder: src/content/thinking
+    create: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    i18n: true
+    fields:
+      - { label: Title, name: title, widget: string, i18n: true }
+      - { label: Description, name: description, widget: string, i18n: true }
+      - { label: Date, name: date, widget: string, i18n: duplicate }
+      - { label: Language, name: lang, widget: select, options: [he, en, es, ru], i18n: duplicate }
+      - { label: Category, name: category, widget: string, i18n: true }
+      - { label: Draft, name: draft, widget: boolean, default: false, i18n: duplicate }
+      - { label: Body, name: body, widget: markdown, i18n: true }
+
+  - name: case-studies
+    label: Case Studies
+    label_singular: Case Study
+    folder: src/content/case-studies
+    create: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    i18n: true
+    fields:
+      - { label: Title, name: title, widget: string, i18n: true }
+      - { label: Date, name: date, widget: string, i18n: duplicate }
+      - { label: Language, name: lang, widget: select, options: [he, en, es, ru], i18n: duplicate }
+      - { label: Tag, name: tag, widget: string, i18n: true }
+      - { label: Problem, name: problem, widget: string, i18n: true }
+      - { label: Intervention, name: intervention, widget: string, i18n: true }
+      - { label: Result, name: result, widget: string, i18n: true }
+      - { label: Draft, name: draft, widget: boolean, default: false, i18n: duplicate }
+      - { label: Body, name: body, widget: markdown, required: false, i18n: true }

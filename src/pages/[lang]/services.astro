@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+const models = [
+  { key: 'audit', color: '#C7FF4A' },
+  { key: 'sprint', color: '#FF7A59' },
+  { key: 'partner', color: '#6EE7F9' },
+  { key: 'whitelabel', color: '#C7FF4A' },
+] as const;
+---
+
+<BaseLayout title={t('services.title')} description={t('services.subtitle')} lang={lang}>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container">
+      <div class="mb-12">
+        <p class="shift-label mb-3">{t('services.label')}</p>
+        <h1 class="shift-heading-xl mb-4">{t('services.title')}</h1>
+        <p class="shift-body max-w-xl text-lg">{t('services.subtitle')}</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-16">
+        {models.map((model) => (
+          <div class="shift-card flex flex-col gap-5">
+            <div>
+              <h2 class="font-heading font-bold text-shift-text text-xl mb-1" style={`color: ${model.color}`}>
+                {t(`services.${model.key}.title` as any)}
+              </h2>
+              <p class="font-mono text-xs text-shift-muted">{t(`services.${model.key}.for` as any)}</p>
+            </div>
+            <p class="shift-body flex-1">{t(`services.${model.key}.desc` as any)}</p>
+            <div class="pt-4 border-t border-shift-line">
+              <p class="font-mono text-xs text-shift-muted/60">
+                Output: <span class="text-shift-text">{t(`services.${model.key}.output` as any)}</span>
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="bg-shift-surface border border-shift-line rounded-2xl p-8 sm:p-12 text-center">
+        <h2 class="shift-heading-lg mb-4">{t('finalCta.title')}</h2>
+        <p class="shift-body mb-8 max-w-lg mx-auto">{t('finalCta.desc')}</p>
+        <a href={`/${lang}/start`} class="shift-btn-primary text-base px-8 py-4">
+          {t('finalCta.cta')}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

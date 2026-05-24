@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { isRTL, type Locale } from '../i18n/index';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang: Locale;
+  ogImage?: string;
+}
+
+const { title, description = 'Technology implementation for businesses that need leverage.', lang, ogImage } = Astro.props;
+const dir = isRTL(lang) ? 'rtl' : 'ltr';
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang} dir={dir} class="bg-shift-bg text-shift-text">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{title} — shiiift</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={`${title} — shiiift`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="website" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+    <!-- Alternate language links -->
+    <link rel="alternate" hreflang="he" href={`/he${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
+    <link rel="alternate" hreflang="en" href={`/en${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
+    <link rel="alternate" hreflang="es" href={`/es${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
+    <link rel="alternate" hreflang="ru" href={`/ru${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
+    <link rel="alternate" hreflang="x-default" href={`/he${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen flex flex-col antialiased">
+    <Header lang={lang} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

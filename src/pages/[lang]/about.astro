@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+const values = [
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    title: { he: 'מינוף לפני תכונות', en: 'Leverage before features', es: 'Apalancamiento antes que características', ru: 'Рычаг важнее функций' },
+    desc: { he: 'אנחנו לא מוסיפים טכנולוגיה בשביל להוסיף טכנולוגיה. כל הטמעה מיועדת להחזיר זמן ולהגביר פלט.', en: 'We don\'t add technology for its own sake. Every implementation is designed to return time and amplify output.', es: 'No añadimos tecnología por sí sola. Cada implementación está diseñada para devolver tiempo y amplificar resultados.', ru: 'Мы не добавляем технологии ради технологий. Каждое внедрение направлено на возврат времени и усиление результата.' },
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+    title: { he: 'ערך לפני מידע', en: 'Value before data', es: 'Valor antes que datos', ru: 'Ценность прежде данных' },
+    desc: { he: 'הכלים שלנו נותנים תוצאות לפני שמבקשים אימייל. אמון נבנה דרך עשייה, לא הבטחות.', en: 'Our tools deliver results before asking for an email. Trust is built through doing, not promising.', es: 'Nuestras herramientas entregan resultados antes de pedir un email. La confianza se construye haciendo, no prometiendo.', ru: 'Наши инструменты дают результаты до того, как просят email. Доверие строится через действие, а не обещания.' },
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+    title: { he: 'מהירות יישום', en: 'Speed of implementation', es: 'Velocidad de implementación', ru: 'Скорость внедрения' },
+    desc: { he: 'חלון ההזדמנויות לעסקים קטנים הוא עכשיו. אנחנו עובדים ב-sprint של שבועות, לא בפרויקטים של שנים.', en: 'The window of opportunity for small businesses is now. We work in week-long sprints, not year-long projects.', es: 'La ventana de oportunidad para las pequeñas empresas es ahora. Trabajamos en sprints de semanas, no proyectos de años.', ru: 'Окно возможностей для малого бизнеса — сейчас. Мы работаем недельными спринтами, а не годовыми проектами.' },
+  },
+];
+
+function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
+---
+
+<BaseLayout title={t('nav.about')} description={t('about.desc')} lang={lang}>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container">
+      <!-- Hero -->
+      <div class="max-w-3xl mb-16 lg:mb-24">
+        <p class="shift-label mb-4">{t('nav.about')}</p>
+        <h1 class="shift-heading-xl mb-6">{t('about.title')}</h1>
+        <p class="text-lg shift-body leading-relaxed">{t('about.desc')}</p>
+      </div>
+
+      <!-- Values -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-16">
+        {values.map((v) => (
+          <div class="shift-card flex flex-col gap-4">
+            <div class="w-10 h-10 rounded-xl bg-shift-surface-soft border border-shift-line flex items-center justify-center text-shift-accent">
+              <Fragment set:html={v.icon} />
+            </div>
+            <h3 class="font-heading font-semibold text-shift-text">{gl(v.title)}</h3>
+            <p class="text-sm text-shift-muted leading-relaxed">{gl(v.desc)}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Manifesto -->
+      <div class="bg-shift-surface border border-shift-line rounded-2xl p-8 sm:p-12 max-w-3xl">
+        <p class="shift-label mb-4">{lang === 'he' ? 'המניפסט שלנו' : lang === 'ru' ? 'Наш манифест' : lang === 'es' ? 'Nuestro manifiesto' : 'Our Manifesto'}</p>
+        <blockquote class="font-heading text-xl sm:text-2xl text-shift-text leading-relaxed font-medium">
+          {lang === 'he'
+            ? '"עסקים קטנים לא צריכים טכנולוגיה מורכבת. הם צריכים מינוף. אנחנו בונים את הגשר."'
+            : lang === 'ru'
+            ? '"Малому бизнесу не нужны сложные технологии. Им нужен рычаг. Мы строим этот мост."'
+            : lang === 'es'
+            ? '"Las pequeñas empresas no necesitan tecnología compleja. Necesitan apalancamiento. Construimos el puente."'
+            : '"Small businesses don\'t need complex technology. They need leverage. We build the bridge."'}
+        </blockquote>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-12">
+        <a href={`/${lang}/start`} class="shift-btn-primary text-base px-8 py-4">
+          {t('finalCta.cta')}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

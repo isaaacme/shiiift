@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import DiagnosticEntry from '../../components/DiagnosticEntry.astro';
+import ToolsSection from '../../components/ToolsSection.astro';
+import WorkshopSection from '../../components/WorkshopSection.astro';
+import CaseStudiesSection from '../../components/CaseStudiesSection.astro';
+import EngagementModels from '../../components/EngagementModels.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  title={lang === 'he' ? 'יישום טכנולוגיה לעסקים שצריכים מינוף' : lang === 'es' ? 'Implementación tecnológica para empresas' : lang === 'ru' ? 'Технологическое внедрение для бизнеса' : 'Technology Implementation for Business'}
+  description={t('hero.subheadline')}
+  lang={lang}
+>
+  <Hero lang={lang} />
+  <DiagnosticEntry lang={lang} />
+  <ToolsSection lang={lang} />
+  <WorkshopSection lang={lang} />
+  <CaseStudiesSection lang={lang} />
+  <EngagementModels lang={lang} />
+  <FinalCTA lang={lang} />
+</BaseLayout>

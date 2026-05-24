@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('nav.start')} description={t('start.desc')} lang={lang}>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container">
+      <div class="max-w-2xl mx-auto">
+        <div class="mb-10 text-center">
+          <p class="shift-label mb-4">{t('nav.start')}</p>
+          <h1 class="shift-heading-xl mb-4">{t('start.title')}</h1>
+          <p class="shift-body text-lg">{t('start.desc')}</p>
+        </div>
+
+        <form
+          name="start"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          class="space-y-5"
+        >
+          <input type="hidden" name="form-name" value="start" />
+          <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="shift-label block mb-2" for="name">{t('start.form.name')}</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                placeholder={t('start.form.namePlaceholder')}
+                class="w-full bg-shift-surface border border-shift-line rounded-xl px-4 py-3 text-shift-text placeholder-shift-muted/50 outline-none focus:border-shift-accent/40 transition-colors text-sm"
+              />
+            </div>
+            <div>
+              <label class="shift-label block mb-2" for="company">{t('start.form.company')}</label>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                placeholder={t('start.form.companyPlaceholder')}
+                class="w-full bg-shift-surface border border-shift-line rounded-xl px-4 py-3 text-shift-text placeholder-shift-muted/50 outline-none focus:border-shift-accent/40 transition-colors text-sm"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="shift-label block mb-2" for="email">{t('start.form.email')}</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder={t('start.form.emailPlaceholder')}
+              class="w-full bg-shift-surface border border-shift-line rounded-xl px-4 py-3 text-shift-text placeholder-shift-muted/50 outline-none focus:border-shift-accent/40 transition-colors text-sm"
+            />
+          </div>
+
+          <div>
+            <label class="shift-label block mb-2" for="challenge">{t('start.form.challenge')}</label>
+            <select
+              id="challenge"
+              name="challenge"
+              class="w-full bg-shift-surface border border-shift-line rounded-xl px-4 py-3 text-shift-text outline-none focus:border-shift-accent/40 transition-colors text-sm appearance-none"
+            >
+              <option value="">{t('start.form.challengePlaceholder')}</option>
+              <option value="website">{lang === 'he' ? 'האתר שלי לא מייצר לידים' : lang === 'ru' ? 'Мой сайт не генерирует лиды' : lang === 'es' ? 'Mi sitio no genera leads' : 'My website doesn\'t generate leads'}</option>
+              <option value="manual">{lang === 'he' ? 'יותר מדי עבודה ידנית' : lang === 'ru' ? 'Слишком много ручной работы' : lang === 'es' ? 'Demasiado trabajo manual' : 'Too much manual work'}</option>
+              <option value="crm">{lang === 'he' ? 'ניהול לידים כאוטי' : lang === 'ru' ? 'Хаотичное управление лидами' : lang === 'es' ? 'Gestión de leads caótica' : 'Chaotic lead management'}</option>
+              <option value="tools">{lang === 'he' ? 'יותר מדי כלים לא מחוברים' : lang === 'ru' ? 'Слишком много несвязанных инструментов' : lang === 'es' ? 'Demasiadas herramientas desconectadas' : 'Too many disconnected tools'}</option>
+              <option value="scale">{lang === 'he' ? 'רוצה לצמוח אבל לא יודע איך' : lang === 'ru' ? 'Хочу расти, но не знаю как' : lang === 'es' ? 'Quiero crecer pero no sé cómo' : 'Want to grow but don\'t know how'}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="shift-label block mb-2" for="message">{t('start.form.message')}</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              placeholder={t('start.form.messagePlaceholder')}
+              class="w-full bg-shift-surface border border-shift-line rounded-xl px-4 py-3 text-shift-text placeholder-shift-muted/50 outline-none focus:border-shift-accent/40 transition-colors text-sm resize-none"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="shift-btn-primary w-full justify-center text-base py-4">
+            {t('start.form.submit')}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+
+          <p class="text-xs text-shift-muted/60 text-center">{t('start.form.disclaimer')}</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

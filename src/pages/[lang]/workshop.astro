@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+const topics = [1, 2, 3, 4, 5, 6] as const;
+
+const checklist = [
+  { he: 'אתר שממיר לידים (לא רק קיים)', en: 'A website that converts (not just exists)', es: 'Un sitio que convierte (no solo existe)', ru: 'Сайт, который конвертирует (не просто существует)' },
+  { he: 'CRM בסיסי שמנהל לידים אוטומטית', en: 'Basic CRM managing leads automatically', es: 'CRM básico gestionando leads automáticamente', ru: 'Базовый CRM, автоматически управляющий лидами' },
+  { he: 'לפחות 3 אוטומציות שחוסכות זמן', en: 'At least 3 time-saving automations', es: 'Al menos 3 automatizaciones que ahorran tiempo', ru: 'Как минимум 3 автоматизации, экономящие время' },
+  { he: 'לוח מחוונים בסיסי למדדי ביצועים', en: 'Basic dashboard for performance metrics', es: 'Dashboard básico de métricas de rendimiento', ru: 'Базовый дашборд метрик производительности' },
+  { he: 'כלי AI אחד שמשמש אותך יום-יום', en: 'One AI tool you use daily', es: 'Una herramienta de IA que usas diariamente', ru: 'Один инструмент ИИ, используемый ежедневно' },
+];
+---
+
+<BaseLayout title={t('workshop.title')} description={t('workshop.desc')} lang={lang}>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start mb-16">
+        <div>
+          <p class="shift-label mb-4">{t('workshop.label')}</p>
+          <h1 class="shift-heading-xl mb-5">{t('workshop.title')}</h1>
+          <p class="shift-body text-lg mb-8">{t('workshop.desc')}</p>
+          <div class="flex flex-wrap gap-3">
+            <a href={`/${lang}/start`} class="shift-btn-primary">
+              {t('workshop.cta.primary')}
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            </a>
+            <a href="#checklist" class="shift-btn-secondary">{t('workshop.cta.secondary')}</a>
+          </div>
+        </div>
+
+        <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8">
+          <p class="shift-label mb-5">30 min</p>
+          <ul class="space-y-3 list-none p-0 m-0">
+            {topics.map((n) => (
+              <li class="flex items-start gap-3">
+                <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shift-surface-soft border border-shift-line flex items-center justify-center mt-0.5">
+                  <span class="font-mono text-xs text-shift-muted">{n}</span>
+                </span>
+                <span class="text-sm text-shift-muted leading-snug">{t(`workshop.topics.${n}` as any)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Checklist section -->
+      <div id="checklist" class="border-t border-shift-line pt-16">
+        <h2 class="shift-heading-lg mb-3">
+          {lang === 'he' ? 'צ\'קליסט הטכנולוגיה שלך' : lang === 'ru' ? 'Ваш технологический чеклист' : lang === 'es' ? 'Tu checklist tecnológico' : 'Your Technology Checklist'}
+        </h2>
+        <p class="shift-body mb-8">
+          {lang === 'he' ? 'כל עסק צריך לפחות את אלה כבסיס תפעולי מודרני.' : lang === 'ru' ? 'Каждому бизнесу нужны как минимум эти элементы как современная операционная основа.' : lang === 'es' ? 'Todo negocio necesita al menos estos elementos como base operativa moderna.' : 'Every business needs at least these as a modern operational baseline.'}
+        </p>
+        <ul class="space-y-3 max-w-xl">
+          {checklist.map((item) => (
+            <li class="flex items-start gap-4 p-4 bg-shift-surface border border-shift-line rounded-xl">
+              <span class="w-5 h-5 rounded border border-shift-line flex-shrink-0 mt-0.5"></span>
+              <span class="text-sm text-shift-text">{item[lang] ?? item['en']}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-8">
+          <a href={`/${lang}/tools/business-audit`} class="shift-btn-primary">
+            {lang === 'he' ? 'בדוק איפה אתה עומד' : lang === 'ru' ? 'Проверьте, где вы находитесь' : lang === 'es' ? 'Verifica dónde estás' : 'Check Where You Stand'}
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

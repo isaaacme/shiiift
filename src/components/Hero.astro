@@ -1,0 +1,93 @@
+---
+import { useTranslations, type Locale } from '../i18n/index';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32">
+  <!-- Background grid -->
+  <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(244,241,234,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(244,241,234,0.04)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" aria-hidden="true"></div>
+
+  <!-- Accent glow -->
+  <div class="absolute top-1/4 start-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-shift-accent/5 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+  <div class="shift-container relative z-10">
+    <div class="max-w-4xl">
+      <!-- Pre-label -->
+      <div class="inline-flex items-center gap-2 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-shift-accent"></span>
+        <span class="shift-label">shiiift</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="shift-heading-xl text-balance mb-6">
+        {t('hero.headline')}
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-lg sm:text-xl text-shift-muted leading-relaxed max-w-2xl mb-10 text-balance">
+        {t('hero.subheadline')}
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex flex-wrap gap-3 items-center">
+        <a href={`/${lang}/tools/business-audit`} class="shift-btn-primary text-base px-6 py-3.5">
+          {t('hero.cta.primary')}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href={`/${lang}/workshop`} class="shift-btn-secondary text-base px-6 py-3.5">
+          {t('hero.cta.secondary')}
+        </a>
+        <a href={`/${lang}/thinking`} class="shift-btn-ghost text-base">
+          {t('hero.cta.tertiary')}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Visual system diagram -->
+    <div class="mt-16 lg:mt-20 relative">
+      <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8 max-w-3xl overflow-hidden">
+        <p class="shift-label mb-5">System flow</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {['Forms', 'WhatsApp', 'Email', 'CRM', 'Invoices', 'Reports', 'Follow-ups', 'Analytics'].map((item, i) => (
+            <div
+              class="bg-shift-surface-soft border border-shift-line rounded-lg px-3 py-2 text-xs font-mono text-shift-muted flex items-center gap-2"
+              style={`animation-delay: ${i * 80}ms`}
+            >
+              <span class="w-1 h-1 rounded-full bg-shift-muted/50 flex-shrink-0"></span>
+              {item}
+            </div>
+          ))}
+        </div>
+        <div class="mt-4 flex items-center gap-3">
+          <div class="flex-1 h-px bg-shift-line relative overflow-hidden">
+            <div class="absolute inset-y-0 start-0 w-1/2 bg-gradient-to-r from-transparent via-shift-accent to-transparent animate-[shimmer_2s_ease-in-out_infinite]"></div>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-shift-accent rtl:rotate-180">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          <div class="bg-shift-accent/10 border border-shift-accent/30 rounded-lg px-4 py-2 font-mono text-sm text-shift-accent font-medium">
+            System
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+</style>

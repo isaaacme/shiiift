@@ -1,0 +1,72 @@
+---
+import { useTranslations, type Locale } from '../i18n/index';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-shift-line bg-shift-bg mt-24">
+  <div class="shift-container py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <a href={`/${lang}`} class="font-heading font-bold text-xl text-shift-text no-underline hover:text-shift-accent transition-colors">
+          shiiift
+        </a>
+        <p class="mt-3 text-sm text-shift-muted max-w-xs leading-relaxed">
+          {t('footer.tagline')}
+        </p>
+        <div class="mt-4 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-shift-accent animate-pulse"></span>
+          <span class="font-mono text-xs text-shift-muted">Insight. Implementation. Iteration.</span>
+        </div>
+      </div>
+
+      <!-- Tools & Pages -->
+      <div>
+        <p class="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{t('nav.tools')}</p>
+        <ul class="space-y-2 text-sm text-shift-muted list-none p-0 m-0">
+          <li><a href={`/${lang}/tools/business-audit`} class="hover:text-shift-text transition-colors no-underline">{t('tools.businessAudit.title')}</a></li>
+          <li><a href={`/${lang}/tools/website-audit`} class="hover:text-shift-text transition-colors no-underline">{t('tools.websiteAudit.title')}</a></li>
+          <li><a href={`/${lang}/tools/automation-finder`} class="hover:text-shift-text transition-colors no-underline">{t('tools.automationFinder.title')}</a></li>
+          <li><a href={`/${lang}/tools/ai-readiness`} class="hover:text-shift-text transition-colors no-underline">{t('tools.aiReadiness.title')}</a></li>
+          <li><a href={`/${lang}/tools/tool-stack`} class="hover:text-shift-text transition-colors no-underline">{t('tools.toolStack.title')}</a></li>
+          <li><a href={`/${lang}/tools/lead-flow`} class="hover:text-shift-text transition-colors no-underline">{t('tools.leadFlow.title')}</a></li>
+        </ul>
+      </div>
+
+      <!-- Site Links -->
+      <div>
+        <p class="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">shiiift</p>
+        <ul class="space-y-2 text-sm text-shift-muted list-none p-0 m-0">
+          <li><a href={`/${lang}/thinking`} class="hover:text-shift-text transition-colors no-underline">{t('nav.thinking')}</a></li>
+          <li><a href={`/${lang}/case-studies`} class="hover:text-shift-text transition-colors no-underline">{t('nav.caseStudies')}</a></li>
+          <li><a href={`/${lang}/workshop`} class="hover:text-shift-text transition-colors no-underline">{t('nav.workshop')}</a></li>
+          <li><a href={`/${lang}/services`} class="hover:text-shift-text transition-colors no-underline">{t('services.label')}</a></li>
+          <li><a href={`/${lang}/about`} class="hover:text-shift-text transition-colors no-underline">{t('about.label')}</a></li>
+          <li><a href={`/${lang}/start`} class="hover:text-shift-text transition-colors no-underline">{t('nav.start')}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="shift-divider mt-10 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <p class="text-xs text-shift-muted font-mono">
+        &copy; {year} shiiift. {t('footer.rights')}.
+      </p>
+      <div class="flex items-center gap-4 text-xs text-shift-muted font-mono">
+        <span>he</span>
+        <span class="text-shift-line">|</span>
+        <a href="/en" class="hover:text-shift-text transition-colors no-underline">en</a>
+        <span class="text-shift-line">|</span>
+        <a href="/es" class="hover:text-shift-text transition-colors no-underline">es</a>
+        <span class="text-shift-line">|</span>
+        <a href="/ru" class="hover:text-shift-text transition-colors no-underline">ru</a>
+      </div>
+    </div>
+  </div>
+</footer>

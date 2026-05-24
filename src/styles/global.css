@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@layer base {
+  :root {
+    --shift-bg: #0E1117;
+    --shift-surface: #151A23;
+    --shift-surface-soft: #1E2530;
+    --shift-text: #F4F1EA;
+    --shift-muted: #A7AFBA;
+    --shift-accent: #C7FF4A;
+    --shift-accent-2: #6EE7F9;
+    --shift-warm: #FF7A59;
+    --shift-line: rgba(244, 241, 234, 0.14);
+  }
+
+  html {
+    background-color: var(--shift-bg);
+    color: var(--shift-text);
+    font-family: 'Inter', 'IBM Plex Sans', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  html[dir='rtl'] {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background-color: var(--shift-accent);
+    color: var(--shift-bg);
+  }
+}
+
+@layer components {
+  .shift-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .shift-label {
+    @apply font-mono text-xs tracking-widest uppercase text-shift-accent;
+  }
+
+  .shift-heading-xl {
+    @apply font-heading font-bold text-4xl sm:text-5xl lg:text-6xl leading-tight text-shift-text;
+  }
+
+  .shift-heading-lg {
+    @apply font-heading font-bold text-3xl sm:text-4xl leading-tight text-shift-text;
+  }
+
+  .shift-heading-md {
+    @apply font-heading font-semibold text-xl sm:text-2xl leading-snug text-shift-text;
+  }
+
+  .shift-body {
+    @apply text-base leading-relaxed text-shift-muted;
+  }
+
+  .shift-card {
+    @apply bg-shift-surface border border-shift-line rounded-2xl p-6 transition-all duration-200;
+  }
+
+  .shift-card-hover {
+    @apply shift-card hover:border-shift-accent/40 hover:bg-shift-surface-soft cursor-pointer;
+  }
+
+  .shift-btn-primary {
+    @apply inline-flex items-center gap-2 bg-shift-accent text-shift-bg font-heading font-semibold text-sm px-5 py-3 rounded-xl hover:bg-shift-accent/90 transition-all duration-150 no-underline;
+  }
+
+  .shift-btn-secondary {
+    @apply inline-flex items-center gap-2 border border-shift-line text-shift-text font-heading font-medium text-sm px-5 py-3 rounded-xl hover:border-shift-accent/40 hover:bg-shift-surface-soft transition-all duration-150 no-underline;
+  }
+
+  .shift-btn-ghost {
+    @apply inline-flex items-center gap-2 text-shift-muted font-medium text-sm hover:text-shift-text transition-colors duration-150 no-underline;
+  }
+
+  .shift-divider {
+    @apply border-t border-shift-line;
+  }
+
+  .shift-score-bar {
+    @apply h-2 rounded-full bg-shift-surface-soft overflow-hidden;
+  }
+
+  .shift-score-fill {
+    @apply h-full rounded-full bg-shift-accent transition-all duration-700 ease-out;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-heading {
+    font-family: 'Inter Tight', 'Space Grotesk', system-ui, sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  }
+}

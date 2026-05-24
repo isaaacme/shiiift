@@ -1,0 +1,105 @@
+---
+import { useTranslations, type Locale } from '../i18n/index';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+let caseStudies: any[] = [];
+try {
+  const all = await getCollection('case-studies');
+  caseStudies = all
+    .filter((entry: any) => entry.data.lang === lang)
+    .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .slice(0, 3);
+} catch {
+  caseStudies = [];
+}
+
+const placeholders = [
+  {
+    problem: lang === 'he' ? 'קליניקה שמנהלת תורים דרך WhatsApp' : lang === 'ru' ? 'Клиника, управляющая записями через WhatsApp' : lang === 'es' ? 'Clínica gestionando citas por WhatsApp' : 'Clinic managing appointments via WhatsApp',
+    intervention: lang === 'he' ? 'מערכת קביעת תורים אוטומטית + CRM' : lang === 'ru' ? 'Автоматическая система записи + CRM' : lang === 'es' ? 'Sistema automático de citas + CRM' : 'Automated booking system + CRM',
+    result: lang === 'he' ? '14 שעות בשבוע שוחררו. אפס לידים שאבדו.' : lang === 'ru' ? '14 часов в неделю освобождено. Ноль потерянных лидов.' : lang === 'es' ? '14 horas semanales liberadas. Cero leads perdidos.' : '14 hours/week freed. Zero lost leads.',
+    tag: lang === 'he' ? 'אוטומציה' : lang === 'ru' ? 'Автоматизация' : lang === 'es' ? 'Automatización' : 'Automation',
+  },
+  {
+    problem: lang === 'he' ? 'סוכנות עם אתר שלא מייצר לידים' : lang === 'ru' ? 'Агентство с сайтом, не генерирующим лиды' : lang === 'es' ? 'Agencia con sitio web sin generación de leads' : 'Agency with website generating zero leads',
+    intervention: lang === 'he' ? 'בנייה מחדש עם זרימת לידים + ביקורת מובנית' : lang === 'ru' ? 'Перестройка с потоком лидов + встроенный аудит' : lang === 'es' ? 'Reconstrucción con flujo de leads + auditoría integrada' : 'Rebuild with lead flow + embedded audit',
+    result: lang === 'he' ? 'פי 3 בפניות. המרה משתפרת מדי חודש.' : lang === 'ru' ? 'В 3 раза больше запросов. Конверсия улучшается ежемесячно.' : lang === 'es' ? '3× más consultas. Conversión mejorando mensualmente.' : '3× more enquiries. Conversion improving monthly.',
+    tag: lang === 'he' ? 'אתר' : lang === 'ru' ? 'Сайт' : lang === 'es' ? 'Sitio web' : 'Website',
+  },
+  {
+    problem: lang === 'he' ? 'עסק לוגיסטיקה עם דיווח ידני על גיליונות אקסל' : lang === 'ru' ? 'Логистический бизнес с ручными отчётами в Excel' : lang === 'es' ? 'Empresa logística con reportes manuales en Excel' : 'Logistics business with manual Excel reporting',
+    intervention: lang === 'he' ? 'לוח מחוונים בזמן אמת + אוטומציה של נתונים' : lang === 'ru' ? 'Дашборд в реальном времени + автоматизация данных' : lang === 'es' ? 'Dashboard en tiempo real + automatización de datos' : 'Real-time dashboard + data automation',
+    result: lang === 'he' ? '6 שעות ביום חסכו. החלטות מהירות פי 10.' : lang === 'ru' ? '6 часов в день сэкономлено. Решения принимаются в 10 раз быстрее.' : lang === 'es' ? '6 horas al día ahorradas. Decisiones 10× más rápidas.' : '6 hours/day saved. Decisions 10× faster.',
+    tag: lang === 'he' ? 'דשבורד' : lang === 'ru' ? 'Дашборд' : lang === 'es' ? 'Dashboard' : 'Dashboard',
+  },
+];
+---
+
+<section class="py-16 lg:py-24 border-t border-shift-line">
+  <div class="shift-container">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
+      <div>
+        <p class="shift-label mb-2">{t('caseStudies.label')}</p>
+        <h2 class="shift-heading-lg">{t('caseStudies.title')}</h2>
+        <p class="mt-2 shift-body">{t('caseStudies.subtitle')}</p>
+      </div>
+      <a href={`/${lang}/case-studies`} class="shift-btn-ghost flex-shrink-0">
+        {t('caseStudies.cta')}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      {(caseStudies.length > 0 ? caseStudies.map((cs: any) => ({
+        problem: cs.data.problem,
+        intervention: cs.data.intervention,
+        result: cs.data.result,
+        tag: cs.data.tag,
+        slug: cs.slug,
+      })) : placeholders).map((cs: any) => (
+        <div class="shift-card flex flex-col gap-5">
+          <div class="flex items-start justify-between gap-2">
+            <span class="font-mono text-xs text-shift-muted/60 border border-shift-line px-2 py-0.5 rounded-md">
+              {cs.tag}
+            </span>
+          </div>
+
+          <div class="space-y-3 flex-1">
+            <div>
+              <p class="font-mono text-xs text-shift-muted mb-1">Problem</p>
+              <p class="text-sm text-shift-text leading-snug font-medium">{cs.problem}</p>
+            </div>
+            <div class="h-px bg-shift-line"></div>
+            <div>
+              <p class="font-mono text-xs text-shift-muted mb-1">Intervention</p>
+              <p class="text-sm text-shift-muted leading-snug">{cs.intervention}</p>
+            </div>
+            <div class="h-px bg-shift-line"></div>
+            <div>
+              <p class="font-mono text-xs text-shift-accent mb-1">Result</p>
+              <p class="text-sm text-shift-text leading-snug font-semibold">{cs.result}</p>
+            </div>
+          </div>
+
+          {cs.slug && (
+            <a href={`/${lang}/case-studies/${cs.slug}`} class="shift-btn-ghost text-sm mt-auto">
+              {t('caseStudies.readMore')}
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

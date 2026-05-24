@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+const cases = [
+  {
+    tag: lang === 'he' ? 'אוטומציה + תיאום' : lang === 'ru' ? 'Автоматизация + Расписание' : lang === 'es' ? 'Automatización + Agenda' : 'Automation + Scheduling',
+    title: lang === 'he' ? 'קליניקת פיזיותרפיה — מ-WhatsApp לתזמון אוטומטי' : lang === 'ru' ? 'Физиотерапевтическая клиника — от WhatsApp к автоматическому расписанию' : lang === 'es' ? 'Clínica de fisioterapia — de WhatsApp a agenda automática' : 'Physio Clinic — From WhatsApp to Automated Scheduling',
+    problem: lang === 'he' ? 'ניהול 40+ תורים שבועיים דרך WhatsApp — 12 שעות עבודה ידנית' : lang === 'ru' ? 'Управление 40+ еженедельными записями через WhatsApp — 12 часов ручной работы' : lang === 'es' ? 'Gestión de 40+ citas semanales por WhatsApp — 12 horas de trabajo manual' : 'Managing 40+ weekly appointments via WhatsApp — 12 hours manual work',
+    intervention: lang === 'he' ? 'Calendly + CRM + תשובות אוטומטיות ב-WhatsApp' : lang === 'ru' ? 'Calendly + CRM + автоответы в WhatsApp' : lang === 'es' ? 'Calendly + CRM + respuestas automáticas en WhatsApp' : 'Calendly + CRM + WhatsApp auto-replies',
+    result: lang === 'he' ? '12 שעות חזרו לרופא. אפס לידים שאבדו. המטופלים מרוצים יותר.' : lang === 'ru' ? '12 часов вернулись врачу. Ноль потерянных лидов. Пациенты довольнее.' : lang === 'es' ? '12 horas devueltas al médico. Cero leads perdidos. Pacientes más satisfechos.' : '12 hours returned to the doctor. Zero lost leads. Happier patients.',
+  },
+  {
+    tag: lang === 'he' ? 'אתר + לידים' : lang === 'ru' ? 'Сайт + Лиды' : lang === 'es' ? 'Sitio + Leads' : 'Website + Leads',
+    title: lang === 'he' ? 'סוכנות שיווק — מאתר שלא ממיר לזרימת לידים' : lang === 'ru' ? 'Маркетинговое агентство — от сайта без конверсий к потоку лидов' : lang === 'es' ? 'Agencia de marketing — de sitio sin conversiones a flujo de leads' : 'Marketing Agency — From Zero-Convert Site to Lead Flow',
+    problem: lang === 'he' ? 'אתר עם 800 מבקרים/חודש — 0 לידים. CTA לא ברור, אין מעקב' : lang === 'ru' ? 'Сайт с 800 посетителями/месяц — 0 лидов. Нечёткий CTA, нет отслеживания' : lang === 'es' ? 'Sitio con 800 visitantes/mes — 0 leads. CTA poco claro, sin seguimiento' : 'Site with 800 visitors/month — 0 leads. Unclear CTA, no tracking',
+    intervention: lang === 'he' ? 'בנייה מחדש עם CTA ברורים, ביקורת מוטמעת, אינטגרציה ל-CRM' : lang === 'ru' ? 'Перестройка с чёткими CTA, встроенным аудитом, интеграцией с CRM' : lang === 'es' ? 'Reconstrucción con CTAs claros, auditoría integrada, integración CRM' : 'Rebuild with clear CTAs, embedded audit, CRM integration',
+    result: lang === 'he' ? 'פי 3 פניות תוך 30 יום. 22% מהמבקרים ממירים לטופס.' : lang === 'ru' ? 'В 3 раза больше запросов за 30 дней. 22% посетителей конвертируются в форму.' : lang === 'es' ? '3× más consultas en 30 días. 22% de visitantes convierten a formulario.' : '3× more enquiries within 30 days. 22% of visitors convert to form.',
+  },
+  {
+    tag: lang === 'he' ? 'דשבורד + דוחות' : lang === 'ru' ? 'Дашборд + Отчёты' : lang === 'es' ? 'Dashboard + Informes' : 'Dashboard + Reporting',
+    title: lang === 'he' ? 'חברת לוגיסטיקה — מגיליונות אקסל ללוח מחוונים בזמן אמת' : lang === 'ru' ? 'Логистическая компания — от Excel к дашборду в реальном времени' : lang === 'es' ? 'Empresa logística — de Excel a dashboard en tiempo real' : 'Logistics Company — From Excel to Real-Time Dashboard',
+    problem: lang === 'he' ? '6 שעות ביום על הכנת דוחות ידניים. החלטות על בסיס נתונים מאתמול' : lang === 'ru' ? '6 часов в день на подготовку ручных отчётов. Решения на основе вчерашних данных' : lang === 'es' ? '6 horas al día preparando informes manuales. Decisiones basadas en datos de ayer' : '6 hours/day preparing manual reports. Decisions based on yesterday\'s data',
+    intervention: lang === 'he' ? 'Looker Studio + אוטומציה של נתונים + התראות בזמן אמת' : lang === 'ru' ? 'Looker Studio + автоматизация данных + оповещения в реальном времени' : lang === 'es' ? 'Looker Studio + automatización de datos + alertas en tiempo real' : 'Looker Studio + data automation + real-time alerts',
+    result: lang === 'he' ? '6 שעות חסכו ביום. ניהול בזמן אמת. החלטות מהירות פי 10.' : lang === 'ru' ? '6 часов в день сэкономлено. Управление в реальном времени. Решения в 10 раз быстрее.' : lang === 'es' ? '6 horas/día ahorradas. Gestión en tiempo real. Decisiones 10× más rápidas.' : '6 hours/day saved. Real-time management. Decisions 10× faster.',
+  },
+];
+---
+
+<BaseLayout title={t('caseStudies.label')} description={t('caseStudies.subtitle')} lang={lang}>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container">
+      <div class="mb-12">
+        <p class="shift-label mb-3">{t('caseStudies.label')}</p>
+        <h1 class="shift-heading-xl mb-4">{t('caseStudies.title')}</h1>
+        <p class="shift-body max-w-xl text-lg">{t('caseStudies.subtitle')}</p>
+      </div>
+
+      <div class="space-y-5">
+        {cases.map((cs) => (
+          <article class="shift-card grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div>
+              <span class="font-mono text-xs text-shift-muted border border-shift-line px-2 py-0.5 rounded-md">{cs.tag}</span>
+              <h2 class="font-heading font-semibold text-shift-text text-lg leading-snug mt-3">{cs.title}</h2>
+            </div>
+            <div class="space-y-3 lg:col-span-2">
+              <div>
+                <p class="font-mono text-xs text-shift-muted mb-1">Problem</p>
+                <p class="text-sm text-shift-text font-medium">{cs.problem}</p>
+              </div>
+              <div class="h-px bg-shift-line"></div>
+              <div>
+                <p class="font-mono text-xs text-shift-muted mb-1">Intervention</p>
+                <p class="text-sm text-shift-muted">{cs.intervention}</p>
+              </div>
+              <div class="h-px bg-shift-line"></div>
+              <div>
+                <p class="font-mono text-xs text-shift-accent mb-1">Result</p>
+                <p class="text-sm text-shift-text font-semibold">{cs.result}</p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-12 text-center">
+        <a href={`/${lang}/start`} class="shift-btn-primary text-base px-8 py-4">
+          {t('finalCta.cta')}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

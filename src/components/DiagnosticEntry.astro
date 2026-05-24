@@ -1,0 +1,89 @@
+---
+import { useTranslations, type Locale } from '../i18n/index';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const cards = [
+  {
+    key: 'website',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>`,
+    href: 'tools/website-audit',
+  },
+  {
+    key: 'leads',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+    href: 'tools/lead-flow',
+  },
+  {
+    key: 'manual',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+    href: 'tools/automation-finder',
+  },
+  {
+    key: 'tools',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`,
+    href: 'tools/tool-stack',
+  },
+  {
+    key: 'ai',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 12-8 12S4 15.25 4 10a8 8 0 0 1 8-8z"/><circle cx="12" cy="10" r="3"/></svg>`,
+    href: 'tools/ai-readiness',
+  },
+  {
+    key: 'strategy',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    href: 'tools/business-audit',
+  },
+] as const;
+---
+
+<section class="py-16 lg:py-24">
+  <div class="shift-container">
+    <div class="mb-10">
+      <h2 class="shift-heading-lg text-balance">{t('diagnostic.title')}</h2>
+      <p class="mt-3 shift-body max-w-xl">{t('diagnostic.subtitle')}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {cards.map((card) => (
+        <a
+          href={`/${lang}/${card.href}`}
+          class="shift-card-hover group flex flex-col gap-3 no-underline"
+        >
+          <div class="flex items-start justify-between">
+            <div class="w-10 h-10 rounded-xl bg-shift-surface-soft border border-shift-line flex items-center justify-center text-shift-muted group-hover:text-shift-accent group-hover:border-shift-accent/30 transition-colors">
+              <Fragment set:html={card.icon} />
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-shift-muted/40 group-hover:text-shift-accent transition-colors rtl:rotate-180 mt-1"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-shift-text text-base group-hover:text-shift-accent transition-colors">
+              {t(`diagnostic.card.${card.key}` as any)}
+            </h3>
+            <p class="mt-1 text-sm text-shift-muted leading-snug">
+              {t(`diagnostic.card.${card.key}.desc` as any)}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

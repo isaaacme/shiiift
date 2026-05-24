@@ -1,0 +1,54 @@
+---
+import { useTranslations, type Locale } from '../i18n/index';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const topics = [1, 2, 3, 4, 5, 6] as const;
+---
+
+<section class="py-16 lg:py-24 border-t border-shift-line">
+  <div class="shift-container">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <!-- Content -->
+      <div>
+        <p class="shift-label mb-3">{t('workshop.label')}</p>
+        <h2 class="shift-heading-lg text-balance mb-5">{t('workshop.title')}</h2>
+        <p class="shift-body mb-8 max-w-lg">{t('workshop.desc')}</p>
+
+        <div class="flex flex-wrap gap-3">
+          <a href={`/${lang}/workshop`} class="shift-btn-primary">
+            {t('workshop.cta.primary')}
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="6 3 20 12 6 21 6 3"/>
+            </svg>
+          </a>
+          <a href={`/${lang}/workshop#checklist`} class="shift-btn-secondary">
+            {t('workshop.cta.secondary')}
+          </a>
+        </div>
+      </div>
+
+      <!-- Topics list -->
+      <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8">
+        <p class="shift-label mb-5">30 min</p>
+        <ul class="space-y-3 list-none p-0 m-0">
+          {topics.map((n) => (
+            <li class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-5 h-5 rounded-full bg-shift-surface-soft border border-shift-line flex items-center justify-center mt-0.5">
+                <span class="font-mono text-[10px] text-shift-muted">{n}</span>
+              </span>
+              <span class="text-sm text-shift-muted leading-snug">
+                {t(`workshop.topics.${n}` as any)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

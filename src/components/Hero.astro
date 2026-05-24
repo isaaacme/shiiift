@@ -57,9 +57,18 @@ const t = useTranslations(lang);
     <!-- Visual system diagram -->
     <div class="mt-16 lg:mt-20 relative">
       <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8 max-w-3xl overflow-hidden">
-        <p class="shift-label mb-5">System flow</p>
+        <p class="shift-label mb-5">
+          {lang === 'he' ? 'זרימת מערכת' : lang === 'ru' ? 'Поток системы' : lang === 'es' ? 'Flujo del sistema' : 'System flow'}
+        </p>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {['Forms', 'WhatsApp', 'Email', 'CRM', 'Invoices', 'Reports', 'Follow-ups', 'Analytics'].map((item, i) => (
+          {(lang === 'he'
+            ? ['טפסים', 'וואטסאפ', 'אימייל', 'CRM', 'חשבוניות', 'דוחות', 'מעקב', 'אנליטיקס']
+            : lang === 'ru'
+            ? ['Формы', 'WhatsApp', 'Email', 'CRM', 'Счета', 'Отчёты', 'Ремаркетинг', 'Аналитика']
+            : lang === 'es'
+            ? ['Formularios', 'WhatsApp', 'Email', 'CRM', 'Facturas', 'Reportes', 'Seguimiento', 'Analítica']
+            : ['Forms', 'WhatsApp', 'Email', 'CRM', 'Invoices', 'Reports', 'Follow-ups', 'Analytics']
+          ).map((item, i) => (
             <div
               class="bg-shift-surface-soft border border-shift-line rounded-lg px-3 py-2 text-xs font-mono text-shift-muted flex items-center gap-2"
               style={`animation-delay: ${i * 80}ms`}
@@ -70,14 +79,14 @@ const t = useTranslations(lang);
           ))}
         </div>
         <div class="mt-4 flex items-center gap-3">
-          <div class="flex-1 h-px bg-shift-line relative overflow-hidden">
-            <div class="absolute inset-y-0 start-0 w-1/2 bg-gradient-to-r from-transparent via-shift-accent to-transparent animate-[shimmer_2s_ease-in-out_infinite]"></div>
+          <div class="bg-shift-accent/10 border border-shift-accent/30 rounded-lg px-4 py-2 font-mono text-sm text-shift-accent font-medium">
+            {lang === 'he' ? 'מערכת' : lang === 'ru' ? 'Система' : lang === 'es' ? 'Sistema' : 'System'}
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-shift-accent rtl:rotate-180">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
-          <div class="bg-shift-accent/10 border border-shift-accent/30 rounded-lg px-4 py-2 font-mono text-sm text-shift-accent font-medium">
-            System
+          <div class="flex-1 h-px bg-shift-line relative overflow-hidden">
+            <div class={`absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-shift-accent to-transparent animate-[shimmer_2s_ease-in-out_infinite] ${lang === 'he' ? 'end-0 shimmer-rtl' : 'start-0'}`}></div>
           </div>
         </div>
       </div>
@@ -89,5 +98,12 @@ const t = useTranslations(lang);
   @keyframes shimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(200%); }
+  }
+  @keyframes shimmer-rtl {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-200%); }
+  }
+  .shimmer-rtl {
+    animation-name: shimmer-rtl !important;
   }
 </style>

@@ -7,6 +7,7 @@ import WorkshopSection from '../../components/WorkshopSection.astro';
 import CaseStudiesSection from '../../components/CaseStudiesSection.astro';
 import EngagementModels from '../../components/EngagementModels.astro';
 import FinalCTA from '../../components/FinalCTA.astro';
+import AboutFounder from '../../components/AboutFounder.astro';
 import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
 
 export function getStaticPaths() {
@@ -28,5 +29,6 @@ const t = useTranslations(lang);
   <WorkshopSection lang={lang} />
   <CaseStudiesSection lang={lang} />
   <EngagementModels lang={lang} />
+  <AboutFounder lang={lang} />
   <FinalCTA lang={lang} />
 </BaseLayout>

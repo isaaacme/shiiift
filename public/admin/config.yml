@@ -12,15 +12,7 @@ public_folder: /images/uploads
 # Sveltia UI is English-only for now; RTL is auto-detected per locale.
 i18n:
   structure: multiple_files
-  locales:
-    - code: he
-      name: "עברית"
-    - code: en
-      name: "English"
-    - code: es
-      name: "Español"
-    - code: ru
-      name: "Русский"
+  locales: [he, en, es, ru]
   default_locale: he
   initial_locales: all
 

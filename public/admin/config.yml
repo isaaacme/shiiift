@@ -1,12 +1,15 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
 backend:
   name: github
   repo: isaaacme/shiiift
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
 
 media_folder: public/images/uploads
 public_folder: /images/uploads
+
+# RTL-first locale — Sveltia auto-detects UI direction from locale
+locale: he
 
 i18n:
   structure: multiple_files
@@ -15,35 +18,43 @@ i18n:
 
 collections:
   - name: thinking
-    label: Thinking / Articles
-    label_singular: Article
+    label: "מאמרים / Thinking"
+    label_singular: "מאמר / Article"
     folder: src/content/thinking
     create: true
-    slug: "{{year}}-{{month}}-{{slug}}"
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
     i18n: true
+    sortable_fields: [date, title]
+    summary: "{{title}} — {{date}}"
     fields:
-      - { label: Title, name: title, widget: string, i18n: true }
-      - { label: Description, name: description, widget: string, i18n: true }
-      - { label: Date, name: date, widget: string, i18n: duplicate }
-      - { label: Language, name: lang, widget: select, options: [he, en, es, ru], i18n: duplicate }
-      - { label: Category, name: category, widget: string, i18n: true }
-      - { label: Draft, name: draft, widget: boolean, default: false, i18n: duplicate }
-      - { label: Body, name: body, widget: markdown, i18n: true }
+      - { label: "כותרת / Title",       name: title,       widget: string,   i18n: true }
+      - { label: "תיאור / Description", name: description, widget: string,   i18n: true }
+      - { label: "תאריך / Date",        name: date,        widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
+      - { label: "שפה / Language",      name: lang,        widget: select,   options: [he, en, es, ru], i18n: duplicate }
+      - { label: "קטגוריה / Category",  name: category,    widget: string,   i18n: true }
+      - { label: "טיוטה / Draft",       name: draft,       widget: boolean,  default: true, i18n: duplicate }
+      - { label: "תוכן / Body",         name: body,        widget: markdown, i18n: true }
 
   - name: case-studies
-    label: Case Studies
-    label_singular: Case Study
+    label: "תיקי עבודות / Case Studies"
+    label_singular: "תיק עבודה / Case Study"
     folder: src/content/case-studies
     create: true
-    slug: "{{year}}-{{month}}-{{slug}}"
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
     i18n: true
+    sortable_fields: [date, title]
+    summary: "{{title}} — {{date}}"
     fields:
-      - { label: Title, name: title, widget: string, i18n: true }
-      - { label: Date, name: date, widget: string, i18n: duplicate }
-      - { label: Language, name: lang, widget: select, options: [he, en, es, ru], i18n: duplicate }
-      - { label: Tag, name: tag, widget: string, i18n: true }
-      - { label: Problem, name: problem, widget: string, i18n: true }
-      - { label: Intervention, name: intervention, widget: string, i18n: true }
-      - { label: Result, name: result, widget: string, i18n: true }
-      - { label: Draft, name: draft, widget: boolean, default: false, i18n: duplicate }
-      - { label: Body, name: body, widget: markdown, required: false, i18n: true }
+      - { label: "כותרת / Title",        name: title,        widget: string,   i18n: true }
+      - { label: "תאריך / Date",         name: date,         widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, i18n: duplicate }
+      - { label: "שפה / Language",       name: lang,         widget: select,   options: [he, en, es, ru], i18n: duplicate }
+      - { label: "תגית / Tag",           name: tag,          widget: string,   i18n: true }
+      - { label: "בעיה / Problem",       name: problem,      widget: string,   i18n: true }
+      - { label: "התערבות / Intervention", name: intervention, widget: string, i18n: true }
+      - { label: "תוצאה / Result",       name: result,       widget: string,   i18n: true }
+      - { label: "טיוטה / Draft",        name: draft,        widget: boolean,  default: true, i18n: duplicate }
+      - { label: "תוכן / Body",          name: body,         widget: markdown, required: false, i18n: true }

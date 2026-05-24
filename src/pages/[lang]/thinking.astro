@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
 
 export function getStaticPaths() {
@@ -9,36 +10,52 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Locale };
 const t = useTranslations(lang);
 
-const posts = [
+// CMS-driven articles (draft:false only in prod, show all in dev)
+const isDev = import.meta.env.DEV;
+let cmsArticles: { title: string; desc: string; category: string; date: string; slug: string }[] = [];
+try {
+  const all = await getCollection('thinking', (e) => isDev || !e.data.draft);
+  cmsArticles = all
+    .filter((e) => e.data.lang === lang)
+    .sort((a, b) => b.data.date.localeCompare(a.data.date))
+    .map((e) => ({
+      title: e.data.title,
+      desc: e.data.description,
+      category: e.data.category,
+      date: e.data.date,
+      slug: e.slug.replace(/\.(he|en|es|ru)$/, ''),
+    }));
+} catch { cmsArticles = []; }
+
+// Static fallback shown only when CMS has no content yet
+const fallbackPosts = cmsArticles.length === 0 ? [
   {
     category: lang === 'he' ? 'אוטומציה' : lang === 'ru' ? 'Автоматизация' : lang === 'es' ? 'Automatización' : 'Automation',
     title: lang === 'he' ? 'למה עסקים קטנים מפסידים 15+ שעות בשבוע על עבודה שניתנת לאוטומציה' : lang === 'ru' ? 'Почему малый бизнес теряет 15+ часов в неделю на работу, которую можно автоматизировать' : lang === 'es' ? 'Por qué las pequeñas empresas pierden 15+ horas/semana en trabajo automatizable' : 'Why Small Businesses Lose 15+ Hours/Week to Automatable Work',
     desc: lang === 'he' ? 'מיפוי של 6 תהליכים שחוזרים על עצמם שאפשר לאוטומט בשבוע' : lang === 'ru' ? 'Карта 6 повторяющихся процессов, которые можно автоматизировать за неделю' : lang === 'es' ? 'Mapeo de 6 procesos repetitivos que pueden automatizarse en una semana' : 'A map of 6 repetitive processes you can automate within a week',
-    date: '2025-01',
-    slug: 'automatable-work',
+    date: '2025-01', slug: 'automatable-work',
   },
   {
     category: lang === 'he' ? 'אתרים' : lang === 'ru' ? 'Сайты' : lang === 'es' ? 'Sitios web' : 'Websites',
-    title: lang === 'he' ? 'האתר שלך הוא פרוספקטוס — כך הופכים אותו למערכת' : lang === 'ru' ? 'Ваш сайт — это брошюра. Вот как превратить его в систему' : lang === 'es' ? 'Tu sitio web es un folleto. Así lo conviertes en un sistema' : 'Your Website Is a Brochure. Here\'s How to Make It a System',
+    title: lang === 'he' ? 'האתר שלך הוא פרוספקטוס — כך הופכים אותו למערכת' : lang === 'ru' ? 'Ваш сайт — это брошюра. Вот как превратить его в систему' : lang === 'es' ? 'Tu sitio web es un folleto. Así lo conviertes en un sistema' : "Your Website Is a Brochure. Here's How to Make It a System",
     desc: lang === 'he' ? 'ההבדל בין אתר שקיים לאתר שעובד — ומה שצריך לשנות' : lang === 'ru' ? 'Разница между сайтом, который существует, и сайтом, который работает' : lang === 'es' ? 'La diferencia entre un sitio que existe y uno que trabaja para ti' : 'The difference between a site that exists and one that works',
-    date: '2025-02',
-    slug: 'website-system',
+    date: '2025-02', slug: 'website-system',
   },
   {
-    category: lang === 'he' ? 'AI' : lang === 'ru' ? 'ИИ' : lang === 'es' ? 'IA' : 'AI',
-    title: lang === 'he' ? 'מה AI יכול לעשות לעסק שלך — ומה לא' : lang === 'ru' ? 'Что ИИ может сделать для вашего бизнеса — и чего не может' : lang === 'es' ? 'Qué puede hacer la IA por tu negocio — y qué no puede' : 'What AI Can Do for Your Business — and What It Can\'t',
+    category: 'AI',
+    title: lang === 'he' ? 'מה AI יכול לעשות לעסק שלך — ומה לא' : lang === 'ru' ? 'Что ИИ может сделать для вашего бизнеса — и чего не может' : lang === 'es' ? 'Qué puede hacer la IA por tu negocio — y qué no puede' : "What AI Can Do for Your Business — and What It Can't",
     desc: lang === 'he' ? 'מסגרת מעשית להערכת מוכנות AI לפני שמשקיעים' : lang === 'ru' ? 'Практическая система оценки готовности к ИИ перед инвестированием' : lang === 'es' ? 'Un marco práctico para evaluar la preparación de IA antes de invertir' : 'A practical framework for evaluating AI readiness before you invest',
-    date: '2025-03',
-    slug: 'ai-reality-check',
+    date: '2025-03', slug: 'ai-reality-check',
   },
   {
-    category: lang === 'he' ? 'CRM' : lang === 'ru' ? 'CRM' : lang === 'es' ? 'CRM' : 'CRM',
-    title: lang === 'he' ? 'אתה לא צריך Salesforce. אתה צריך CRM שמתאים לגודל שלך' : lang === 'ru' ? 'Вам не нужен Salesforce. Вам нужен CRM, подходящий вашему размеру' : lang === 'es' ? 'No necesitas Salesforce. Necesitas un CRM que se adapte a tu tamaño' : 'You Don\'t Need Salesforce. You Need a CRM That Fits Your Size',
+    category: 'CRM',
+    title: lang === 'he' ? 'אתה לא צריך Salesforce. אתה צריך CRM שמתאים לגודל שלך' : lang === 'ru' ? 'Вам не нужен Salesforce. Вам нужен CRM, подходящий вашему размеру' : lang === 'es' ? 'No necesitas Salesforce. Necesitas un CRM que se adapte a tu tamaño' : "You Don't Need Salesforce. You Need a CRM That Fits Your Size",
     desc: lang === 'he' ? 'השוואת CRM לעסקים קטנים — ב-2025 יש אפשרויות טובות וחינמיות' : lang === 'ru' ? 'Сравнение CRM для малого бизнеса — в 2025 году есть отличные бесплатные варианты' : lang === 'es' ? 'Comparación de CRM para pequeñas empresas — en 2025 hay excelentes opciones gratuitas' : 'CRM comparison for small business — in 2025 there are great free options',
-    date: '2025-04',
-    slug: 'right-sized-crm',
+    date: '2025-04', slug: 'right-sized-crm',
   },
-];
+] : [];
+
+const posts = cmsArticles.length > 0 ? cmsArticles : fallbackPosts;
 ---
 
 <BaseLayout title={t('nav.thinking')} description={t('nav.thinking')} lang={lang}>

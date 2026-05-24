@@ -11,6 +11,7 @@ const thinkingCollection = defineCollection({
     lang: localeEnum,
     category: z.string(),
     draft: z.boolean().optional().default(false),
+    body: z.string().optional(),
   }),
 });
 

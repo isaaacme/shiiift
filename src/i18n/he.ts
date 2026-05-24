@@ -82,7 +82,7 @@ const he = {
 
   // Case Studies
   'caseStudies.label': 'תיקי עבודות',
-  'caseStudies.title': 'בעיה → התערבות → תוצאה',
+  'caseStudies.title': 'בעיה ← התערבות ← תוצאה',
   'caseStudies.subtitle': 'לא פורטפוליו. תיעוד של שיפורים תפעוליים.',
   'caseStudies.cta': 'ראה את כל תיקי העבודות',
   'caseStudies.readMore': 'קרא עוד',

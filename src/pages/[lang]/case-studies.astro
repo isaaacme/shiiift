@@ -52,17 +52,17 @@ const cases = [
             </div>
             <div class="space-y-3 lg:col-span-2">
               <div>
-                <p class="font-mono text-xs text-shift-muted mb-1">Problem</p>
+                <p class="font-mono text-xs text-shift-muted mb-1">{lang === 'he' ? 'בעיה' : lang === 'ru' ? 'Проблема' : lang === 'es' ? 'Problema' : 'Problem'}</p>
                 <p class="text-sm text-shift-text font-medium">{cs.problem}</p>
               </div>
               <div class="h-px bg-shift-line"></div>
               <div>
-                <p class="font-mono text-xs text-shift-muted mb-1">Intervention</p>
+                <p class="font-mono text-xs text-shift-muted mb-1">{lang === 'he' ? 'התערבות' : lang === 'ru' ? 'Вмешательство' : lang === 'es' ? 'Intervención' : 'Intervention'}</p>
                 <p class="text-sm text-shift-muted">{cs.intervention}</p>
               </div>
               <div class="h-px bg-shift-line"></div>
               <div>
-                <p class="font-mono text-xs text-shift-accent mb-1">Result</p>
+                <p class="font-mono text-xs text-shift-accent mb-1">{lang === 'he' ? 'תוצאה' : lang === 'ru' ? 'Результат' : lang === 'es' ? 'Resultado' : 'Result'}</p>
                 <p class="text-sm text-shift-text font-semibold">{cs.result}</p>
               </div>
             </div>

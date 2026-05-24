@@ -248,7 +248,7 @@ if (!article) return Astro.redirect(`/${lang}/thinking`);
       <div class="mb-10">
         <div class="flex items-center gap-3 mb-6">
           <a href={`/${lang}/thinking`} class="font-mono text-xs text-shift-muted hover:text-shift-accent transition-colors no-underline">
-            ← {lang === 'he' ? 'חזרה לחשיבה' : lang === 'ru' ? '← Назад к материалам' : lang === 'es' ? '← Volver a artículos' : '← Back to thinking'}
+            {lang === 'he' ? '→ חזרה לחשיבה' : lang === 'ru' ? '← Назад к материалам' : lang === 'es' ? '← Volver a artículos' : '← Back to thinking'}
           </a>
         </div>
         <span class="font-mono text-xs text-shift-muted border border-shift-line px-2 py-0.5 rounded-md">{article.category}</span>

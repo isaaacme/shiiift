@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ToolResult from './ToolResult';
+import { useToolSession, trackEvent } from './useToolSession';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
 type T = { back: string; next: string; seeResults: string; startOver: string; yourScore: string; topFindings: string; quickWins: string; nextActions: string; relatedTools: string; newsletterTitle: string; newsletterPlaceholder: string; newsletterCta: string; newsletterDisclaimer: string; lang: string };
@@ -57,82 +59,63 @@ const CANDIDATES: Record<string, Record<string, string>> = {
 
 export default function AutomationFinder({ t }: { t: T }) {
   const lang = (t.lang || 'en') as Lang;
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string[]>>({});
-  const [selected, setSelected] = useState<string[]>([]);
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  const [session, setSession, clearSession] = useToolSession('automation-finder', {
+    step: 0,
+    answers: {} as Record<string, string[]>,
+    selected: [] as string[],
+  });
+  const { step, answers, selected } = session;
 
   const isResult = step >= QS.length;
   const cq = QS[step];
-
-  function toggle(v: string) {
-    if (cq?.multi) {
-      setSelected((p) => p.includes(v) ? p.filter((x) => x !== v) : [...p, v]);
-    } else {
-      setSelected([v]);
-    }
-  }
-
-  function next() {
-    if (!selected.length) return;
-    setAnswers((p) => ({ ...p, [cq.id]: selected }));
-    setSelected([]);
-    setStep((s) => s + 1);
-  }
-
-  function back() {
-    if (step === 0) return;
-    const pq = QS[step - 1];
-    setSelected(answers[pq.id] || []);
-    setStep((s) => s - 1);
-  }
-
   const tasks = answers.tasks || [];
   const hours = HOURS_MAP[answers.hours?.[0]] || 0;
   const candidates = tasks.map((t) => CANDIDATES[t]).filter(Boolean);
 
+  const multiLabel = { he: 'בחר כמה שרלוונטי', en: 'Select all that apply', es: 'Selecciona todo lo que aplique', ru: 'Выберите все подходящие' };
+  const hoursLabel = { he: 'שעות/שבוע ניתנות לשחזור', en: 'hours/week recoverable', es: 'horas/semana recuperables', ru: 'часов/неделю восстановимо' };
+
+  const nextActions = [
+    tasks.includes('followup') && { he: 'הגדר זרימת מעקב אוטומטית ב-CRM — תסיר את הצורך לזכור', en: 'Build a CRM auto-follow-up flow — removes the need to remember', es: 'Construye un flujo de seguimiento automático en CRM', ru: 'Настройте авто-follow-up в CRM — устраните зависимость от памяти' },
+    tasks.includes('scheduling') && { he: 'הטמע Calendly/Cal.com עם אינטגרציה ל-CRM', en: 'Embed Calendly/Cal.com with CRM integration', es: 'Incorpora Calendly/Cal.com con integración al CRM', ru: 'Внедрите Calendly/Cal.com с интеграцией в CRM' },
+    hours >= 10 && { he: 'עבוד עם shiiift למיפוי ואוטומציה של 3 תהליכים עדיפים', en: 'Work with shiiift to map and automate your top 3 processes', es: 'Trabaja con shiiift para mapear y automatizar tus 3 procesos principales', ru: 'Работайте с shiiift для маппинга и автоматизации 3 ключевых процессов' },
+  ].filter(Boolean).map((a: any) => gl(a, lang));
+
+  useEffect(() => {
+    if (step === 0 && Object.keys(answers).length === 0) trackEvent('tool_started', { tool: 'automation-finder', lang });
+  }, []);
+  useEffect(() => {
+    if (isResult) trackEvent('tool_completed', { tool: 'automation-finder', lang, hours: String(hours) });
+  }, [isResult]);
+
+  function toggle(v: string) {
+    if (cq?.multi) {
+      setSession((s) => ({ ...s, selected: s.selected.includes(v) ? s.selected.filter((x) => x !== v) : [...s.selected, v] }));
+    } else {
+      setSession((s) => ({ ...s, selected: [v] }));
+    }
+  }
+
   if (isResult) {
     return (
-      <div className="space-y-6">
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <p className="font-mono text-xs tracking-widest uppercase text-[#FF7A59] mb-3">{t.yourScore}</p>
-          <div className="flex items-baseline gap-3 mb-2">
-            <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{hours}</span>
-            <span className="text-[#A7AFBA] text-sm">{lang === 'he' ? 'שעות/שבוע ניתנות לשחזור' : lang === 'ru' ? 'часов/неделю восстановимо' : lang === 'es' ? 'horas/semana recuperables' : 'hours/week recoverable'}</span>
-          </div>
-        </div>
-
-        {candidates.length > 0 && (
-          <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.quickWins}</p>
-            <ul className="space-y-2">
-              {candidates.map((c, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-[#F4F1EA]">
-                  <span className="w-5 h-5 rounded-full bg-[#FF7A59]/10 border border-[#FF7A59]/30 flex items-center justify-center flex-shrink-0 mt-0.5 text-[10px] font-mono text-[#FF7A59]">{i + 1}</span>
-                  {gl(c, lang)}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <div className="flex items-center justify-between">
-          <button onClick={() => { setStep(0); setAnswers({}); setSelected([]); }} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] font-mono transition-colors">↺ {t.startOver}</button>
-          <a href={`/${lang}/tools/lead-flow`} className="text-sm text-[#A7AFBA] hover:text-[#C7FF4A] font-mono no-underline transition-colors">{t.relatedTools} →</a>
-        </div>
-
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6">
-          <p className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-[#F4F1EA] mb-3">{t.newsletterTitle}</p>
-          {subscribed ? <p className="text-sm text-[#C7FF4A]">✓</p> : (
-            <div className="flex gap-2">
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.newsletterPlaceholder} className="flex-1 bg-[#1E2530] border border-[rgba(244,241,234,0.14)] rounded-xl px-4 py-2.5 text-sm text-[#F4F1EA] outline-none focus:border-[rgba(199,255,74,0.4)]" />
-              <button onClick={() => email && setSubscribed(true)} className="bg-[#C7FF4A] text-[#0E1117] font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-[#C7FF4A]/90 flex-shrink-0 transition-colors">{t.newsletterCta}</button>
+      <ToolResult
+        lang={lang}
+        toolId="automation-finder"
+        t={t}
+        answers={answers}
+        quickWins={candidates.map((c) => gl(c, lang))}
+        nextActions={nextActions}
+        onReset={clearSession}
+        scoreBlock={
+          <div>
+            <p className="font-mono text-xs tracking-widest uppercase text-[#FF7A59] mb-3">{t.yourScore}</p>
+            <div className="flex items-baseline gap-3 mb-2">
+              <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{hours}</span>
+              <span className="text-[#A7AFBA] text-sm">{gl(hoursLabel, lang)}</span>
             </div>
-          )}
-          <p className="mt-2 text-xs text-[#A7AFBA]/60">{t.newsletterDisclaimer}</p>
-        </div>
-      </div>
+          </div>
+        }
+      />
     );
   }
 
@@ -141,15 +124,24 @@ export default function AutomationFinder({ t }: { t: T }) {
     <div className="space-y-6">
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
-        <div className="h-1.5 rounded-full bg-[#1E2530] overflow-hidden"><div className="h-full rounded-full bg-[#FF7A59] transition-all duration-300" style={{ width: `${progress}%` }} /></div>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#e05535,#ff7a59)', boxShadow: '0 0 6px rgba(255,122,89,0.35)' }} />
+        </div>
       </div>
-      <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
+      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
         <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-2">{gl(cq.q, lang)}</h2>
-        {cq.multi && <p className="text-xs text-[#A7AFBA]/60 font-mono mb-5">{lang === 'he' ? 'בחר כמה שרלוונטי' : lang === 'ru' ? 'Выберите все подходящие' : lang === 'es' ? 'Selecciona todo lo que aplique' : 'Select all that apply'}</p>}
+        {cq.multi && <p className="text-xs text-[#A7AFBA]/60 font-mono mb-5">{gl(multiLabel, lang)}</p>}
         <div className="space-y-2">
           {cq.opts.map((o) => (
-            <button key={o.v} onClick={() => toggle(o.v)} className={`w-full text-start px-4 py-3.5 rounded-xl border text-sm transition-all flex items-center gap-3 ${selected.includes(o.v) ? 'border-[#FF7A59]/60 bg-[#FF7A59]/8 text-[#F4F1EA]' : 'border-[rgba(244,241,234,0.14)] bg-[#1E2530] text-[#A7AFBA] hover:text-[#F4F1EA] hover:border-[rgba(244,241,234,0.25)]'}`}>
-              <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all ${selected.includes(o.v) ? 'bg-[#FF7A59] border-[#FF7A59]' : 'border-[rgba(244,241,234,0.3)]'}`}>
+            <button key={o.v} onClick={() => toggle(o.v)}
+              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all flex items-center gap-3"
+              style={selected.includes(o.v)
+                ? { background: 'linear-gradient(160deg,rgba(255,122,89,0.1) 0%,rgba(255,122,89,0.04) 100%)', border: '1px solid rgba(255,122,89,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
+                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
+              }
+            >
+              <span className="w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all"
+                style={selected.includes(o.v) ? { background: '#FF7A59', border: '1px solid #FF7A59' } : { border: '1px solid rgba(244,241,234,0.25)' }}>
                 {selected.includes(o.v) && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
               </span>
               {gl(o.l, lang)}
@@ -158,8 +150,16 @@ export default function AutomationFinder({ t }: { t: T }) {
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <button onClick={back} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}</button>
-        <button onClick={next} disabled={!selected.length} className="bg-[#FF7A59] text-white font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-[#FF7A59]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        <button
+          onClick={() => { if (step === 0) return; const pq = QS[step-1]; setSession((s) => ({...s, step:s.step-1, selected: s.answers[pq.id]||[]})); }}
+          disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}
+        </button>
+        <button
+          onClick={() => { if (!selected.length) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]:selected}, selected:[], step:s.step+1})); }}
+          disabled={!selected.length}
+          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          style={{ background: 'linear-gradient(180deg,#ff9070 0%,#ff7a59 45%,#e05535 100%)', color: '#fff', boxShadow: '0 1px 0 0 rgba(255,255,255,0.2) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(255,122,89,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
+        >
           {step === QS.length - 1 ? t.seeResults : t.next} →
         </button>
       </div>

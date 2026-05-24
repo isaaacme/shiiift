@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ToolResult from './ToolResult';
+import { useToolSession, trackEvent } from './useToolSession';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
 type T = { back: string; next: string; seeResults: string; startOver: string; yourScore: string; topFindings: string; quickWins: string; nextActions: string; relatedTools: string; newsletterTitle: string; newsletterPlaceholder: string; newsletterCta: string; newsletterDisclaimer: string; lang: string };
@@ -36,76 +38,65 @@ const ADVICE: Record<string, Record<string, string>> = {
 
 export default function ToolStackSimplifier({ t }: { t: T }) {
   const lang = (t.lang || 'en') as Lang;
-  const [step, setStep] = useState(0);
-  const [tools, setTools] = useState<string[]>([]);
-  const [pains, setPains] = useState<string[]>([]);
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  const [session, setSession, clearSession] = useToolSession('tool-stack', { step: 0, tools: [] as string[], pains: [] as string[] });
+  const { step, tools, pains } = session;
 
   const isResult = step >= 2;
 
-  function toggleTool(v: string) { setTools((p) => p.includes(v) ? p.filter((x) => x !== v) : [...p, v]); }
-  function togglePain(v: string) { setPains((p) => p.includes(v) ? p.filter((x) => x !== v) : [...p, v]); }
-
-  const advice = [...tools.filter((t) => ADVICE[t]), ...pains.filter((p) => ADVICE[p])]
-    .map((k) => ADVICE[k]);
-
+  const advice = [...tools.filter((t) => ADVICE[t]), ...pains.filter((p) => ADVICE[p])].map((k) => ADVICE[k]);
   const keep = tools.filter((t) => ['crm', 'automation'].includes(t));
   const review = tools.filter((t) => !['crm', 'automation'].includes(t));
 
+  const lbl = {
+    keep: { he: 'שמור', en: 'Keep', es: 'Conservar', ru: 'Оставить' },
+    review: { he: 'בדוק מחדש', en: 'Review', es: 'Revisar', ru: 'Пересмотреть' },
+    toolsQ: { he: 'אילו כלים אתה משתמש בהם?', en: 'Which tools do you use?', es: '¿Qué herramientas usas?', ru: 'Какими инструментами вы пользуетесь?' },
+    painQ: { he: 'מה הכי מתסכל אותך?', en: 'What frustrates you most?', es: '¿Qué te frustra más?', ru: 'Что вас больше всего раздражает?' },
+    selectAll: { he: 'בחר הכל שרלוונטי', en: 'Select all that apply', es: 'Selecciona todo lo que aplique', ru: 'Выберите все подходящие' },
+  };
+
+  const nextActions = [
+    pains.includes('disconnected') && { he: 'בחר Zapier/Make/n8n כשכבת אינטגרציה ובנה זרימה אחת היום', en: 'Choose Zapier/Make/n8n as integration layer and build one flow today', es: 'Elige Zapier/Make/n8n como capa de integración y construye un flujo hoy', ru: 'Выберите Zapier/Make/n8n и создайте один поток сегодня' },
+    pains.includes('unused') && { he: 'בטל מנויים שלא השתמשת בהם ב-90 יום — חסוך ≥$50/חודש', en: 'Cancel subscriptions unused in 90 days — save ≥$50/month', es: 'Cancela suscripciones sin usar en 90 días — ahorra ≥$50/mes', ru: 'Отмените неиспользуемые 90 дней подписки — сэкономьте ≥$50/мес' },
+    !tools.includes('crm') && { he: 'הגדר CRM בסיסי — הוא חיבור הכלים החשוב ביותר שלך', en: 'Set up a basic CRM — it\'s your most important tool connection', es: 'Configura un CRM básico — es tu conexión de herramientas más importante', ru: 'Настройте базовый CRM — это самое важное соединение инструментов' },
+  ].filter(Boolean).slice(0, 3).map((a: any) => gl(a, lang));
+
+  useEffect(() => {
+    if (step === 0 && tools.length === 0) trackEvent('tool_started', { tool: 'tool-stack', lang });
+  }, []);
+  useEffect(() => {
+    if (isResult) trackEvent('tool_completed', { tool: 'tool-stack', lang, tools: tools.length.toString() });
+  }, [isResult]);
+
   if (isResult) {
-    const lbl = {
-      keep: { he: 'שמור', en: 'Keep', es: 'Conservar', ru: 'Оставить' },
-      review: { he: 'בדוק מחדש', en: 'Review', es: 'Revisar', ru: 'Пересмотреть' },
-    };
     return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-[#151A23] border border-[rgba(199,255,74,0.2)] rounded-2xl p-5">
-            <p className="font-mono text-xs text-[#C7FF4A] uppercase tracking-widest mb-3">{gl(lbl.keep, lang)}</p>
-            {keep.length > 0 ? keep.map((t) => {
-              const opt = TOOL_OPTIONS.find((o) => o.v === t);
-              return <p key={t} className="text-sm text-[#F4F1EA]">{opt ? gl(opt.l, lang) : t}</p>;
-            }) : <p className="text-xs text-[#A7AFBA]">—</p>}
-          </div>
-          <div className="bg-[#151A23] border border-[rgba(255,122,89,0.2)] rounded-2xl p-5">
-            <p className="font-mono text-xs text-[#FF7A59] uppercase tracking-widest mb-3">{gl(lbl.review, lang)}</p>
-            {review.length > 0 ? review.map((t) => {
-              const opt = TOOL_OPTIONS.find((o) => o.v === t);
-              return <p key={t} className="text-sm text-[#A7AFBA]">{opt ? gl(opt.l, lang) : t}</p>;
-            }) : <p className="text-xs text-[#A7AFBA]">—</p>}
-          </div>
-        </div>
-
-        {advice.length > 0 && (
-          <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6">
-            <p className="font-mono text-xs uppercase text-[#C7FF4A] tracking-widest mb-4">{t.quickWins}</p>
-            <ul className="space-y-2">
-              {advice.slice(0, 3).map((a, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-[#F4F1EA]">
-                  <span className="w-5 h-5 rounded-full bg-[#C7FF4A]/10 border border-[#C7FF4A]/30 flex items-center justify-center flex-shrink-0 mt-0.5 font-mono text-[10px] text-[#C7FF4A]">{i + 1}</span>
-                  {gl(a, lang)}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <div className="flex items-center justify-between">
-          <button onClick={() => { setStep(0); setTools([]); setPains([]); }} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] font-mono transition-colors">↺ {t.startOver}</button>
-        </div>
-
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6">
-          <p className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-[#F4F1EA] mb-3">{t.newsletterTitle}</p>
-          {subscribed ? <p className="text-sm text-[#C7FF4A]">✓</p> : (
-            <div className="flex gap-2">
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.newsletterPlaceholder} className="flex-1 bg-[#1E2530] border border-[rgba(244,241,234,0.14)] rounded-xl px-4 py-2.5 text-sm text-[#F4F1EA] outline-none focus:border-[rgba(199,255,74,0.4)]" />
-              <button onClick={() => email && setSubscribed(true)} className="bg-[#C7FF4A] text-[#0E1117] font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-[#C7FF4A]/90 flex-shrink-0 transition-colors">{t.newsletterCta}</button>
+      <ToolResult
+        lang={lang}
+        toolId="tool-stack"
+        t={t}
+        answers={{ pains }}
+        quickWins={advice.slice(0, 3).map((a) => gl(a, lang))}
+        nextActions={nextActions}
+        onReset={clearSession}
+        scoreBlock={
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <p className="font-mono text-xs text-[#C7FF4A] uppercase tracking-widest mb-3">{gl(lbl.keep, lang)}</p>
+              {keep.length > 0 ? keep.map((t) => {
+                const opt = TOOL_OPTIONS.find((o) => o.v === t);
+                return <p key={t} className="text-sm text-[#F4F1EA]">{opt ? gl(opt.l, lang) : t}</p>;
+              }) : <p className="text-xs text-[#A7AFBA]">—</p>}
             </div>
-          )}
-          <p className="mt-2 text-xs text-[#A7AFBA]/60">{t.newsletterDisclaimer}</p>
-        </div>
-      </div>
+            <div>
+              <p className="font-mono text-xs text-[#FF7A59] uppercase tracking-widest mb-3">{gl(lbl.review, lang)}</p>
+              {review.length > 0 ? review.map((t) => {
+                const opt = TOOL_OPTIONS.find((o) => o.v === t);
+                return <p key={t} className="text-sm text-[#A7AFBA]">{opt ? gl(opt.l, lang) : t}</p>;
+              }) : <p className="text-xs text-[#A7AFBA]">—</p>}
+            </div>
+          </div>
+        }
+      />
     );
   }
 
@@ -113,48 +104,61 @@ export default function ToolStackSimplifier({ t }: { t: T }) {
     <div className="space-y-6">
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / 2</span><span>{step * 50}%</span></div>
-        <div className="h-1.5 rounded-full bg-[#1E2530] overflow-hidden"><div className="h-full rounded-full bg-[#6EE7F9] transition-all duration-300" style={{ width: `${step * 50}%` }} /></div>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${step * 50}%`, background: 'linear-gradient(90deg,#4dcfed,#6ee7f9)', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
+        </div>
       </div>
 
-      {step === 0 ? (
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-2">
-            {lang === 'he' ? 'אילו כלים אתה משתמש בהם?' : lang === 'ru' ? 'Какими инструментами вы пользуетесь?' : lang === 'es' ? '¿Qué herramientas usas?' : 'Which tools do you use?'}
-          </h2>
-          <p className="text-xs text-[#A7AFBA]/60 font-mono mb-5">{lang === 'he' ? 'בחר הכל שרלוונטי' : lang === 'ru' ? 'Выберите все подходящие' : lang === 'es' ? 'Selecciona todo lo que aplique' : 'Select all that apply'}</p>
+      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
+        <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-2">{gl(step === 0 ? lbl.toolsQ : lbl.painQ, lang)}</h2>
+        <p className="text-xs text-[#A7AFBA]/60 font-mono mb-5">{gl(lbl.selectAll, lang)}</p>
+        {step === 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {TOOL_OPTIONS.map((o) => (
-              <button key={o.v} onClick={() => toggleTool(o.v)} className={`text-start px-4 py-3 rounded-xl border text-sm transition-all flex items-center gap-3 ${tools.includes(o.v) ? 'border-[#6EE7F9]/60 bg-[#6EE7F9]/8 text-[#F4F1EA]' : 'border-[rgba(244,241,234,0.14)] bg-[#1E2530] text-[#A7AFBA] hover:text-[#F4F1EA]'}`}>
-                <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all ${tools.includes(o.v) ? 'bg-[#6EE7F9] border-[#6EE7F9]' : 'border-[rgba(244,241,234,0.3)]'}`}>
+              <button key={o.v} onClick={() => setSession((s) => ({ ...s, tools: s.tools.includes(o.v) ? s.tools.filter((x) => x !== o.v) : [...s.tools, o.v] }))}
+                className="text-start px-4 py-3 rounded-xl text-sm transition-all flex items-center gap-3"
+                style={tools.includes(o.v)
+                  ? { background: 'linear-gradient(160deg,rgba(110,231,249,0.1) 0%,rgba(110,231,249,0.04) 100%)', border: '1px solid rgba(110,231,249,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
+                  : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
+                }
+              >
+                <span className="w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all"
+                  style={tools.includes(o.v) ? { background: '#6EE7F9', border: '1px solid #6EE7F9' } : { border: '1px solid rgba(244,241,234,0.25)' }}>
                   {tools.includes(o.v) && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
                 </span>
                 {gl(o.l, lang)}
               </button>
             ))}
           </div>
-        </div>
-      ) : (
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-2">
-            {lang === 'he' ? 'מה הכי מתסכל אותך?' : lang === 'ru' ? 'Что вас больше всего раздражает?' : lang === 'es' ? '¿Qué te frustra más?' : 'What frustrates you most?'}
-          </h2>
-          <p className="text-xs text-[#A7AFBA]/60 font-mono mb-5">{lang === 'he' ? 'בחר הכל שרלוונטי' : lang === 'ru' ? 'Выберите все подходящие' : lang === 'es' ? 'Selecciona todo lo que aplique' : 'Select all that apply'}</p>
+        ) : (
           <div className="space-y-2">
             {PAIN_OPTIONS.map((o) => (
-              <button key={o.v} onClick={() => togglePain(o.v)} className={`w-full text-start px-4 py-3.5 rounded-xl border text-sm transition-all flex items-center gap-3 ${pains.includes(o.v) ? 'border-[#6EE7F9]/60 bg-[#6EE7F9]/8 text-[#F4F1EA]' : 'border-[rgba(244,241,234,0.14)] bg-[#1E2530] text-[#A7AFBA] hover:text-[#F4F1EA]'}`}>
-                <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all ${pains.includes(o.v) ? 'bg-[#6EE7F9] border-[#6EE7F9]' : 'border-[rgba(244,241,234,0.3)]'}`}>
+              <button key={o.v} onClick={() => setSession((s) => ({ ...s, pains: s.pains.includes(o.v) ? s.pains.filter((x) => x !== o.v) : [...s.pains, o.v] }))}
+                className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all flex items-center gap-3"
+                style={pains.includes(o.v)
+                  ? { background: 'linear-gradient(160deg,rgba(110,231,249,0.1) 0%,rgba(110,231,249,0.04) 100%)', border: '1px solid rgba(110,231,249,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
+                  : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
+                }
+              >
+                <span className="w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all"
+                  style={pains.includes(o.v) ? { background: '#6EE7F9', border: '1px solid #6EE7F9' } : { border: '1px solid rgba(244,241,234,0.25)' }}>
                   {pains.includes(o.v) && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
                 </span>
                 {gl(o.l, lang)}
               </button>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="flex items-center justify-between">
-        <button onClick={() => step > 0 && setStep((s) => s - 1)} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}</button>
-        <button onClick={() => setStep((s) => s + 1)} disabled={step === 0 ? tools.length === 0 : pains.length === 0} className="bg-[#6EE7F9] text-[#0E1117] font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-[#6EE7F9]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        <button onClick={() => step > 0 && setSession((s) => ({...s, step:s.step-1}))} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}</button>
+        <button
+          onClick={() => setSession((s) => ({...s, step:s.step+1}))}
+          disabled={step === 0 ? tools.length === 0 : pains.length === 0}
+          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 1px 0 0 rgba(255,255,255,0.22) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
+        >
           {step === 1 ? t.seeResults : t.next} →
         </button>
       </div>

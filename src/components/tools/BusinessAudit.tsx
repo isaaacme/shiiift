@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ToolResult from './ToolResult';
+import { useToolSession, trackEvent } from './useToolSession';
 
 interface Translations {
   back: string;
@@ -178,13 +180,29 @@ function getQuickWins(answers: Record<string, string>, lang: string): string[] {
   return wins.slice(0, 3);
 }
 
+function getNextActions(answers: Record<string, string>, lang: string): string[] {
+  const score = getScore(answers);
+  const actions: Record<string, string>[] = [];
+  if (score < 25) {
+    actions.push({ he: 'הגדר מערכת CRM בסיסית (HubSpot חינמי) — שלב ראשון הכרחי', en: 'Set up a basic CRM (free HubSpot) — essential first step', es: 'Configura un CRM básico (HubSpot gratis) — primer paso esencial', ru: 'Настройте базовый CRM (бесплатный HubSpot) — обязательный первый шаг' });
+    actions.push({ he: 'הוסף טופס ליצירת קשר ברור לאתר', en: 'Add a clear contact/intake form to your website', es: 'Agrega un formulario de contacto claro a tu sitio web', ru: 'Добавьте чёткую форму заявки на сайт' });
+  } else if (score < 50) {
+    actions.push({ he: 'חבר את הטופס שלך ל-CRM ובנה זרימת מעקב אוטומטית', en: 'Connect your form to CRM and build an automated follow-up flow', es: 'Conecta tu formulario al CRM y construye un flujo de seguimiento automatizado', ru: 'Подключите форму к CRM и создайте автоматический follow-up' });
+    actions.push({ he: 'מפה 3 משימות ידניות שחוזרות ובצע אוטומציה ראשונה עם Zapier/Make', en: 'Map 3 recurring manual tasks and build your first Zapier/Make automation', es: 'Mapea 3 tareas manuales recurrentes y crea tu primera automatización', ru: 'Определите 3 повторяющиеся задачи и создайте первую автоматизацию' });
+  } else if (score < 75) {
+    actions.push({ he: 'שפר את לוח המחוונים שלך — הגדר KPIs ברורים ודוח שבועי', en: 'Improve your dashboard — set clear KPIs and a weekly report', es: 'Mejora tu dashboard — define KPIs claros y un informe semanal', ru: 'Улучшите дашборд — установите чёткие KPI и еженедельный отчёт' });
+    actions.push({ he: 'בחן שילוב AI לתהליכי תמיכה וייצור תוכן', en: 'Explore AI integration for support and content workflows', es: 'Explora integración de IA para soporte y flujos de contenido', ru: 'Изучите интеграцию ИИ для поддержки и создания контента' });
+  } else {
+    actions.push({ he: 'תעד את הגדרות האוטומציה שלך ובנה נהלים לצוות', en: 'Document your automation setup and build team SOPs', es: 'Documenta tu configuración de automatización y crea SOPs', ru: 'Задокументируйте автоматизацию и создайте SOP для команды' });
+    actions.push({ he: 'בחן Supabase/Airtable ליצירת לוח מחוונים מותאם אישית', en: 'Explore Supabase/Airtable for a custom business dashboard', es: 'Explora Supabase/Airtable para un dashboard empresarial personalizado', ru: 'Изучите Supabase/Airtable для настраиваемого бизнес-дашборда' });
+  }
+  return actions.map((a) => getLabel(a, lang));
+}
+
 export default function BusinessAudit({ t }: Props) {
   const lang = (t.lang || 'en') as Lang;
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-  const [selected, setSelected] = useState<string>('');
+  const [session, setSession, clearSession] = useToolSession('business-audit', { step: 0, answers: {} as Record<string, string>, selected: '' });
+  const { step, answers, selected } = session;
 
   const isResult = step >= QUESTIONS.length;
   const currentQ = QUESTIONS[step];
@@ -192,138 +210,63 @@ export default function BusinessAudit({ t }: Props) {
   const maturity = getMaturityLevel(score, lang);
   const findings = getFindings(answers, lang);
   const quickWins = getQuickWins(answers, lang);
+  const nextActions = getNextActions(answers, lang);
+
+  useEffect(() => {
+    if (step === 0 && Object.keys(answers).length === 0) {
+      trackEvent('tool_started', { tool: 'business-audit', lang });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isResult) trackEvent('tool_completed', { tool: 'business-audit', lang, score: String(score) });
+  }, [isResult]);
 
   function handleSelect(value: string) {
-    setSelected(value);
+    setSession((s) => ({ ...s, selected: value }));
   }
 
   function handleNext() {
     if (!selected) return;
-    setAnswers((prev) => ({ ...prev, [currentQ.id]: selected }));
-    setSelected('');
-    setStep((s) => s + 1);
+    setSession((s) => ({ ...s, answers: { ...s.answers, [currentQ.id]: selected }, selected: '', step: s.step + 1 }));
   }
 
   function handleBack() {
     if (step === 0) return;
     const prevQ = QUESTIONS[step - 1];
-    setSelected(answers[prevQ.id] || '');
-    setStep((s) => s - 1);
+    setSession((s) => ({ ...s, step: s.step - 1, selected: s.answers[prevQ.id] || '' }));
   }
 
   function handleReset() {
-    setStep(0);
-    setAnswers({});
-    setSelected('');
+    clearSession();
   }
 
   const progress = Math.round((step / QUESTIONS.length) * 100);
 
   if (isResult) {
     return (
-      <div className="space-y-8">
-        {/* Score */}
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-3">{t.yourScore}</p>
-          <div className="flex items-end gap-4 mb-4">
-            <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{score}</span>
-            <span className="text-[#A7AFBA] font-mono text-sm mb-2">/ 100 — {maturity}</span>
-          </div>
-          <div className="h-2 rounded-full bg-[#1E2530] overflow-hidden">
-            <div
-              className="h-full rounded-full bg-[#C7FF4A] transition-all duration-1000 ease-out"
-              style={{ width: `${score}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Findings */}
-        {findings.length > 0 && (
-          <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.topFindings}</p>
-            <ul className="space-y-3">
-              {findings.map((f, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-[#A7AFBA] leading-snug">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF7A59] flex-shrink-0 mt-1.5"></span>
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Quick Wins */}
-        {quickWins.length > 0 && (
-          <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.quickWins}</p>
-            <ul className="space-y-3">
-              {quickWins.map((w, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-[#F4F1EA] leading-snug">
-                  <span className="w-5 h-5 rounded-full bg-[#C7FF4A]/10 border border-[#C7FF4A]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="font-mono text-[10px] text-[#C7FF4A]">{i + 1}</span>
-                  </span>
-                  {w}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Related Tools */}
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.relatedTools}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {[
-              { href: 'automation-finder', label: { he: 'מאתר הזדמנויות אוטומציה', en: 'Automation Opportunity Finder', es: 'Buscador de Automatización', ru: 'Поиск автоматизации' } },
-              { href: 'website-audit', label: { he: 'ביקורת מינוף אתרים', en: 'Website Leverage Audit', es: 'Auditoría de Sitio Web', ru: 'Аудит сайта' } },
-              { href: 'lead-flow', label: { he: 'ממפה זרימת לידים', en: 'Lead Flow Mapper', es: 'Mapeador de Leads', ru: 'Карта потока лидов' } },
-            ].map((tool) => (
-              <a
-                key={tool.href}
-                href={`/${lang}/tools/${tool.href}`}
-                className="flex items-center justify-between px-4 py-3 bg-[#1E2530] border border-[rgba(244,241,234,0.14)] rounded-xl text-sm text-[#A7AFBA] hover:text-[#F4F1EA] hover:border-[rgba(199,255,74,0.3)] transition-all no-underline"
-              >
-                <span>{getLabel(tool.label, lang)}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Newsletter */}
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <p className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-[#F4F1EA] mb-2">{t.newsletterTitle}</p>
-          {subscribed ? (
-            <p className="text-sm text-[#C7FF4A]">✓</p>
-          ) : (
-            <div className="flex gap-2 mt-3">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t.newsletterPlaceholder}
-                className="flex-1 bg-[#1E2530] border border-[rgba(244,241,234,0.14)] rounded-xl px-4 py-2.5 text-sm text-[#F4F1EA] placeholder-[#A7AFBA]/50 outline-none focus:border-[rgba(199,255,74,0.4)]"
-              />
-              <button
-                onClick={() => email && setSubscribed(true)}
-                className="bg-[#C7FF4A] text-[#0E1117] font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-[#C7FF4A]/90 transition-colors flex-shrink-0"
-              >
-                {t.newsletterCta}
-              </button>
+      <ToolResult
+        lang={lang}
+        toolId="business-audit"
+        t={t}
+        answers={answers}
+        findings={findings}
+        quickWins={quickWins}
+        nextActions={nextActions}
+        onReset={handleReset}
+        scoreBlock={
+          <div>
+            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-3">{t.yourScore}</p>
+            <div className="flex items-end gap-4 mb-4">
+              <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{score}</span>
+              <span className="text-[#A7AFBA] font-mono text-sm mb-2">/ 100 — {maturity}</span>
             </div>
-          )}
-          <p className="mt-2 text-xs text-[#A7AFBA]/60">{t.newsletterDisclaimer}</p>
-        </div>
-
-        <button
-          onClick={handleReset}
-          className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] transition-colors font-mono"
-        >
-          ↺ {t.startOver}
-        </button>
-      </div>
+            <div className="h-2 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#1a2030)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+              <div className="h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${score}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a,#d8ff6a)', boxShadow: '0 0 8px rgba(199,255,74,0.4)' }} />
+            </div>
+          </div>
+        }
+      />
     );
   }
 
@@ -335,30 +278,26 @@ export default function BusinessAudit({ t }: Props) {
           <span>{step + 1} / {QUESTIONS.length}</span>
           <span>{progress}%</span>
         </div>
-        <div className="h-1.5 rounded-full bg-[#1E2530] overflow-hidden">
-          <div
-            className="h-full rounded-full bg-[#C7FF4A] transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a)', boxShadow: '0 0 6px rgba(199,255,74,0.35)' }} />
         </div>
       </div>
 
       {/* Question */}
-      <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
+      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
         <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-6">
           {getLabel(currentQ.question, lang)}
         </h2>
-
         <div className="space-y-2">
           {(currentQ.options as any[]).map((opt) => (
             <button
               key={opt.value}
               onClick={() => handleSelect(opt.value)}
-              className={`w-full text-start px-4 py-3.5 rounded-xl border text-sm transition-all duration-150 ${
-                selected === opt.value
-                  ? 'border-[#C7FF4A]/60 bg-[#C7FF4A]/8 text-[#F4F1EA]'
-                  : 'border-[rgba(244,241,234,0.14)] bg-[#1E2530] text-[#A7AFBA] hover:text-[#F4F1EA] hover:border-[rgba(244,241,234,0.25)]'
-              }`}
+              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150"
+              style={selected === opt.value
+                ? { background: 'linear-gradient(160deg,rgba(199,255,74,0.1) 0%,rgba(199,255,74,0.04) 100%)', border: '1px solid rgba(199,255,74,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
+                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
+              }
             >
               {getLabel(opt.label, lang)}
             </button>
@@ -368,17 +307,16 @@ export default function BusinessAudit({ t }: Props) {
 
       {/* Navigation */}
       <div className="flex items-center justify-between">
-        <button
-          onClick={handleBack}
-          disabled={step === 0}
-          className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-mono"
-        >
+        <button onClick={handleBack} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-mono">
           ← {t.back}
         </button>
         <button
-          onClick={step === QUESTIONS.length - 1 ? () => { if (selected) { setAnswers((prev) => ({ ...prev, [currentQ.id]: selected })); setSelected(''); setStep((s) => s + 1); } } : handleNext}
+          onClick={step === QUESTIONS.length - 1
+            ? () => { if (selected) { setSession((s) => ({ ...s, answers: { ...s.answers, [currentQ.id]: selected }, selected: '', step: s.step + 1 })); } }
+            : handleNext}
           disabled={!selected}
-          className="bg-[#C7FF4A] text-[#0E1117] font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-[#C7FF4A]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          style={{ background: 'linear-gradient(180deg,#d6ff5e 0%,#c7ff4a 45%,#aee038 100%)', color: '#0E1117', boxShadow: 'var(--v-shadow-accent)', border: '1px solid rgba(255,255,255,0.15)' }}
         >
           {step === QUESTIONS.length - 1 ? t.seeResults : t.next} →
         </button>

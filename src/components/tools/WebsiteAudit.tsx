@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ToolResult from './ToolResult';
+import { useToolSession, trackEvent } from './useToolSession';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
 
@@ -69,11 +71,8 @@ const LEVEL_LABELS = [
 
 export default function WebsiteAudit({ t }: Props) {
   const lang = (t.lang || 'en') as Lang;
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [selected, setSelected] = useState('');
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  const [session, setSession, clearSession] = useToolSession('website-audit', { step: 0, answers: {} as Record<string, string>, selected: '' });
+  const { step, answers, selected } = session;
 
   const isResult = step >= QUESTIONS.length;
   const cq = QUESTIONS[step];
@@ -84,73 +83,53 @@ export default function WebsiteAudit({ t }: Props) {
   }, 0) / 75 * 100);
   const level = LEVEL_LABELS.find((l) => score >= l.min && score <= l.max) ?? LEVEL_LABELS[0];
 
-  function next() {
-    if (!selected) return;
-    setAnswers((p) => ({ ...p, [cq.id]: selected }));
-    setSelected('');
-    setStep((s) => s + 1);
-  }
+  useEffect(() => {
+    if (step === 0 && Object.keys(answers).length === 0) trackEvent('tool_started', { tool: 'website-audit', lang });
+  }, []);
+  useEffect(() => {
+    if (isResult) trackEvent('tool_completed', { tool: 'website-audit', lang, score: String(score) });
+  }, [isResult]);
 
-  function back() {
-    if (step === 0) return;
-    const pq = QUESTIONS[step - 1];
-    setSelected(answers[pq.id] || '');
-    setStep((s) => s - 1);
-  }
+  const wins = [
+    answers.cta !== 'tested' && { he: 'ערוך A/B טסט על ה-CTA הראשי', en: 'Run an A/B test on your primary CTA', es: 'Haz un A/B test en tu CTA principal', ru: 'Проведите A/B тест основного CTA' },
+    answers.speed === 'slow' && { he: 'שפר מהירות אתר — כל שניית עיכוב עולה ב-7% המרה', en: 'Improve load speed — every second costs 7% conversion', es: 'Mejora la velocidad — cada segundo cuesta 7% de conversión', ru: 'Улучшите скорость — каждая секунда стоит 7% конверсии' },
+    answers.leads !== 'crm' && { he: 'חבר טופס ל-CRM ואוטומט מעקב', en: 'Connect form to CRM and automate follow-up', es: 'Conecta formulario al CRM y automatiza el seguimiento', ru: 'Подключите форму к CRM и автоматизируйте follow-up' },
+    answers.analytics === 'no' && { he: 'התקן Google Analytics 4 עם מעקב אחר אירועים', en: 'Install GA4 with event tracking', es: 'Instala GA4 con seguimiento de eventos', ru: 'Установите GA4 с отслеживанием событий' },
+  ].filter(Boolean).slice(0, 3).map((w: any) => gl(w, lang));
+
+  const nextActions = score < 40
+    ? [
+        { he: 'הוסף CTA ראשי ברור לדף הבית', en: 'Add a single clear primary CTA to your homepage', es: 'Agrega un CTA principal claro a tu página de inicio', ru: 'Добавьте чёткий основной CTA на главную страницу' },
+        { he: 'חבר טופס יצירת קשר ל-CRM עם מעקב אוטומטי', en: 'Connect contact form to CRM with auto follow-up', es: 'Conecta formulario al CRM con seguimiento automático', ru: 'Подключите форму к CRM с авто-follow-up' },
+      ].map((a) => gl(a, lang))
+    : [
+        { he: 'הגדר מעקב המרות ב-GA4 ובנה דוח שבועי', en: 'Set up GA4 conversion tracking and build a weekly report', es: 'Configura seguimiento de conversiones en GA4 y crea informe semanal', ru: 'Настройте отслеживание конверсий в GA4 и еженедельный отчёт' },
+        { he: 'בחן הוספת צ\'אט/בוט לדף הבית לייצור לידים', en: 'Consider adding a chat/bot to homepage for lead capture', es: 'Considera agregar chat/bot a la página de inicio para captura de leads', ru: 'Рассмотрите добавление чата/бота на главную для захвата лидов' },
+      ].map((a) => gl(a, lang));
 
   if (isResult) {
     return (
-      <div className="space-y-6">
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <p className="font-mono text-xs tracking-widest uppercase mb-3" style={{ color: level.color }}>{t.yourScore}</p>
-          <div className="flex items-end gap-4 mb-1">
-            <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{score}</span>
-            <span className="font-semibold mb-2" style={{ color: level.color }}>{gl(level.label, lang)}</span>
-          </div>
-          <div className="h-2 rounded-full bg-[#1E2530] overflow-hidden mt-3">
-            <div className="h-full rounded-full transition-all duration-700" style={{ width: `${score}%`, backgroundColor: level.color }} />
-          </div>
-        </div>
-
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.quickWins}</p>
-          <ul className="space-y-2">
-            {[
-              answers.cta !== 'tested' && { he: 'ערוך A/B טסט על ה-CTA הראשי', en: 'Run an A/B test on your primary CTA', es: 'Haz un A/B test en tu CTA principal', ru: 'Проведите A/B тест основного CTA' },
-              answers.speed === 'slow' && { he: 'שפר מהירות אתר — כל שניית עיכוב עולה ב-7% המרה', en: 'Improve load speed — every second costs 7% conversion', es: 'Mejora la velocidad — cada segundo cuesta 7% de conversión', ru: 'Улучшите скорость — каждая секунда стоит 7% конверсии' },
-              answers.leads !== 'crm' && { he: 'חבר טופס ל-CRM ואוטומט מעקב', en: 'Connect form to CRM and automate follow-up', es: 'Conecta formulario al CRM y automatiza el seguimiento', ru: 'Подключите форму к CRM и автоматизируйте follow-up' },
-              answers.analytics === 'no' && { he: 'התקן Google Analytics 4 עם מעקב אחר אירועים', en: 'Install GA4 with event tracking', es: 'Instala GA4 con seguimiento de eventos', ru: 'Установите GA4 с отслеживанием событий' },
-            ].filter(Boolean).slice(0, 3).map((w: any, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-[#F4F1EA]">
-                <span className="w-5 h-5 rounded-full bg-[#C7FF4A]/10 border border-[#C7FF4A]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="font-mono text-[10px] text-[#C7FF4A]">{i + 1}</span>
-                </span>
-                {gl(w, lang)}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <button onClick={() => { setStep(0); setAnswers({}); setSelected(''); }} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] transition-colors font-mono">
-            ↺ {t.startOver}
-          </button>
-          <a href={`/${lang}/tools/business-audit`} className="text-sm text-[#A7AFBA] hover:text-[#C7FF4A] transition-colors no-underline font-mono">
-            {t.relatedTools} →
-          </a>
-        </div>
-
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6">
-          <p className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-[#F4F1EA] mb-3">{t.newsletterTitle}</p>
-          {subscribed ? <p className="text-sm text-[#C7FF4A]">✓</p> : (
-            <div className="flex gap-2">
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.newsletterPlaceholder} className="flex-1 bg-[#1E2530] border border-[rgba(244,241,234,0.14)] rounded-xl px-4 py-2.5 text-sm text-[#F4F1EA] placeholder-[#A7AFBA]/50 outline-none focus:border-[rgba(199,255,74,0.4)]" />
-              <button onClick={() => email && setSubscribed(true)} className="bg-[#C7FF4A] text-[#0E1117] font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-[#C7FF4A]/90 transition-colors flex-shrink-0">{t.newsletterCta}</button>
+      <ToolResult
+        lang={lang}
+        toolId="website-audit"
+        t={t}
+        answers={answers}
+        quickWins={wins}
+        nextActions={nextActions}
+        onReset={clearSession}
+        scoreBlock={
+          <div>
+            <p className="font-mono text-xs tracking-widest uppercase mb-3" style={{ color: level.color }}>{t.yourScore}</p>
+            <div className="flex items-end gap-4 mb-1">
+              <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{score}</span>
+              <span className="font-semibold mb-2" style={{ color: level.color }}>{gl(level.label, lang)}</span>
             </div>
-          )}
-          <p className="mt-2 text-xs text-[#A7AFBA]/60">{t.newsletterDisclaimer}</p>
-        </div>
-      </div>
+            <div className="h-2 rounded-full overflow-hidden mt-3" style={{ background: 'linear-gradient(90deg,#0c1018,#1a2030)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+              <div className="h-full rounded-full transition-all duration-700" style={{ width: `${score}%`, backgroundColor: level.color, boxShadow: `0 0 8px ${level.color}66` }} />
+            </div>
+          </div>
+        }
+      />
     );
   }
 
@@ -159,21 +138,34 @@ export default function WebsiteAudit({ t }: Props) {
     <div className="space-y-6">
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / {QUESTIONS.length}</span><span>{progress}%</span></div>
-        <div className="h-1.5 rounded-full bg-[#1E2530] overflow-hidden"><div className="h-full rounded-full bg-[#6EE7F9] transition-all duration-300" style={{ width: `${progress}%` }} /></div>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#4dcfed,#6ee7f9)', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
+        </div>
       </div>
-      <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
+      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
         <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-6">{gl(cq.q, lang)}</h2>
         <div className="space-y-2">
           {cq.opts.map((o) => (
-            <button key={o.v} onClick={() => setSelected(o.v)} className={`w-full text-start px-4 py-3.5 rounded-xl border text-sm transition-all ${selected === o.v ? 'border-[#6EE7F9]/60 bg-[#6EE7F9]/8 text-[#F4F1EA]' : 'border-[rgba(244,241,234,0.14)] bg-[#1E2530] text-[#A7AFBA] hover:text-[#F4F1EA] hover:border-[rgba(244,241,234,0.25)]'}`}>
+            <button key={o.v} onClick={() => setSession((s) => ({ ...s, selected: o.v }))}
+              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150"
+              style={selected === o.v
+                ? { background: 'linear-gradient(160deg,rgba(110,231,249,0.1) 0%,rgba(110,231,249,0.04) 100%)', border: '1px solid rgba(110,231,249,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
+                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
+              }
+            >
               {gl(o.l, lang)}
             </button>
           ))}
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <button onClick={back} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 transition-colors font-mono">← {t.back}</button>
-        <button onClick={next} disabled={!selected} className="bg-[#6EE7F9] text-[#0E1117] font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-[#6EE7F9]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        <button onClick={() => { if (step === 0) return; const pq = QUESTIONS[step-1]; setSession((s) => ({...s, step: s.step-1, selected: s.answers[pq.id]||''})); }} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 transition-colors font-mono">← {t.back}</button>
+        <button
+          onClick={() => { if (!selected) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]:selected}, selected:'', step:s.step+1})); }}
+          disabled={!selected}
+          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 1px 0 0 rgba(255,255,255,0.22) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
+        >
           {step === QUESTIONS.length - 1 ? t.seeResults : t.next} →
         </button>
       </div>

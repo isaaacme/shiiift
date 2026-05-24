@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ToolResult from './ToolResult';
+import { useToolSession, trackEvent } from './useToolSession';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
 type T = { back: string; next: string; seeResults: string; startOver: string; yourScore: string; topFindings: string; quickWins: string; nextActions: string; relatedTools: string; newsletterTitle: string; newsletterPlaceholder: string; newsletterCta: string; newsletterDisclaimer: string; lang: string };
@@ -60,79 +62,52 @@ const BAD: Record<string, string> = {
 
 export default function AIReadiness({ t }: { t: T }) {
   const lang = (t.lang || 'en') as Lang;
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [selected, setSelected] = useState('');
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  const [session, setSession, clearSession] = useToolSession('ai-readiness', { step: 0, answers: {} as Record<string, string>, selected: '' });
+  const { step, answers, selected } = session;
 
   const isResult = step >= QS.length;
   const cq = QS[step];
 
-  function next() {
-    if (!selected) return;
-    setAnswers((p) => ({ ...p, [cq.id]: selected }));
-    setSelected('');
-    setStep((s) => s + 1);
-  }
-
-  function back() {
-    if (step === 0) return;
-    const pq = QS[step - 1];
-    setSelected(answers[pq.id] || '');
-    setStep((s) => s - 1);
-  }
-
   const goodUses = Object.entries(GOOD)
-    .filter(([k]) => {
-      const [field, val] = k.split('_');
-      return answers[field] === val;
-    })
+    .filter(([k]) => { const [field, val] = k.split('_'); return answers[field] === val; })
     .map(([, v]) => v);
+
+  const keepHumanLabel = { he: 'לא לאוטומציה', en: 'Keep human', es: 'No automatizar', ru: 'Не для автоматизации' };
+  const noUsesLabel = { he: 'לא זוהו מקרי שימוש ברורים לAI כרגע.', en: 'No clear AI use cases identified yet.', es: 'No se identificaron casos de uso de IA claros por ahora.', ru: 'Явных кейсов для ИИ пока не выявлено.' };
+
+  const nextActions = [
+    goodUses.length > 0 && { he: 'בחר מקרה שימוש אחד ל-AI מהרשימה ובנה גרסת PoC בשבוע', en: 'Pick one AI use case from the list and build a PoC this week', es: 'Elige un caso de uso de IA y crea un PoC esta semana', ru: 'Выберите один AI-кейс из списка и создайте PoC на этой неделе' },
+    answers.support === 'many' && { he: 'הגדר צ\'אטבוט AI עם מסד ידע מ-FAQ קיים', en: 'Set up an AI chatbot trained on your existing FAQ', es: 'Configura un chatbot de IA entrenado con tu FAQ existente', ru: 'Настройте AI-чатбот на основе существующего FAQ' },
+    { he: 'הגדר בדיקת סף ל-AI: האם זה חוזר, מבוסס כללים, בנפח גבוה?', en: 'Apply the AI threshold test: is it repetitive, rules-based, high-volume?', es: 'Aplica el test de umbral de IA: ¿es repetitivo, basado en reglas, alto volumen?', ru: 'Применяйте AI-порог: повторяющееся, основанное на правилах, высокообъёмное?' },
+  ].filter(Boolean).slice(0, 3).map((a: any) => gl(a, lang));
+
+  useEffect(() => {
+    if (step === 0 && Object.keys(answers).length === 0) trackEvent('tool_started', { tool: 'ai-readiness', lang });
+  }, []);
+  useEffect(() => {
+    if (isResult) trackEvent('tool_completed', { tool: 'ai-readiness', lang, uses: String(goodUses.length) });
+  }, [isResult]);
 
   if (isResult) {
     return (
-      <div className="space-y-6">
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.topFindings}</p>
-          {goodUses.length > 0 ? (
-            <ul className="space-y-2 mb-5">
-              {goodUses.map((u, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-[#F4F1EA]">
-                  <span className="text-[#C7FF4A] mt-0.5 flex-shrink-0">✓</span>
-                  {gl(u, lang)}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-[#A7AFBA] mb-5">
-              {lang === 'he' ? 'לא זוהו מקרי שימוש ברורים לAI כרגע.' : lang === 'ru' ? 'Явных кейсов для ИИ пока не выявлено.' : lang === 'es' ? 'No se identificaron casos de uso de IA claros por ahora.' : 'No clear AI use cases identified yet.'}
-            </p>
-          )}
-          <div className="border-t border-[rgba(244,241,234,0.14)] pt-4">
-            <p className="font-mono text-xs text-[#FF7A59] mb-2 uppercase tracking-widest">
-              {lang === 'he' ? 'לא לאוטומציה' : lang === 'ru' ? 'Не для автоматизации' : lang === 'es' ? 'No automatizar' : 'Keep human'}
-            </p>
-            <p className="text-sm text-[#A7AFBA]">{BAD[lang] ?? BAD['en']}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <button onClick={() => { setStep(0); setAnswers({}); setSelected(''); }} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] font-mono transition-colors">↺ {t.startOver}</button>
-          <a href={`/${lang}/tools/automation-finder`} className="text-sm text-[#A7AFBA] hover:text-[#C7FF4A] font-mono no-underline transition-colors">{t.relatedTools} →</a>
-        </div>
-
-        <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6">
-          <p className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-[#F4F1EA] mb-3">{t.newsletterTitle}</p>
-          {subscribed ? <p className="text-sm text-[#C7FF4A]">✓</p> : (
-            <div className="flex gap-2">
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.newsletterPlaceholder} className="flex-1 bg-[#1E2530] border border-[rgba(244,241,234,0.14)] rounded-xl px-4 py-2.5 text-sm text-[#F4F1EA] outline-none focus:border-[rgba(199,255,74,0.4)]" />
-              <button onClick={() => email && setSubscribed(true)} className="bg-[#C7FF4A] text-[#0E1117] font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-[#C7FF4A]/90 flex-shrink-0 transition-colors">{t.newsletterCta}</button>
+      <ToolResult
+        lang={lang}
+        toolId="ai-readiness"
+        t={t}
+        answers={answers}
+        findings={goodUses.length > 0 ? goodUses.map((u) => `✓ ${gl(u, lang)}`) : [gl(noUsesLabel, lang)]}
+        nextActions={nextActions}
+        onReset={clearSession}
+        scoreBlock={
+          <div>
+            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-3">{t.topFindings}</p>
+            <div className="border-t border-[rgba(244,241,234,0.08)] mt-4 pt-4">
+              <p className="font-mono text-xs text-[#FF7A59] mb-2 uppercase tracking-widest">{gl(keepHumanLabel, lang)}</p>
+              <p className="text-sm text-[#A7AFBA]">{BAD[lang] ?? BAD['en']}</p>
             </div>
-          )}
-          <p className="mt-2 text-xs text-[#A7AFBA]/60">{t.newsletterDisclaimer}</p>
-        </div>
-      </div>
+          </div>
+        }
+      />
     );
   }
 
@@ -141,21 +116,37 @@ export default function AIReadiness({ t }: { t: T }) {
     <div className="space-y-6">
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
-        <div className="h-1.5 rounded-full bg-[#1E2530] overflow-hidden"><div className="h-full rounded-full bg-[#C7FF4A] transition-all duration-300" style={{ width: `${progress}%` }} /></div>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a)', boxShadow: '0 0 6px rgba(199,255,74,0.35)' }} />
+        </div>
       </div>
-      <div className="bg-[#151A23] border border-[rgba(244,241,234,0.14)] rounded-2xl p-6 sm:p-8">
+      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
         <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-6">{gl(cq.q, lang)}</h2>
         <div className="space-y-2">
           {cq.opts.map((o) => (
-            <button key={o.v} onClick={() => setSelected(o.v)} className={`w-full text-start px-4 py-3.5 rounded-xl border text-sm transition-all ${selected === o.v ? 'border-[#C7FF4A]/60 bg-[#C7FF4A]/8 text-[#F4F1EA]' : 'border-[rgba(244,241,234,0.14)] bg-[#1E2530] text-[#A7AFBA] hover:text-[#F4F1EA] hover:border-[rgba(244,241,234,0.25)]'}`}>
+            <button key={o.v} onClick={() => setSession((s) => ({ ...s, selected: o.v }))}
+              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all"
+              style={selected === o.v
+                ? { background: 'linear-gradient(160deg,rgba(199,255,74,0.1) 0%,rgba(199,255,74,0.04) 100%)', border: '1px solid rgba(199,255,74,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
+                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
+              }
+            >
               {gl(o.l, lang)}
             </button>
           ))}
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <button onClick={back} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}</button>
-        <button onClick={next} disabled={!selected} className="bg-[#C7FF4A] text-[#0E1117] font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-[#C7FF4A]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        <button
+          onClick={() => { if (step === 0) return; const pq = QS[step-1]; setSession((s) => ({...s, step:s.step-1, selected:s.answers[pq.id]||''})); }}
+          disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">← {t.back}
+        </button>
+        <button
+          onClick={() => { if (!selected) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]:selected}, selected:'', step:s.step+1})); }}
+          disabled={!selected}
+          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          style={{ background: 'linear-gradient(180deg,#d6ff5e 0%,#c7ff4a 45%,#aee038 100%)', color: '#0E1117', boxShadow: 'var(--v-shadow-accent)', border: '1px solid rgba(255,255,255,0.15)' }}
+        >
           {step === QS.length - 1 ? t.seeResults : t.next} →
         </button>
       </div>

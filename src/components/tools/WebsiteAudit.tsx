@@ -145,18 +145,16 @@ async function fetchPsi(url: string): Promise<PsiData> {
   const base = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
   const encoded = encodeURIComponent(url);
 
-  const [desktopRes, mobileRes] = await Promise.all([
-    fetch(`${base}?url=${encoded}&strategy=desktop`),
-    fetch(`${base}?url=${encoded}&strategy=mobile`),
-  ]);
-
+  const desktopRes = await fetch(`${base}?url=${encoded}&strategy=desktop`);
+  if (desktopRes.status === 429) throw new Error('RATE_LIMITED');
   if (!desktopRes.ok) throw new Error(`PSI API error: ${desktopRes.status}`);
 
   const desktop = await desktopRes.json();
-  const mobile = mobileRes.ok ? await mobileRes.json() : null;
-
   if (desktop?.error) throw new Error(desktop.error?.message ?? 'PSI error');
   if (!desktop?.lighthouseResult) throw new Error('No Lighthouse result returned');
+
+  const mobileRes = await fetch(`${base}?url=${encoded}&strategy=mobile`);
+  const mobile = mobileRes.ok ? await mobileRes.json() : null;
 
   const audits = desktop.lighthouseResult.audits ?? {};
   const cats = desktop.lighthouseResult.categories ?? {};
@@ -368,7 +366,11 @@ export default function WebsiteAudit({ t }: Props) {
       setPsiData(data);
       setPhase('psi');
     } catch (err: any) {
-      setPsiError(lang === 'he' ? 'לא ניתן לנתח את האתר. בדוק שהכתובת נגישה לציבור ונסה שוב.' : lang === 'ru' ? 'Не удалось проанализировать сайт. Проверьте, что URL публично доступен.' : lang === 'es' ? 'No se pudo analizar el sitio. Verifica que la URL sea públicamente accesible.' : 'Could not analyse the site. Make sure the URL is publicly accessible and try again.');
+      const isRateLimit = err?.message === 'RATE_LIMITED';
+      setPsiError(isRateLimit
+        ? (lang === 'he' ? 'Google PageSpeed הגיע למגבלת בקשות. המתן מספר דקות ונסה שוב, או בדוק ישירות בpagespeed.web.dev' : lang === 'ru' ? 'Google PageSpeed достиг лимита запросов. Подождите несколько минут или проверьте напрямую на pagespeed.web.dev' : lang === 'es' ? 'Google PageSpeed alcanzó el límite de solicitudes. Espera unos minutos o comprueba en pagespeed.web.dev' : 'Google PageSpeed rate limit reached. Wait a few minutes and try again, or check directly at pagespeed.web.dev')
+        : (lang === 'he' ? 'לא ניתן לנתח את האתר. בדוק שהכתובת נגישה לציבור ונסה שוב.' : lang === 'ru' ? 'Не удалось проанализировать сайт. Проверьте, что URL публично доступен.' : lang === 'es' ? 'No se pudo analizar el sitio. Verifica que la URL sea públicamente accesible.' : 'Could not analyse the site. Make sure the URL is publicly accessible and try again.')
+      );
       setPhase('url');
     }
   };

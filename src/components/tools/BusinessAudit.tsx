@@ -2,6 +2,27 @@ import { useState, useEffect } from 'react';
 import ToolResult from './ToolResult';
 import { useToolSession, trackEvent } from './useToolSession';
 
+const HOURS_COST_MAP: Record<string, number> = { many: 17, some: 10, few: 3, automated: 0 };
+
+async function fetchLocalRate(lang: string): Promise<{ symbol: string; rate: number; code: string }> {
+  const currencyMap: Record<string, { code: string; symbol: string }> = {
+    he: { code: 'ILS', symbol: '₪' },
+    ru: { code: 'RUB', symbol: '₽' },
+    es: { code: 'EUR', symbol: '€' },
+    en: { code: 'USD', symbol: '$' },
+  };
+  const { code, symbol } = currencyMap[lang] ?? currencyMap.en;
+  if (code === 'USD') return { symbol, rate: 1, code };
+  try {
+    const res = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
+    if (!res.ok) return { symbol, rate: 1, code };
+    const data = await res.json();
+    return { symbol, rate: data.rates?.[code] ?? 1, code };
+  } catch {
+    return { symbol, rate: 1, code };
+  }
+}
+
 interface Translations {
   back: string;
   next: string;
@@ -204,6 +225,8 @@ export default function BusinessAudit({ t }: Props) {
   const [session, setSession, clearSession] = useToolSession('business-audit', { step: 0, answers: {} as Record<string, string>, selected: '' });
   const { step, answers, selected } = session;
 
+  const [currency, setCurrency] = useState<{ symbol: string; rate: number; code: string } | null>(null);
+
   const isResult = step >= QUESTIONS.length;
   const currentQ = QUESTIONS[step];
   const score = getScore(answers);
@@ -219,7 +242,9 @@ export default function BusinessAudit({ t }: Props) {
   }, []);
 
   useEffect(() => {
-    if (isResult) trackEvent('tool_completed', { tool: 'business-audit', lang, score: String(score) });
+    if (!isResult) return;
+    trackEvent('tool_completed', { tool: 'business-audit', lang, score: String(score) });
+    fetchLocalRate(lang).then(setCurrency);
   }, [isResult]);
 
   function handleSelect(value: string) {
@@ -261,9 +286,22 @@ export default function BusinessAudit({ t }: Props) {
               <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{score}</span>
               <span className="text-[#A7AFBA] font-mono text-sm mb-2">/ 100 — {maturity}</span>
             </div>
-            <div className="h-2 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#1a2030)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
+            <div className="h-2 rounded-full overflow-hidden mb-4" style={{ background: 'linear-gradient(90deg,#0c1018,#1a2030)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
               <div className="h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${score}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a,#d8ff6a)', boxShadow: '0 0 8px rgba(199,255,74,0.4)' }} />
             </div>
+            {currency && HOURS_COST_MAP[answers.manualWork] > 0 && (() => {
+              const weeklyHours = HOURS_COST_MAP[answers.manualWork] ?? 0;
+              const annualUsd = weeklyHours * 52 * 25;
+              const annualLocal = Math.round(annualUsd * currency.rate);
+              const costLabel: Record<Lang, string> = { he: 'עלות עבודה ידנית שנתית משוערת', en: 'Est. annual manual work cost', es: 'Costo anual estimado de trabajo manual', ru: 'Ориентировочные годовые затраты на ручной труд' };
+              return (
+                <div className="border-t border-[rgba(244,241,234,0.08)] pt-4">
+                  <p className="font-mono text-xs text-[#A7AFBA]/60 uppercase tracking-widest mb-1">{costLabel[lang]}</p>
+                  <p className="font-bold text-2xl text-[#FF7A59]">{currency.symbol}{annualLocal.toLocaleString()}</p>
+                  <p className="text-xs text-[#A7AFBA]/50 mt-0.5 font-mono">{currency.code} @ $25/hr × {weeklyHours}h/wk × 52</p>
+                </div>
+              );
+            })()}
           </div>
         }
       />

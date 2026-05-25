@@ -5,6 +5,35 @@ import { useToolSession, trackEvent } from './useToolSession';
 type Lang = 'he' | 'en' | 'es' | 'ru';
 type T = { back: string; next: string; seeResults: string; startOver: string; yourScore: string; topFindings: string; quickWins: string; nextActions: string; relatedTools: string; newsletterTitle: string; newsletterPlaceholder: string; newsletterCta: string; newsletterDisclaimer: string; lang: string };
 
+async function fetchAiInsight(answers: Record<string, string>, lang: Lang): Promise<string> {
+  const summaries: Record<string, Record<string, string>> = {
+    support: { few: 'low support volume', medium: 'medium support volume', many: 'high support volume (50+ weekly requests)' },
+    content: { no: 'rarely produces content', sometimes: 'produces content inconsistently', yes: 'produces content at least weekly' },
+    documents: { no: 'few repetitive documents', some: 'some repetitive documents/FAQs', many: 'many repetitive documents/procedures/FAQs' },
+    decisions: { no: 'no repetitive decisions', some: 'a few repetitive rule-based decisions', yes: 'many repetitive decisions with clear criteria' },
+  };
+  const ctx = Object.entries(answers).map(([k, v]) => summaries[k]?.[v] ?? '').filter(Boolean).join(', ');
+  const prompt = lang === 'he'
+    ? `אתה יועץ AI לעסקים. בהתבסס על הנתונים הבאים על עסק: ${ctx}. כתוב 2 משפטים קצרים בעברית: מה הכי מתאים לאוטומציה עם AI ולמה. היה ספציפי ומעשי.`
+    : lang === 'ru'
+    ? `Вы AI-консультант для бизнеса. Данные о бизнесе: ${ctx}. Напишите 2 предложения: что лучше всего автоматизировать с помощью ИИ и почему. Будьте конкретны.`
+    : lang === 'es'
+    ? `Eres un consultor de IA para empresas. Datos del negocio: ${ctx}. Escribe 2 oraciones: qué es mejor automatizar con IA y por qué. Sé específico.`
+    : `You are a business AI consultant. Business data: ${ctx}. Write exactly 2 sentences: what is best to automate with AI and why. Be specific and practical.`;
+  try {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'HTTP-Referer': 'https://shiiiftagency.netlify.app', 'X-Title': 'shiiift AI Readiness' },
+      body: JSON.stringify({ model: 'mistralai/mistral-7b-instruct:free', messages: [{ role: 'user', content: prompt }], max_tokens: 120 }),
+    });
+    if (!res.ok) return '';
+    const data = await res.json();
+    return data?.choices?.[0]?.message?.content?.trim() ?? '';
+  } catch {
+    return '';
+  }
+}
+
 function gl(o: Record<string, string>, l: string) { return o[l] ?? o['en'] ?? ''; }
 
 const QS = [
@@ -65,6 +94,9 @@ export default function AIReadiness({ t }: { t: T }) {
   const [session, setSession, clearSession] = useToolSession('ai-readiness', { step: 0, answers: {} as Record<string, string>, selected: '' });
   const { step, answers, selected } = session;
 
+  const [aiInsight, setAiInsight] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+
   const isResult = step >= QS.length;
   const cq = QS[step];
 
@@ -85,8 +117,30 @@ export default function AIReadiness({ t }: { t: T }) {
     if (step === 0 && Object.keys(answers).length === 0) trackEvent('tool_started', { tool: 'ai-readiness', lang });
   }, []);
   useEffect(() => {
-    if (isResult) trackEvent('tool_completed', { tool: 'ai-readiness', lang, uses: String(goodUses.length) });
+    if (!isResult) return;
+    trackEvent('tool_completed', { tool: 'ai-readiness', lang, uses: String(goodUses.length) });
+    setAiLoading(true);
+    fetchAiInsight(answers, lang).then((txt) => { setAiInsight(txt); setAiLoading(false); });
   }, [isResult]);
+
+  const aiInsightLabel = { he: 'תובנת AI מותאמת אישית', en: 'Personalised AI insight', es: 'Perspectiva de IA personalizada', ru: 'Персонализированный AI-инсайт' };
+
+  const insightBlock = (aiLoading || aiInsight) ? (
+    <div style={{ background: 'linear-gradient(160deg,rgba(199,255,74,0.06) 0%,#151A23 100%)', border: '1px solid rgba(199,255,74,0.2)', borderRadius: '1rem', padding: '1.5rem' }}>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A]">{gl(aiInsightLabel, lang)}</span>
+        <span className="font-mono text-[10px] text-[#A7AFBA]/50 border border-[rgba(255,255,255,0.08)] px-1.5 py-0.5 rounded">Mistral AI</span>
+      </div>
+      {aiLoading ? (
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 rounded-full border-2 border-[#C7FF4A] border-t-transparent animate-spin flex-shrink-0" />
+          <span className="text-sm text-[#A7AFBA] font-mono">{lang === 'he' ? 'מייצר תובנה...' : lang === 'ru' ? 'Генерируем инсайт...' : lang === 'es' ? 'Generando perspectiva...' : 'Generating insight...'}</span>
+        </div>
+      ) : (
+        <p className="text-sm text-[#F4F1EA] leading-relaxed">{aiInsight}</p>
+      )}
+    </div>
+  ) : null;
 
   if (isResult) {
     return (
@@ -107,7 +161,9 @@ export default function AIReadiness({ t }: { t: T }) {
             </div>
           </div>
         }
-      />
+      >
+        {insightBlock}
+      </ToolResult>
     );
   }
 

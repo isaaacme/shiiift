@@ -1,9 +1,30 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ToolResult from './ToolResult';
 import { useToolSession, trackEvent } from './useToolSession';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
 type T = { back: string; next: string; seeResults: string; startOver: string; yourScore: string; topFindings: string; quickWins: string; nextActions: string; relatedTools: string; newsletterTitle: string; newsletterPlaceholder: string; newsletterCta: string; newsletterDisclaimer: string; lang: string };
+
+interface GeoData { country_code: string; country_name: string; currency: string; }
+
+async function fetchGeo(): Promise<GeoData | null> {
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    if (!res.ok) return null;
+    const d = await res.json();
+    return { country_code: d.country_code ?? '', country_name: d.country_name ?? '', currency: d.currency ?? 'USD' };
+  } catch { return null; }
+}
+
+function getCrmForRegion(geo: GeoData | null): { name: string; url: string } {
+  if (!geo) return { name: 'HubSpot CRM', url: 'https://www.hubspot.com/products/crm' };
+  const cc = geo.country_code;
+  if (cc === 'IL') return { name: 'Monday CRM', url: 'https://monday.com/crm' };
+  if (['DE', 'AT', 'CH', 'NL', 'BE'].includes(cc)) return { name: 'Pipedrive', url: 'https://www.pipedrive.com' };
+  if (['RU', 'UA', 'KZ', 'BY'].includes(cc)) return { name: 'Bitrix24', url: 'https://www.bitrix24.com' };
+  if (['MX', 'CO', 'AR', 'CL', 'PE', 'ES'].includes(cc)) return { name: 'Zoho CRM', url: 'https://www.zoho.com/crm' };
+  return { name: 'HubSpot CRM', url: 'https://www.hubspot.com/products/crm' };
+}
 
 function gl(o: Record<string, string>, l: string) { return o[l] ?? o['en'] ?? ''; }
 
@@ -72,6 +93,8 @@ export default function LeadFlowMapper({ t }: { t: T }) {
   });
   const { step, answers, selected } = session;
 
+  const [geo, setGeo] = useState<GeoData | null>(null);
+
   const isResult = step >= QS.length;
   const cq = QS[step];
 
@@ -102,7 +125,9 @@ export default function LeadFlowMapper({ t }: { t: T }) {
     if (step === 0 && Object.keys(answers).length === 0) trackEvent('tool_started', { tool: 'lead-flow', lang });
   }, []);
   useEffect(() => {
-    if (isResult) trackEvent('tool_completed', { tool: 'lead-flow', lang });
+    if (!isResult) return;
+    trackEvent('tool_completed', { tool: 'lead-flow', lang });
+    fetchGeo().then(setGeo);
   }, [isResult]);
 
   function toggle(v: string) {
@@ -124,25 +149,42 @@ export default function LeadFlowMapper({ t }: { t: T }) {
         nextActions={nextActions}
         onReset={clearSession}
         scoreBlock={
-          <div className="overflow-x-auto">
-            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-5">{t.yourScore}</p>
-            <div className="flex items-center gap-2 min-w-max">
-              {(flowSteps[lang as Lang] ?? flowSteps.en).map((s, i, arr) => (
-                <div key={i} className="flex items-center gap-2">
-                  <div className="px-3 py-1.5 rounded-lg border text-xs font-mono"
-                    style={i === 2 && (followup === 'nothing' || followup === 'manual')
-                      ? { border: '1px solid rgba(255,122,89,0.5)', background: 'rgba(255,122,89,0.1)', color: '#FF7A59' }
-                      : { border: '1px solid rgba(244,241,234,0.12)', background: 'rgba(255,255,255,0.04)', color: '#A7AFBA' }
-                    }
-                  >{s}</div>
-                  {i < arr.length - 1 && (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#A7AFBA]/40 flex-shrink-0">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  )}
-                </div>
-              ))}
+          <div>
+            <div className="overflow-x-auto mb-5">
+              <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-5">{t.yourScore}</p>
+              <div className="flex items-center gap-2 min-w-max">
+                {(flowSteps[lang as Lang] ?? flowSteps.en).map((s, i, arr) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="px-3 py-1.5 rounded-lg border text-xs font-mono"
+                      style={i === 2 && (followup === 'nothing' || followup === 'manual')
+                        ? { border: '1px solid rgba(255,122,89,0.5)', background: 'rgba(255,122,89,0.1)', color: '#FF7A59' }
+                        : { border: '1px solid rgba(244,241,234,0.12)', background: 'rgba(255,255,255,0.04)', color: '#A7AFBA' }
+                      }
+                    >{s}</div>
+                    {i < arr.length - 1 && (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#A7AFBA]/40 flex-shrink-0">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
+            {(() => {
+              const crm = getCrmForRegion(geo);
+              const crmLabel: Record<Lang, string> = { he: 'CRM מומלץ לאזורך', en: 'Recommended CRM for your region', es: 'CRM recomendado para tu región', ru: 'Рекомендуемый CRM для вашего региона' };
+              return (
+                <div className="border-t border-[rgba(244,241,234,0.08)] pt-4">
+                  <p className="font-mono text-xs text-[#A7AFBA]/60 uppercase tracking-widest mb-2">{crmLabel[lang]}{geo ? ` (${geo.country_name})` : ''}</p>
+                  <a href={crm.url} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#C7FF4A] hover:text-[#d6ff5e] transition-colors no-underline"
+                  >
+                    {crm.name}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </a>
+                </div>
+              );
+            })()}
           </div>
         }
       />

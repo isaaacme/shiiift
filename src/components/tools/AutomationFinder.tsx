@@ -2,6 +2,39 @@ import { useState, useEffect } from 'react';
 import ToolResult from './ToolResult';
 import { useToolSession, trackEvent } from './useToolSession';
 
+interface N8nTemplate {
+  id: number;
+  name: string;
+  description?: string;
+  url?: string;
+}
+
+const TASK_TO_QUERY: Record<string, string> = {
+  followup: 'crm follow-up email',
+  invoicing: 'invoice payment',
+  scheduling: 'calendar scheduling',
+  reporting: 'automated report',
+  dataentry: 'data sync spreadsheet',
+  onboarding: 'client onboarding',
+};
+
+async function fetchN8nTemplates(tasks: string[]): Promise<N8nTemplate[]> {
+  const query = tasks.map((t) => TASK_TO_QUERY[t] ?? t).join(' ');
+  try {
+    const res = await fetch(`https://api.n8n.io/api/templates/search?text=${encodeURIComponent(query)}&limit=3`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data?.workflows ?? []).slice(0, 3).map((w: any) => ({
+      id: w.id,
+      name: w.name,
+      description: w.description?.replace(/<[^>]*>/g, '').slice(0, 120) ?? '',
+      url: `https://n8n.io/workflows/${w.id}`,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 type Lang = 'he' | 'en' | 'es' | 'ru';
 type T = { back: string; next: string; seeResults: string; startOver: string; yourScore: string; topFindings: string; quickWins: string; nextActions: string; relatedTools: string; newsletterTitle: string; newsletterPlaceholder: string; newsletterCta: string; newsletterDisclaimer: string; lang: string };
 
@@ -66,6 +99,9 @@ export default function AutomationFinder({ t }: { t: T }) {
   });
   const { step, answers, selected } = session;
 
+  const [n8nTemplates, setN8nTemplates] = useState<N8nTemplate[]>([]);
+  const [n8nLoading, setN8nLoading] = useState(false);
+
   const isResult = step >= QS.length;
   const cq = QS[step];
   const tasks = answers.tasks || [];
@@ -85,7 +121,12 @@ export default function AutomationFinder({ t }: { t: T }) {
     if (step === 0 && Object.keys(answers).length === 0) trackEvent('tool_started', { tool: 'automation-finder', lang });
   }, []);
   useEffect(() => {
-    if (isResult) trackEvent('tool_completed', { tool: 'automation-finder', lang, hours: String(hours) });
+    if (!isResult) return;
+    trackEvent('tool_completed', { tool: 'automation-finder', lang, hours: String(hours) });
+    if (tasks.length > 0) {
+      setN8nLoading(true);
+      fetchN8nTemplates(tasks).then((tpls) => { setN8nTemplates(tpls); setN8nLoading(false); });
+    }
   }, [isResult]);
 
   function toggle(v: string) {
@@ -95,6 +136,36 @@ export default function AutomationFinder({ t }: { t: T }) {
       setSession((s) => ({ ...s, selected: [v] }));
     }
   }
+
+  const n8nLabel = { he: 'תבניות אוטומציה מ-n8n — מוכנות לשימוש', en: 'Ready-to-use automation templates from n8n', es: 'Plantillas de automatización de n8n — listas para usar', ru: 'Готовые шаблоны автоматизации из n8n' };
+  const n8nCta = { he: 'פתח תבנית ↗', en: 'Open template ↗', es: 'Abrir plantilla ↗', ru: 'Открыть шаблон ↗' };
+
+  const templatesBlock = (n8nLoading || n8nTemplates.length > 0) ? (
+    <div style={{ background: 'linear-gradient(160deg,rgba(255,122,89,0.05) 0%,#151A23 100%)', border: '1px solid rgba(255,122,89,0.15)', borderRadius: '1rem', padding: '1.5rem' }}>
+      <p className="font-mono text-xs tracking-widest uppercase text-[#FF7A59] mb-4">{gl(n8nLabel, lang)}</p>
+      {n8nLoading ? (
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 rounded-full border-2 border-[#FF7A59] border-t-transparent animate-spin flex-shrink-0" />
+          <span className="text-sm text-[#A7AFBA] font-mono">{lang === 'he' ? 'מחפש תבניות...' : lang === 'ru' ? 'Ищем шаблоны...' : lang === 'es' ? 'Buscando plantillas...' : 'Finding templates...'}</span>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {n8nTemplates.map((tpl) => (
+            <a key={tpl.id} href={tpl.url} target="_blank" rel="noopener noreferrer"
+              className="flex items-start justify-between gap-3 px-4 py-3 rounded-xl no-underline group transition-all"
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+            >
+              <div className="min-w-0">
+                <p className="text-sm text-[#F4F1EA] font-medium group-hover:text-[#FF7A59] transition-colors truncate">{tpl.name}</p>
+                {tpl.description && <p className="text-xs text-[#A7AFBA] mt-0.5 leading-snug line-clamp-2">{tpl.description}</p>}
+              </div>
+              <span className="font-mono text-xs text-[#FF7A59] flex-shrink-0 mt-0.5">{gl(n8nCta, lang)}</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  ) : null;
 
   if (isResult) {
     return (
@@ -110,12 +181,14 @@ export default function AutomationFinder({ t }: { t: T }) {
           <div>
             <p className="font-mono text-xs tracking-widest uppercase text-[#FF7A59] mb-3">{t.yourScore}</p>
             <div className="flex items-baseline gap-3 mb-2">
-              <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{hours}</span>
+              <span className="font-bold text-5xl text-[#F4F1EA]" style={{ fontFamily: "'Inter Tight', system-ui, sans-serif" }}>{hours}</span>
               <span className="text-[#A7AFBA] text-sm">{gl(hoursLabel, lang)}</span>
             </div>
           </div>
         }
-      />
+      >
+        {templatesBlock}
+      </ToolResult>
     );
   }
 

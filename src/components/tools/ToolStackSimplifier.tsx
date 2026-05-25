@@ -7,6 +7,19 @@ type T = { back: string; next: string; seeResults: string; startOver: string; yo
 
 function gl(o: Record<string, string>, l: string) { return o[l] ?? o['en'] ?? ''; }
 
+const TOOL_LOGO: Record<string, string> = {
+  crm: 'hubspot.com',
+  email: 'mailchimp.com',
+  project: 'notion.so',
+  accounting: 'quickbooks.intuit.com',
+  scheduling: 'calendly.com',
+  communication: 'slack.com',
+  docs: 'notion.so',
+  analytics: 'analytics.google.com',
+  forms: 'typeform.com',
+  automation: 'zapier.com',
+};
+
 const TOOL_OPTIONS = [
   { v: 'crm', l: { he: 'CRM', en: 'CRM', es: 'CRM', ru: 'CRM' } },
   { v: 'email', l: { he: 'אימייל / ניוזלטר', en: 'Email / Newsletter', es: 'Email / Newsletter', ru: 'Email / Рассылка' } },
@@ -84,14 +97,26 @@ export default function ToolStackSimplifier({ t }: { t: T }) {
               <p className="font-mono text-xs text-[#C7FF4A] uppercase tracking-widest mb-3">{gl(lbl.keep, lang)}</p>
               {keep.length > 0 ? keep.map((t) => {
                 const opt = TOOL_OPTIONS.find((o) => o.v === t);
-                return <p key={t} className="text-sm text-[#F4F1EA]">{opt ? gl(opt.l, lang) : t}</p>;
+                const logo = TOOL_LOGO[t];
+                return (
+                  <div key={t} className="flex items-center gap-2 mb-2">
+                    {logo && <img src={`https://logo.clearbit.com/${logo}`} alt="" width="16" height="16" className="rounded w-4 h-4 object-contain flex-shrink-0" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />}
+                    <p className="text-sm text-[#F4F1EA]">{opt ? gl(opt.l, lang) : t}</p>
+                  </div>
+                );
               }) : <p className="text-xs text-[#A7AFBA]">—</p>}
             </div>
             <div>
               <p className="font-mono text-xs text-[#FF7A59] uppercase tracking-widest mb-3">{gl(lbl.review, lang)}</p>
               {review.length > 0 ? review.map((t) => {
                 const opt = TOOL_OPTIONS.find((o) => o.v === t);
-                return <p key={t} className="text-sm text-[#A7AFBA]">{opt ? gl(opt.l, lang) : t}</p>;
+                const logo = TOOL_LOGO[t];
+                return (
+                  <div key={t} className="flex items-center gap-2 mb-2">
+                    {logo && <img src={`https://logo.clearbit.com/${logo}`} alt="" width="16" height="16" className="rounded w-4 h-4 object-contain flex-shrink-0 opacity-50" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />}
+                    <p className="text-sm text-[#A7AFBA]">{opt ? gl(opt.l, lang) : t}</p>
+                  </div>
+                );
               }) : <p className="text-xs text-[#A7AFBA]">—</p>}
             </div>
           </div>
@@ -126,6 +151,7 @@ export default function ToolStackSimplifier({ t }: { t: T }) {
                   style={tools.includes(o.v) ? { background: '#6EE7F9', border: '1px solid #6EE7F9' } : { border: '1px solid rgba(244,241,234,0.25)' }}>
                   {tools.includes(o.v) && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
                 </span>
+                {TOOL_LOGO[o.v] && <img src={`https://logo.clearbit.com/${TOOL_LOGO[o.v]}`} alt="" width="14" height="14" className="w-3.5 h-3.5 rounded object-contain flex-shrink-0 opacity-70" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />}
                 {gl(o.l, lang)}
               </button>
             ))}

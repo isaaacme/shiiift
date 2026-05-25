@@ -144,17 +144,26 @@ const RATING_LABEL: Record<string, Record<Lang, string>> = {
 async function fetchPsi(url: string): Promise<PsiData> {
   const base = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
   const encoded = encodeURIComponent(url);
+
   const [desktopRes, mobileRes] = await Promise.all([
     fetch(`${base}?url=${encoded}&strategy=desktop`),
     fetch(`${base}?url=${encoded}&strategy=mobile`),
   ]);
-  const desktop = await desktopRes.json();
-  const mobile = await mobileRes.json();
 
-  const audits = desktop?.lighthouseResult?.audits ?? {};
-  const cats = desktop?.lighthouseResult?.categories ?? {};
+  if (!desktopRes.ok) throw new Error(`PSI API error: ${desktopRes.status}`);
+
+  const desktop = await desktopRes.json();
+  const mobile = mobileRes.ok ? await mobileRes.json() : null;
+
+  if (desktop?.error) throw new Error(desktop.error?.message ?? 'PSI error');
+  if (!desktop?.lighthouseResult) throw new Error('No Lighthouse result returned');
+
+  const audits = desktop.lighthouseResult.audits ?? {};
+  const cats = desktop.lighthouseResult.categories ?? {};
   const perfScore = Math.round((cats?.performance?.score ?? 0) * 100);
-  const mobileScore = Math.round(((mobile?.lighthouseResult?.categories?.performance?.score) ?? 0) * 100);
+  const mobileScore = mobile?.lighthouseResult?.categories?.performance?.score != null
+    ? Math.round(mobile.lighthouseResult.categories.performance.score * 100)
+    : null;
 
   const metrics: PsiMetric[] = METRIC_GUIDES.map((g) => {
     const audit = audits[g.id];
@@ -260,6 +269,7 @@ function MetricCard({ metric, lang, expanded, onToggle }: { metric: PsiMetric; l
 function PsiPanel({ psi, lang }: { psi: PsiData; lang: Lang }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const scoreColor = psi.performanceScore >= 90 ? '#C7FF4A' : psi.performanceScore >= 50 ? '#FFD060' : '#FF7A59';
+  const allNA = psi.metrics.every((m) => m.rating === 'n/a');
   return (
     <div className="space-y-4">
       <div style={cardStyle}>
@@ -280,12 +290,29 @@ function PsiPanel({ psi, lang }: { psi: PsiData; lang: Lang }) {
           <div className="h-full rounded-full transition-all duration-700" style={{ width: `${psi.performanceScore}%`, backgroundColor: scoreColor, boxShadow: `0 0 8px ${scoreColor}66` }} />
         </div>
       </div>
-      <p className="font-mono text-xs text-[#A7AFBA] uppercase tracking-wider px-1">{lang === 'he' ? 'מדדי Core Web Vitals — לחץ לפרטים ופתרונות' : lang === 'ru' ? 'Core Web Vitals — нажмите для деталей и решений' : lang === 'es' ? 'Core Web Vitals — haz clic para detalles y soluciones' : 'Core Web Vitals — click each for details & fixes'}</p>
-      <div className="space-y-2">
-        {psi.metrics.map((m) => (
-          <MetricCard key={m.id} metric={m} lang={lang} expanded={expanded === m.id} onToggle={() => setExpanded(expanded === m.id ? null : m.id)} />
-        ))}
-      </div>
+      {allNA ? (
+        <div className="px-4 py-3 rounded-xl text-sm font-mono" style={{ background: 'rgba(255,122,89,0.08)', border: '1px solid rgba(255,122,89,0.25)', color: '#FF7A59' }}>
+          {lang === 'he'
+            ? 'Google PageSpeed לא הצליח לאחזר מדדים לכתובת זו. ודא שהאתר נגיש לציבור ולא חסום מאינדוקס.'
+            : lang === 'ru'
+            ? 'Google PageSpeed не смог получить метрики для этого URL. Убедитесь, что сайт публично доступен.'
+            : lang === 'es'
+            ? 'Google PageSpeed no pudo obtener métricas para esta URL. Asegúrate de que el sitio sea públicamente accesible.'
+            : 'Google PageSpeed could not fetch metrics for this URL. Make sure the site is publicly accessible and not blocked from crawling.'}
+          {' '}<a href={`https://pagespeed.web.dev/report?url=${encodeURIComponent(psi.url)}`} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: '#6EE7F9' }}>
+            {lang === 'he' ? 'נסה ישירות ב-PageSpeed ↗' : lang === 'ru' ? 'Попробуйте напрямую ↗' : lang === 'es' ? 'Inténtalo directamente ↗' : 'Try directly on PageSpeed ↗'}
+          </a>
+        </div>
+      ) : (
+        <>
+          <p className="font-mono text-xs text-[#A7AFBA] uppercase tracking-wider px-1">{lang === 'he' ? 'מדדי Core Web Vitals — לחץ לפרטים ופתרונות' : lang === 'ru' ? 'Core Web Vitals — нажмите для деталей и решений' : lang === 'es' ? 'Core Web Vitals — haz clic para detalles y soluciones' : 'Core Web Vitals — click each for details & fixes'}</p>
+          <div className="space-y-2">
+            {psi.metrics.map((m) => (
+              <MetricCard key={m.id} metric={m} lang={lang} expanded={expanded === m.id} onToggle={() => setExpanded(expanded === m.id ? null : m.id)} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -327,15 +354,21 @@ export default function WebsiteAudit({ t }: Props) {
     let url = urlInput.trim();
     if (!url) { setUrlError(lang === 'he' ? 'נא להזין כתובת אתר' : lang === 'ru' ? 'Пожалуйста, введите URL' : lang === 'es' ? 'Por favor ingresa una URL' : 'Please enter a URL'); return; }
     if (!url.startsWith('http')) url = 'https://' + url;
-    try { new URL(url); } catch { setUrlError(lang === 'he' ? 'כתובת לא תקינה' : lang === 'ru' ? 'Недействительный URL' : lang === 'es' ? 'URL no válida' : 'Invalid URL'); return; }
+    let parsed: URL;
+    try { parsed = new URL(url); } catch { setUrlError(lang === 'he' ? 'כתובת לא תקינה' : lang === 'ru' ? 'Недействительный URL' : lang === 'es' ? 'URL no válida' : 'Invalid URL'); return; }
+    const isLocal = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1' || parsed.hostname.endsWith('.local') || /^192\.168\./.test(parsed.hostname);
+    if (isLocal) {
+      setUrlError(lang === 'he' ? 'Google PageSpeed לא יכול לנתח כתובות מקומיות. הזן את כתובת האתר הציבורי שלך.' : lang === 'ru' ? 'Google PageSpeed не может анализировать локальные адреса. Введите публичный URL.' : lang === 'es' ? 'Google PageSpeed no puede analizar URLs locales. Ingresa tu URL pública.' : 'Google PageSpeed cannot analyse localhost. Enter your live public website URL.');
+      return;
+    }
     setUrlError('');
     setPhase('loading');
     try {
       const data = await fetchPsi(url);
       setPsiData(data);
       setPhase('psi');
-    } catch {
-      setPsiError(lang === 'he' ? 'לא ניתן לנתח את האתר. בדוק שהכתובת נגישה ונסה שוב.' : lang === 'ru' ? 'Не удалось проанализировать сайт. Проверьте URL и попробуйте снова.' : lang === 'es' ? 'No se pudo analizar el sitio. Verifica la URL e intenta de nuevo.' : 'Could not analyse the site. Check the URL is publicly accessible and try again.');
+    } catch (err: any) {
+      setPsiError(lang === 'he' ? 'לא ניתן לנתח את האתר. בדוק שהכתובת נגישה לציבור ונסה שוב.' : lang === 'ru' ? 'Не удалось проанализировать сайт. Проверьте, что URL публично доступен.' : lang === 'es' ? 'No se pudo analizar el sitio. Verifica que la URL sea públicamente accesible.' : 'Could not analyse the site. Make sure the URL is publicly accessible and try again.');
       setPhase('url');
     }
   };

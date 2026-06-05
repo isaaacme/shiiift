@@ -1,0 +1,190 @@
+---
+import { type Locale } from '../i18n/index';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+
+const labels = {
+  sectionLabel: { he: 'פרויקטים נבחרים', en: 'Selected Projects', es: 'Proyectos Seleccionados', ru: 'Избранные проекты' },
+  sectionDesc:  { he: 'עבודה אמיתית. תוצאות אמיתיות.', en: 'Real work. Real results.', es: 'Trabajo real. Resultados reales.', ru: 'Реальная работа. Реальные результаты.' },
+  viewProject:  { he: 'צפה בפרויקט', en: 'View project', es: 'Ver proyecto', ru: 'Смотреть проект' },
+  close:        { he: 'סגור', en: 'Close', es: 'Cerrar', ru: 'Закрыть' },
+};
+
+function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
+
+const projects = [
+  {
+    id: 'alchemiq',
+    name: 'Alchemiq',
+    url: 'https://isaaac.me/projects/alchemiq',
+    tag:  { he: 'AI / מדיה', en: 'AI / Media', es: 'AI / Medios', ru: 'AI / Медиа' },
+    desc: { he: 'חברת AI בתחום ניתוח חדשות — מסייעת בהבנת תוכן ומפחיתה דיסאינפורמציה.', en: 'AI company in the news-analysis space — helps understand content and reduce disinformation.', es: 'Empresa de IA en análisis de noticias — ayuda a entender contenido y reducir desinformación.', ru: 'ИИ-компания в сфере анализа новостей — помогает понимать контент и снижать дезинформацию.' },
+    metric: { he: 'אנליטיקה בזמן אמת', en: 'Real-time analytics', es: 'Analítica en tiempo real', ru: 'Аналитика в реальном времени' },
+  },
+  {
+    id: 'bridgify',
+    name: 'Bridgify',
+    url: 'https://isaaac.me/projects/bridgify',
+    tag:  { he: 'טכנולוגיה / תיירות', en: 'Tech / Travel', es: 'Tecnología / Viajes', ru: 'Технологии / Туризм' },
+    desc: { he: 'פתרון white-label לקמעונאי נסיעות — מספק מסלולי טיול מותאמים אישית ביעד.', en: 'White-label solution for travel retailers — provides personalised itineraries at destination.', es: 'Solución white-label para minoristas de viajes — itinerarios personalizados en destino.', ru: 'White-label решение для туристических ритейлеров — персонализированные маршруты в пункте назначения.' },
+    metric: { he: '+140% המרות', en: '+140% conversions', es: '+140% conversiones', ru: '+140% конверсий' },
+  },
+  {
+    id: 'cheetah-restaurant',
+    name: 'Cheetah Restaurant',
+    url: 'https://isaaac.me/projects/cheetah-restaurant',
+    tag:  { he: 'אי-קומרס / מזון', en: 'E-commerce / Food', es: 'E-commerce / Alimentación', ru: 'E-commerce / Еда' },
+    desc: { he: 'אפליקציית אי-קומרס למפיצי מזון — הזמנות, ניהול קטלוג וניהול לקוחות.', en: 'E-commerce app for food distributors — orders, catalogue management and client accounts.', es: 'App de e-commerce para distribuidores de alimentos — pedidos, catálogo y cuentas de clientes.', ru: 'E-commerce приложение для дистрибьюторов продуктов питания — заказы, каталог и аккаунты клиентов.' },
+    metric: { he: 'הזמנות דיגיטליות', en: 'Digital orders', es: 'Pedidos digitales', ru: 'Цифровые заказы' },
+  },
+  {
+    id: 'douglas-bloomberg',
+    name: 'Douglas & Bloomberg',
+    url: 'https://isaaac.me/projects/douglas-bloomberg',
+    tag:  { he: 'פינטק / אירופה', en: 'Fintech / Europe', es: 'Fintech / Europa', ru: 'Финтех / Европа' },
+    desc: { he: 'חברת מימון המוני אירופאית — בנייה מלאה של פלטפורמת האתר וממשק המשתמש.', en: 'European crowdfunding company — full platform website build and user interface.', es: 'Empresa europea de financiación colectiva — construcción completa de plataforma web e interfaz.', ru: 'Европейская краудфандинговая компания — полная разработка платформы и интерфейса.' },
+    metric: { he: 'פלטפורמה פיננסית', en: 'Financial platform', es: 'Plataforma financiera', ru: 'Финансовая платформа' },
+  },
+  {
+    id: 'enhance',
+    name: 'Enhance',
+    url: 'https://isaaac.me/projects/enhance',
+    tag:  { he: '3D / AR', en: '3D / AR', es: '3D / AR', ru: '3D / AR' },
+    desc: { he: 'ויזואליזציה והתאמה אישית של מוצרים בתלת-ממד ובמציאות רבודה (AR) ליצרנים.', en: '3D visualisation & AR product customisation for manufacturers.', es: 'Visualización 3D y personalización AR de productos para fabricantes.', ru: '3D-визуализация и AR-кастомизация продуктов для производителей.' },
+    metric: { he: 'חוויית AR מלאה', en: 'Full AR experience', es: 'Experiencia AR completa', ru: 'Полный AR-опыт' },
+  },
+  {
+    id: 'paz-interactive',
+    name: 'Paz Interactive',
+    url: 'https://isaaac.me/projects/paz-interactive',
+    tag:  { he: 'סוכנות דיגיטלית', en: 'Digital agency', es: 'Agencia digital', ru: 'Диджитал-агентство' },
+    desc: { he: 'חברה תל אביבית–ניו יורקית המתמחה בעיצוב, אתרים, שיווק דיגיטלי ומיתוג עסקי.', en: 'Tel Aviv–New York company specialising in design, web, digital marketing & branding.', es: 'Empresa Tel Aviv–Nueva York especializada en diseño, web, marketing digital y branding.', ru: 'Компания Тель-Авив–Нью-Йорк, специализирующаяся на дизайне, веб, диджитал-маркетинге и брендинге.' },
+    metric: { he: '98 PageSpeed', en: '98 PageSpeed', es: '98 PageSpeed', ru: '98 PageSpeed' },
+  },
+  {
+    id: 'trek-market',
+    name: 'Trek Market',
+    url: 'https://isaaac.me/projects/trek-market',
+    tag:  { he: 'אי-קומרס / ספורט', en: 'E-commerce / Sport', es: 'E-commerce / Deporte', ru: 'E-commerce / Спорт' },
+    desc: { he: 'חנות ציוד טיולים, מחנאות, נסיעות וספורט — בנייה מלאה כולל אינטגרציות ERP.', en: 'Hiking, camping, travel & sport gear store — full build including ERP integrations.', es: 'Tienda de equipamiento para senderismo, camping, viajes y deporte — build completo con integraciones ERP.', ru: 'Магазин снаряжения для туризма, кемпинга, путешествий и спорта — полная разработка с ERP-интеграциями.' },
+    metric: { he: 'קטלוג 2,000+ מוצרים', en: '2,000+ product catalogue', es: 'Catálogo de 2,000+ productos', ru: 'Каталог 2,000+ товаров' },
+  },
+  {
+    id: 'feministit',
+    name: 'Feministit',
+    url: 'https://isaaac.me/projects/feministit',
+    tag:  { he: 'תוכן / מגדר', en: 'Content / Gender', es: 'Contenido / Género', ru: 'Контент / Гендер' },
+    desc: { he: 'מיזם תוכן פמיניסטי-קווירי — מאגר מידע על צדק חברתי, מגדר, להט"ב — בעברית, ערבית ואנגלית.', en: 'Feminist-queer content project — knowledge base on social justice, gender, LGBTQ — in Hebrew, Arabic & English.', es: 'Proyecto feminista-queer — base de conocimiento sobre justicia social, género, LGBTQ — en hebreo, árabe e inglés.', ru: 'Феминистско-квир контент-проект — база знаний о социальной справедливости, гендере, ЛГБТК+ на иврите, арабском и английском.' },
+    metric: { he: 'רב-לשוני', en: 'Multilingual', es: 'Multilingüe', ru: 'Многоязычный' },
+  },
+  {
+    id: 'swu',
+    name: 'SWU',
+    url: 'https://isaaac.me/projects/swu',
+    tag:  { he: 'אוטומציה / אדמין', en: 'Automation / Ops', es: 'Automatización / Ops', ru: 'Автоматизация / Операции' },
+    desc: { he: 'חיבור טפסי הרשמה, יצירת חשבוניות ואוטומציה של תהליכי קליטת לקוחות — חיסכון של 15 שעות בשבוע.', en: 'Connected client onboarding forms, automatic invoices & data verification — saving 15 hours per week.', es: 'Formularios de onboarding, facturación automática y verificación de datos — ahorro de 15 horas semanales.', ru: 'Формы онбординга, автоматические счета и проверка данных — экономия 15 часов в неделю.' },
+    metric: { he: '-15 שעות/שבוע', en: '-15 hours/week', es: '-15 horas/semana', ru: '-15 часов/неделю' },
+  },
+];
+---
+
+<section class="py-16 lg:py-24 border-t border-shift-line" id="selected-projects">
+  <div class="shift-container">
+
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+      <div>
+        <p class="shift-label mb-2">{gl(labels.sectionLabel)}</p>
+        <h2 class="shift-heading-lg">{gl(labels.sectionDesc)}</h2>
+      </div>
+    </div>
+
+    <!-- Projects grid: 3 cols on lg, 2 on md, 1 on sm -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="projects-grid">
+      {projects.map((p) => (
+        <button
+          class="project-card text-start bg-shift-surface border border-shift-line rounded-xl p-5 flex flex-col gap-3 hover:border-shift-accent/40 hover:shadow-volume-md transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
+          data-project={p.id}
+          data-name={p.name}
+          data-tag={gl(p.tag)}
+          data-desc={gl(p.desc)}
+          data-url={p.url}
+          data-view={gl(labels.viewProject)}
+          type="button"
+          aria-haspopup="dialog"
+        >
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] text-shift-muted border border-shift-line px-2 py-0.5 rounded">{gl(p.tag)}</span>
+            <span class="font-mono text-[10px] text-shift-accent/60 border border-shift-accent/20 bg-shift-accent/5 px-2 py-0.5 rounded">{gl(p.metric)}</span>
+          </div>
+          <span class="font-heading font-semibold text-shift-text text-sm leading-snug group-hover:text-shift-accent transition-colors">{p.name}</span>
+          <span class="text-xs text-shift-muted leading-snug line-clamp-3 flex-1">{gl(p.desc)}</span>
+          <span class="mt-auto font-mono text-xs text-shift-accent/60 group-hover:text-shift-accent transition-colors flex items-center gap-1">
+            {lang === 'he' ? '← ' : ''}{gl(labels.viewProject)}{lang !== 'he' ? ' →' : ''}
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox overlay -->
+<div
+  id="project-lightbox"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="lightbox-backdrop"></div>
+  <div class="relative z-10 bg-shift-surface border border-shift-line rounded-2xl p-8 max-w-lg w-full shadow-[0_8px_40px_rgba(0,0,0,0.6)]">
+    <button id="lightbox-close" class="absolute top-4 end-4 text-shift-muted hover:text-shift-text transition-colors font-mono text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded p-1">
+      ✕ {gl(labels.close)}
+    </button>
+    <span id="lb-tag" class="font-mono text-[10px] text-shift-muted border border-shift-line px-2 py-0.5 rounded mb-4 inline-block"></span>
+    <h3 id="lb-name" class="font-heading font-bold text-2xl text-shift-text mb-3"></h3>
+    <p id="lb-desc" class="text-sm text-shift-muted leading-relaxed mb-6"></p>
+    <a id="lb-link" href="#" target="_blank" rel="noopener" class="shift-btn-primary text-sm px-5 py-2.5 inline-flex items-center gap-2">
+      <span id="lb-cta"></span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+  const lb = document.getElementById('project-lightbox') as HTMLElement;
+  const backdrop = document.getElementById('lightbox-backdrop');
+  const closeBtn = document.getElementById('lightbox-close');
+
+  function openLightbox(card: HTMLElement) {
+    const name = card.dataset.name ?? '';
+    const tag  = card.dataset.tag  ?? '';
+    const desc = card.dataset.desc ?? '';
+    const url  = card.dataset.url  ?? '#';
+    const view = card.dataset.view ?? 'View project';
+    (document.getElementById('lb-name') as HTMLElement).textContent = name;
+    (document.getElementById('lb-tag')  as HTMLElement).textContent = tag;
+    (document.getElementById('lb-desc') as HTMLElement).textContent = desc;
+    (document.getElementById('lb-cta')  as HTMLElement).textContent = view;
+    (document.getElementById('lb-link') as HTMLAnchorElement).href = url;
+    lb.classList.remove('hidden');
+    lb.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lb.classList.add('hidden');
+    lb.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.project-card').forEach((card) => {
+    card.addEventListener('click', () => openLightbox(card as HTMLElement));
+  });
+
+  backdrop?.addEventListener('click', closeLightbox);
+  closeBtn?.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+</script>

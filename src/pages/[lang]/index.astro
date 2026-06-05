@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AboutFounder from '../../components/AboutFounder.astro';
+import ProjectsSection from '../../components/ProjectsSection.astro';
+import LogosCarousel from '../../components/LogosCarousel.astro';
 import OSConsole from '../../components/tools/OSConsole';
 import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
 
@@ -101,20 +103,7 @@ const tProps = {
   },
 };
 
-// Outcomes translation
-const outcomesLabel = {
-  he: 'תוצאות ומערכות שנבחרו',
-  en: 'Selected Outcomes & Systems',
-  es: 'Resultados y Sistemas Seleccionados',
-  ru: 'Выбранные результаты и системы',
-};
 
-const trustLabel = {
-  he: 'עסקים שסומכים עלינו',
-  en: 'Trusted By Leading Companies',
-  es: 'Empresas Que Confían En Nosotros',
-  ru: 'Компании, которые нам доверяют',
-};
 
 const ctaHeadline = {
   he: 'מוכנים להסיר את החיכוך התפעולי בעסק שלכם?',
@@ -288,74 +277,11 @@ const ctaBtn = {
     </div>
   </section>
 
-  <!-- Client Logos & Selected Outcomes Section -->
-  <section class="py-16 lg:py-24 border-t border-white/[0.06]">
-    <div class="shift-container">
-      
-      {/* Logos list */}
-      <div class="text-center mb-16">
-        <p class="font-mono text-xs uppercase tracking-widest text-shift-muted mb-8">
-          {outcomesLabel[lang]}
-        </p>
-        
-        {/* Monospace logo chips */}
-        <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 font-mono text-sm text-[#F4F1EA]/55">
-          <span class="tracking-widest">BRIDGIFY</span>
-          <span class="tracking-widest">//</span>
-          <span class="tracking-widest">SWU</span>
-          <span class="tracking-widest">//</span>
-          <span class="tracking-widest">PAZ INTERACTIVE</span>
-          <span class="tracking-widest">//</span>
-          <span class="tracking-widest">ALCHEMIQ</span>
-          <span class="tracking-widest">//</span>
-          <span class="tracking-widest">DOUGLAS & BLOOMBERG</span>
-        </div>
-      </div>
+  <!-- Logos Carousel -->
+  <LogosCarousel lang={lang} />
 
-      {/* Selected Systems Outcomes Grid */}
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-6 rounded-2xl bg-gradient-to-br from-white/[0.02] to-transparent border border-white/10 shadow-sm flex flex-col justify-between min-h-[200px]">
-          <div>
-            <span class="font-mono text-xs text-shift-accent-2 border border-shift-accent-2/20 bg-shift-accent-2/5 px-2 py-0.5 rounded">
-              {lang === 'he' ? 'מערכת לידים' : lang === 'ru' ? 'Лидогенерация' : lang === 'es' ? 'Sistema de Leads' : 'Inbound Lead Engine'}
-            </span>
-            <p class="font-heading font-semibold text-lg text-shift-text mt-4">Bridgify</p>
-            <p class="text-xs text-shift-muted mt-2 leading-relaxed">
-              {lang === 'he' ? 'אוטומציית קליטת לידים מלאה כולל ניתוב CRM והודעות WhatsApp מיידיות.' : lang === 'ru' ? 'Автоматизация захвата лидов, CRM-маршрутизация и мгновенные WhatsApp-уведомления.' : lang === 'es' ? 'Automatización de captura de leads, CRM e integración rápida con WhatsApp.' : 'Automated inbound lead routing & instant customer WhatsApp messaging.'}
-            </p>
-          </div>
-          <p class="font-mono text-xl font-bold text-shift-accent mt-4">+140% Conversions</p>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-gradient-to-br from-white/[0.02] to-transparent border border-white/10 shadow-sm flex flex-col justify-between min-h-[200px]">
-          <div>
-            <span class="font-mono text-xs text-shift-warm border border-shift-warm/20 bg-shift-warm/5 px-2 py-0.5 rounded">
-              {lang === 'he' ? 'ליבת אוטומציה' : lang === 'ru' ? 'Оптимизация процессов' : lang === 'es' ? 'Automatización de Procesos' : 'Operations Automation'}
-            </span>
-            <p class="font-heading font-semibold text-lg text-shift-text mt-4">SWU</p>
-            <p class="text-xs text-shift-muted mt-2 leading-relaxed">
-              {lang === 'he' ? 'חיבור טפסי הרשמה, יצירת חשבוניות סליקה, ואוטומציית אימות נתונים.' : lang === 'ru' ? 'Связка регистрационных форм, биллинга счетов и автоматической проверки данных.' : lang === 'es' ? 'Conexión de formularios de registro, facturación y reconciliación automática.' : 'Connected client onboarding forms, automatic invoices & verification.'}
-            </p>
-          </div>
-          <p class="font-mono text-xl font-bold text-shift-accent-2 mt-4">-15 Hours/Week</p>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-gradient-to-br from-white/[0.02] to-transparent border border-white/10 shadow-sm flex flex-col justify-between min-h-[200px]">
-          <div>
-            <span class="font-mono text-xs text-shift-accent border border-shift-accent/20 bg-shift-accent/5 px-2 py-0.5 rounded">
-              {lang === 'he' ? 'ביצועי רשת' : lang === 'ru' ? 'Оптимизация сайта' : lang === 'es' ? 'Rendimiento y SEO' : 'Performance Architecture'}
-            </span>
-            <p class="font-heading font-semibold text-lg text-shift-text mt-4">Paz Interactive</p>
-            <p class="text-xs text-shift-muted mt-2 leading-relaxed">
-              {lang === 'he' ? 'שדרוג קוד האתר ל-Next.js, אופטימיזציית מהירות Core Web Vitals מלאה.' : lang === 'ru' ? 'Перенос сайта на Next.js, оптимизация показателей Core Web Vitals на максимум.' : lang === 'es' ? 'Reconstrucción en Next.js, optimización de Core Web Vitals de punta a punta.' : 'Next.js frontend rebuild, CDN caching, PageSpeed score optimization.'}
-            </p>
-          </div>
-          <p class="font-mono text-xl font-bold text-shift-warm mt-4">98 PageSpeed Score</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
+  <!-- Selected Projects (9 projects, prominent) -->
+  <ProjectsSection lang={lang} />
 
   <!-- About Founder Biography Section -->
   <AboutFounder lang={lang} />

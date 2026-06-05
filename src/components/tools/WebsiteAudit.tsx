@@ -325,6 +325,26 @@ export default function WebsiteAudit({ t }: Props) {
   const [urlError, setUrlError] = useState('');
   const [psiData, setPsiData] = useState<PsiData | null>(null);
   const [psiError, setPsiError] = useState('');
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
+  useEffect(() => {
+    if (phase !== 'loading') {
+      setLoadingProgress(0);
+      return;
+    }
+
+    setLoadingProgress(5);
+    const interval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 95) return prev;
+        const increment = Math.max(1, Math.floor((95 - prev) / 8));
+        const randomBonus = Math.random() > 0.7 ? 1 : 0;
+        return Math.min(95, prev + increment + randomBonus);
+      });
+    }, 400);
+
+    return () => clearInterval(interval);
+  }, [phase]);
 
   const isResult = phase === 'result' || (phase === 'questions' && step >= QUESTIONS.length);
   const cq = QUESTIONS[step];
@@ -361,6 +381,8 @@ export default function WebsiteAudit({ t }: Props) {
     setPhase('loading');
     try {
       const data = await fetchPsi(url);
+      setLoadingProgress(100);
+      await new Promise((resolve) => setTimeout(resolve, 600));
       setPsiData(data);
       setPhase('psi');
     } catch (err: any) {
@@ -472,15 +494,60 @@ export default function WebsiteAudit({ t }: Props) {
   }
 
   if (phase === 'loading') {
+    const radius = 30;
+    const strokeDasharray = 2 * Math.PI * radius;
+    const strokeDashoffset = strokeDasharray * (1 - loadingProgress / 100);
+
+    const getLoadingStatus = (progress: number, lang: Lang): string => {
+      if (progress < 35) {
+        return lang === 'he' ? 'בודק גרסת שולחן עבודה...' : lang === 'ru' ? 'Проверка десктопной версии...' : lang === 'es' ? 'Comprobando versión de escritorio...' : 'Checking desktop version...';
+      }
+      if (progress < 70) {
+        return lang === 'he' ? 'מנתח ביצועי מובייל...' : lang === 'ru' ? 'Анализ мобильной производительности...' : lang === 'es' ? 'Analizando rendimiento móvil...' : 'Analyzing mobile performance...';
+      }
+      if (progress < 90) {
+        return lang === 'he' ? 'מעבד נתוני Lighthouse...' : lang === 'ru' ? 'Обработка метрик Lighthouse...' : lang === 'es' ? 'Procesando métricas de Lighthouse...' : 'Processing Lighthouse metrics...';
+      }
+      return lang === 'he' ? 'מייצר המלצות מותאמות...' : lang === 'ru' ? 'Создание персональных рекомендаций...' : lang === 'es' ? 'Generando recomendaciones personalizadas...' : 'Generating custom recommendations...';
+    };
+
     return (
-      <div style={cardStyle} className="flex flex-col items-center justify-center py-12 gap-4">
-        <div className="w-10 h-10 rounded-full border-2 border-[#6EE7F9] border-t-transparent animate-spin" />
-        <p className="font-mono text-sm text-[#A7AFBA]">
-          {lang === 'he' ? 'מנתח את האתר שלך...' : lang === 'ru' ? 'Анализируем ваш сайт...' : lang === 'es' ? 'Analizando tu sitio...' : 'Analysing your site...'}
-        </p>
-        <p className="font-mono text-xs text-[#A7AFBA]/60">
-          {lang === 'he' ? 'בדיקת שולחן עבודה + נייד — עשוי לקחת ~15 שניות' : lang === 'ru' ? 'Проверка десктоп + мобайл — может занять ~15 сек' : lang === 'es' ? 'Comprobando escritorio + móvil — puede tardar ~15 seg' : 'Checking desktop + mobile — may take ~15 seconds'}
-        </p>
+      <div style={cardStyle} className="flex flex-col items-center justify-center py-12 gap-5">
+        <div className="relative flex items-center justify-center w-24 h-24">
+          <svg className="w-full h-full transform -rotate-90">
+            <circle
+              cx="48"
+              cy="48"
+              r={radius}
+              stroke="rgba(255,255,255,0.05)"
+              strokeWidth="6"
+              fill="transparent"
+            />
+            <circle
+              cx="48"
+              cy="48"
+              r={radius}
+              stroke="#6EE7F9"
+              strokeWidth="6"
+              fill="transparent"
+              strokeDasharray={strokeDasharray}
+              strokeDashoffset={strokeDashoffset}
+              strokeLinecap="round"
+              style={{ transition: 'stroke-dashoffset 0.3s ease-out' }}
+            />
+          </svg>
+          <span className="absolute text-lg font-mono font-bold text-[#F4F1EA]" style={{ fontFamily: "'Inter Tight', system-ui, sans-serif" }}>
+            {loadingProgress}%
+          </span>
+        </div>
+        <div className="text-center space-y-1.5">
+          <p className="font-mono text-sm text-[#A7AFBA] min-h-[1.25rem]">
+            {getLoadingStatus(loadingProgress, lang)}
+          </p>
+          <p className="font-mono text-xs text-[#A7AFBA]/60">
+            {lang === 'he' ? 'בדיקת שולחן עבודה + נייד — עשוי לקחת ~15 שניות' : lang === 'ru' ? 'Проверка десктоп + мобайл — может занять ~15 сек' : lang === 'es' ? 'Comprobando escritorio + móvil — puede tardar ~15 seg' : 'Checking desktop + mobile — may take ~15 seconds'}
+          </p>
+        </div>
       </div>
     );
   }

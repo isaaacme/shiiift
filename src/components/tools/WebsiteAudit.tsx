@@ -141,13 +141,9 @@ const RATING_LABEL: Record<string, Record<Lang, string>> = {
 };
 
 async function fetchPsi(url: string): Promise<PsiData> {
-  const base = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
   const encoded = encodeURIComponent(url);
-  const keyParam = typeof import.meta.env !== 'undefined' && import.meta.env.GOOGLE_API_PAGESPEED
-    ? `&key=${encodeURIComponent(import.meta.env.GOOGLE_API_PAGESPEED)}`
-    : '';
 
-  const desktopRes = await fetch(`${base}?url=${encoded}&strategy=desktop${keyParam}`);
+  const desktopRes = await fetch(`/api/pagespeed?url=${encoded}&strategy=desktop`);
   if (desktopRes.status === 429) throw new Error('RATE_LIMITED');
   if (!desktopRes.ok) throw new Error(`PSI API error: ${desktopRes.status}`);
 
@@ -155,7 +151,7 @@ async function fetchPsi(url: string): Promise<PsiData> {
   if (desktop?.error) throw new Error(desktop.error?.message ?? 'PSI error');
   if (!desktop?.lighthouseResult) throw new Error('No Lighthouse result returned');
 
-  const mobileRes = await fetch(`${base}?url=${encoded}&strategy=mobile${keyParam}`);
+  const mobileRes = await fetch(`/api/pagespeed?url=${encoded}&strategy=mobile`);
   const mobile = mobileRes.ok ? await mobileRes.json() : null;
 
   const audits = desktop.lighthouseResult.audits ?? {};

@@ -3,9 +3,11 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import netlify from '@astrojs/netlify';
 
 export default defineConfig({
   site: 'https://shiiift.com',
+  adapter: netlify(),
   integrations: [
     react(),
     tailwind(),
@@ -27,6 +29,11 @@ export default defineConfig({
     locales: ['he', 'en', 'es', 'ru'],
     routing: {
       prefixDefaultLocale: true,
+    },
+  },
+  vite: {
+    resolve: {
+      dedupe: ['react', 'react-dom'],
     },
   },
 });

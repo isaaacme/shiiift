@@ -21,6 +21,7 @@ const t = useTranslations(lang);
         </div>
 
         <form
+          id="start-form"
           name="start"
           method="POST"
           data-netlify="true"
@@ -100,6 +101,22 @@ const t = useTranslations(lang);
 
           <p class="text-xs text-shift-muted/60 text-center">{t('start.form.disclaimer')}</p>
         </form>
+
+        <script>
+          const form = document.getElementById('start-form') as HTMLFormElement;
+          form?.addEventListener('submit', (e) => {
+            const email = (document.getElementById('email') as HTMLInputElement)?.value;
+            const name = (document.getElementById('name') as HTMLInputElement)?.value;
+            if (email) {
+              fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, source: 'contact_form' }),
+                keepalive: true
+              }).catch(() => {});
+            }
+          });
+        </script>
       </div>
     </div>
   </div>

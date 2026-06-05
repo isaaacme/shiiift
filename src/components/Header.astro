@@ -23,6 +23,9 @@ const currentPath = Astro.url.pathname;
         <a href={`/${lang}/tools`} class="text-shift-muted hover:text-shift-text transition-colors no-underline">
           {t('nav.tools')}
         </a>
+        <a href={`/${lang}/thinking`} class="text-shift-muted hover:text-shift-text transition-colors no-underline">
+          {t('nav.thinking')}
+        </a>
         <a href={`/${lang}/workshop`} class="text-shift-muted hover:text-shift-text transition-colors no-underline">
           {t('nav.workshop')}
         </a>
@@ -89,6 +92,9 @@ const currentPath = Astro.url.pathname;
     <div class="shift-container py-4 flex flex-col gap-1">
       <a href={`/${lang}/tools`} class="px-3 py-2.5 text-shift-muted hover:text-shift-text text-sm no-underline rounded-lg hover:bg-shift-surface-soft transition-colors">
         {t('nav.tools')}
+      </a>
+      <a href={`/${lang}/thinking`} class="px-3 py-2.5 text-shift-muted hover:text-shift-text text-sm no-underline rounded-lg hover:bg-shift-surface-soft transition-colors">
+        {t('nav.thinking')}
       </a>
       <a href={`/${lang}/workshop`} class="px-3 py-2.5 text-shift-muted hover:text-shift-text text-sm no-underline rounded-lg hover:bg-shift-surface-soft transition-colors">
         {t('nav.workshop')}

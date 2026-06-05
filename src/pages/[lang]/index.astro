@@ -4,6 +4,7 @@ import Hero from '../../components/Hero.astro';
 import DiagnosticEntry from '../../components/DiagnosticEntry.astro';
 import ToolsSection from '../../components/ToolsSection.astro';
 import WorkshopSection from '../../components/WorkshopSection.astro';
+import CaseStudiesSection from '../../components/CaseStudiesSection.astro';
 import EngagementModels from '../../components/EngagementModels.astro';
 import FinalCTA from '../../components/FinalCTA.astro';
 import { LOCALES, useTranslations, type Locale } from '../../i18n/index';
@@ -25,6 +26,7 @@ const t = useTranslations(lang);
   <DiagnosticEntry lang={lang} />
   <ToolsSection lang={lang} />
   <WorkshopSection lang={lang} />
+  <CaseStudiesSection lang={lang} />
   <EngagementModels lang={lang} />
   <FinalCTA lang={lang} />
 </BaseLayout>

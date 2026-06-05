@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import ToolResult from './ToolResult';
-import { useToolSession, trackEvent } from './useToolSession';
+import ToolResult, { useToolSession, trackEvent } from './ToolResult';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
 type T = { back: string; next: string; seeResults: string; startOver: string; yourScore: string; topFindings: string; quickWins: string; nextActions: string; relatedTools: string; newsletterTitle: string; newsletterPlaceholder: string; newsletterCta: string; newsletterDisclaimer: string; lang: string };
@@ -21,14 +20,14 @@ async function fetchAiInsight(answers: Record<string, string>, lang: Lang): Prom
     ? `Eres un consultor de IA para empresas. Datos del negocio: ${ctx}. Escribe 2 oraciones: qué es mejor automatizar con IA y por qué. Sé específico.`
     : `You are a business AI consultant. Business data: ${ctx}. Write exactly 2 sentences: what is best to automate with AI and why. Be specific and practical.`;
   try {
-    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const res = await fetch('/api/generate-insight', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'HTTP-Referer': 'https://shiiiftagency.netlify.app', 'X-Title': 'shiiift AI Readiness' },
-      body: JSON.stringify({ model: 'mistralai/mistral-7b-instruct:free', messages: [{ role: 'user', content: prompt }], max_tokens: 120 }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
     });
     if (!res.ok) return '';
     const data = await res.json();
-    return data?.choices?.[0]?.message?.content?.trim() ?? '';
+    return data?.text ?? '';
   } catch {
     return '';
   }
@@ -129,7 +128,7 @@ export default function AIReadiness({ t }: { t: T }) {
     <div style={{ background: 'linear-gradient(160deg,rgba(199,255,74,0.06) 0%,#151A23 100%)', border: '1px solid rgba(199,255,74,0.2)', borderRadius: '1rem', padding: '1.5rem' }}>
       <div className="flex items-center gap-2 mb-3">
         <span className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A]">{gl(aiInsightLabel, lang)}</span>
-        <span className="font-mono text-[10px] text-[#A7AFBA]/50 border border-[rgba(255,255,255,0.08)] px-1.5 py-0.5 rounded">Mistral AI</span>
+        <span className="font-mono text-[10px] text-[#A7AFBA]/50 border border-[rgba(255,255,255,0.08)] px-1.5 py-0.5 rounded">Gemini AI</span>
       </div>
       {aiLoading ? (
         <div className="flex items-center gap-3">

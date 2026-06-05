@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import ToolResult from './ToolResult';
-import { useToolSession, trackEvent } from './useToolSession';
+import ToolResult, { useToolSession, trackEvent } from './ToolResult';
 
 const HOURS_COST_MAP: Record<string, number> = { many: 17, some: 10, few: 3, automated: 0 };
 

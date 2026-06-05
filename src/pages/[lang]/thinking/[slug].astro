@@ -1,0 +1,945 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { LOCALES, useTranslations, type Locale } from '../../../i18n/index';
+
+export function getStaticPaths() {
+  const paths: any[] = [];
+  const slugs = ['automatable-work', 'right-sized-crm', 'website-system', 'ai-reality-check'];
+
+  LOCALES.forEach((lang) => {
+    slugs.forEach((slug) => {
+      paths.push({
+        params: { lang, slug },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const { lang, slug } = Astro.params as { lang: Locale; slug: string };
+const t = useTranslations(lang);
+
+const categories = {
+  automation: { he: 'אוטומציה', en: 'Automation', es: 'Automatización', ru: 'Автоматизация' },
+  crm: { he: 'CRM', en: 'CRM', es: 'CRM', ru: 'CRM' },
+  websites: { he: 'אתרים', en: 'Websites', es: 'Sitios web', ru: 'Сайты' },
+  ai: { he: 'AI', en: 'AI', es: 'IA', ru: 'ИИ' },
+};
+
+const backLabels = {
+  he: 'חזרה למאמרים',
+  en: 'Back to Thinking',
+  es: 'Volver a Pensamiento',
+  ru: 'Назад к статьям',
+};
+
+const formTranslations = {
+  title: {
+    he: 'רוצה שנבנה את המערכת הזו בשבילך?',
+    en: 'Want us to build this system for you?',
+    es: '¿Quieres que construyamos este sistema?',
+    ru: 'Хотите, чтобы мы настроили это для вас?',
+  },
+  desc: {
+    he: 'מלא את הפרטים ונחזור אליך עם הצעה מותאמת אישית ליישום.',
+    en: "Fill in the details and we'll get back to you with a customized implementation proposal.",
+    es: 'Complete los detalles y nos pondremos en contacto con una propuesta personalizada.',
+    ru: 'Заполните форму, и мы свяжемся с вами с индивидуальным предложением.',
+  },
+  name: {
+    he: 'שם מלא',
+    en: 'Full name',
+    es: 'Nombre completo',
+    ru: 'Имя и фамилия',
+  },
+  email: {
+    he: 'אימייל',
+    en: 'Email address',
+    es: 'Correo electrónico',
+    ru: 'Email адрес',
+  },
+  message: {
+    he: 'פרטים נוספים על העסק שלך',
+    en: 'More details about your business',
+    es: 'Más detalles sobre tu negocio',
+    ru: 'Детали о вашем бизнесе',
+  },
+  submit: {
+    he: 'שלח בקשה ליישום',
+    en: 'Send Implementation Request',
+    es: 'Enviar solicitud de desarrollo',
+    ru: 'Отправить запрос на внедрение',
+  },
+  placeholderName: {
+    he: 'ישראל ישראלי',
+    en: 'John Doe',
+    es: 'Juan Pérez',
+    ru: 'Иван Иванов',
+  },
+  placeholderEmail: {
+    he: 'you@example.com',
+    en: 'you@example.com',
+    es: 'you@example.com',
+    ru: 'you@example.com',
+  },
+  placeholderMessage: {
+    he: 'ספר לנו בקצרה על תהליך העבודה הנוכחי שלך ואיפה החיכוך...',
+    en: 'Tell us briefly about your current workflow and where the friction is...',
+    es: 'Cuéntanos brevemente sobre tu flujo de trabajo actual...',
+    ru: 'Расскажите кратко о вашей текущей рутине...',
+  },
+  disclaimer: {
+    he: 'אין ספאם. מענה תוך 48 שעות.',
+    en: 'No spam. Response within 48 hours.',
+    es: 'Sin spam. Respuesta en 48 horas.',
+    ru: 'Без спама. Ответ в течение 48 часов.',
+  },
+  success: {
+    he: 'תודה! הבקשה שלך התקבלה בהצלחה. נחזור אליך בקרוב.',
+    en: 'Thank you! Your request has been received. We will get back to you shortly.',
+    es: '¡Gracias! Su solicitud ha sido recibida. Nos pondremos en contacto pronto.',
+    ru: 'Спасибо! Ваш запрос получен. Мы свяжемся с вами в ближайшее время.',
+  }
+};
+
+const headings = {
+  situation: { he: '1. המצב הקיים', en: '1. The Current Situation', es: '1. Situación Actual', ru: '1. Текущая ситуация' },
+  issues: { he: '2. מה לא בסדר במצב הזה', en: '2. What is Wrong with It', es: '2. Qué está Fallando', ru: '2. Что здесь не так' },
+  opportunity: { he: '3. איך הופכים את זה להזדמנות', en: '3. Turning It Into an Opportunity', es: '3. Cómo Convertirlo en Oportunidad', ru: '3. Как превратить это в возможность' },
+  diagram: { he: 'תרשים זרימת עבודה מומלץ', en: 'Recommended Workflow Architecture', es: 'Arquitectura de Flujo Recomendada', ru: 'Рекомендуемая архитектура процессов' },
+  checklist: { he: '4. צ\'קליסט ליישום מיידי', en: '4. Actionable Implementation Checklist', es: '4. Lista de Acciones para Implementación', ru: '4. Чек-лист для внедрения' },
+};
+
+const articleContent: Record<string, {
+  category: keyof typeof categories;
+  color: string;
+  title: Record<Locale, string>;
+  subtitle: Record<Locale, string>;
+  situation: Record<Locale, string[]>;
+  issues: Record<Locale, string[]>;
+  opportunity: Record<Locale, string[]>;
+  checklist: Record<Locale, string[]>;
+}> = {
+  'automatable-work': {
+    category: 'automation',
+    color: '#C7FF4A',
+    title: {
+      he: 'למה עסקים קטנים מפסידים 15+ שעות בשבוע',
+      en: 'Why Small Businesses Lose 15+ Hours/Week',
+      es: 'Por qué pequeñas empresas pierden 15+ horas',
+      ru: 'Почему малый бизнес теряет 15+ часов',
+    },
+    subtitle: {
+      he: 'זיהוי משימות ידניות חוזרות ונשנות והחזרת השליטה על הזמן שלך.',
+      en: 'Identifying repetitive manual tasks and reclaiming control of your schedule.',
+      es: 'Identificar tareas manuales repetitivas y recuperar el control de su agenda.',
+      ru: 'Выявление рутинных ручных задач и возвращение контроля над своим временем.',
+    },
+    situation: {
+      en: [
+        'Most small business owners operate in reactive mode. They spend their days jumping between client requests, responding manually to lead forms, messaging contacts to coordinate meeting times, and manually copying invoice data into accounting sheets.',
+        'This creates a feeling of constant activity, but yields little strategic progress. The owner remains stuck in the day-to-day operational machinery instead of managing and growing the business.'
+      ],
+      he: [
+        'רוב בעלי העסקים הקטנים פועלים במצב מגננה ותגובה. הם מבלים את ימיהם בקפיצה בין בקשות לקוחות, מענה ידני לטפסי לידים, החלפת הודעות לתיאום זמני פגישות והעתקה ידנית של נתוני חשבוניות לגיליונות חשבונאות.',
+        'זה מייצר תחושה של פעילות מתמדת, אך מניב מעט מאוד התקדמות אסטרטגית. בעל העסק נשאר תקוע במכונות התפעול היומיומיות במקום לנהל ולהצמיח את העסק.'
+      ],
+      es: [
+        'La mayoría de los dueños de pequeñas empresas operan en modo reactivo. Pasan sus días saltando entre solicitudes de clientes, respondiendo manualmente a formularios de contacto, enviando mensajes para coordinar reuniones y copiando datos de facturas en hojas contables.',
+        'Esto crea una sensación de actividad constante, pero produce muy poco progreso estratégico. El propietario sigue atrapado en la maquinaria operativa diaria en lugar de gestionar y hacer crecer el negocio.'
+      ],
+      ru: [
+        'Большинство владельцев малого бизнеса работают в реактивном режиме. Они целыми днями переключаются между запросами клиентов, вручную отвечают на заявки, согласовывают время встреч в чатах и переносят данные счетов в таблицы.',
+        'Это создает иллюзию постоянной занятости, но не дает стратегического прогресса. Владелец остается заложником ежедневной рутины вместо того, чтобы развивать бизнес.'
+      ]
+    },
+    issues: {
+      en: [
+        'Manual coordination leads to immediate lead drop-off; if you take 3 hours to coordinate a meeting, a competitor has already booked them.',
+        'Administrative cognitive fatigue lowers the quality of delivery and client communication.',
+        'Human error causes forgotten follow-ups and lost billing details, directly hurting the company\'s bottom line.'
+      ],
+      he: [
+        'תיאום ידני מוביל לנטישה מיידית של לידים; אם לוקח לך 3 שעות לתאם פגישה, מתחרה מהיר כבר סגר איתם.',
+        'עייפות קוגניטיבית מנהלתית מפחיתה את איכות השירות והתקשורת עם הלקוחות.',
+        'טעויות אנוש גורמות למעקבים שנשכחים ולפרטי חיוב שאובדים, מה שפוגע ישירות בשורה התחתונה של העסק.'
+      ],
+      es: [
+        'La coordinación manual provoca la pérdida inmediata de clientes potenciales; si tardas 3 horas en coordinar una reunión, un competidor ya los habrá programado.',
+        'La fatiga cognitiva administrativa reduce la calidad de la entrega y la comunicación con los clientes.',
+        'Los errores humanos causan seguimientos olvidados y detalles de facturación perdidos, perjudicando directamente los ingresos de la empresa.'
+      ],
+      ru: [
+        'Ручное согласование встреч приводит к потере клиентов: если вы договариваетесь о звонке часами, конкуренты сделают это быстрее.',
+        'Административная усталость снижает качество работы и общения с клиентами.',
+        'Человеческий фактор ведет к забытым напоминаниям и потерянным счетам, что напрямую бьет по прибыли.'
+      ]
+    },
+    opportunity: {
+      en: [
+        'By automating scheduling, lead intake, and invoice notifications, you transform administrative friction into a seamless client onboarding engine.',
+        'This frees up to 15 hours per week of cognitive focus, allowing you to improve service delivery, design new offers, and scale client relationships.'
+      ],
+      he: [
+        'על ידי אוטומציה של תזמון פגישות, קליטת לידים והתראות חשבוניות, אתה הופך חיכוך מנהלתי למנוע קליטת לקוחות חלק.',
+        'זה מפנה עד 15 שעות בשבוע של מיקוד קוגניטיבי, ומאפשר לך לשפר את השירות, לעצב הצעות ערך חדשות ולהרחיב את קשרי הלקוחות.'
+      ],
+      es: [
+        'Al automatizar la programación, la entrada de prospectos y las notificaciones de facturas, transforma la fricción administrativa en un motor fluido de captación.',
+        'Esto libera hasta 15 horas a la semana de enfoque cognitivo, permitiéndole mejorar la entrega del servicio, diseñar nuevas ofertas y escalar el negocio.'
+      ],
+      ru: [
+        'Автоматизируя запись, сбор данных и уведомления, вы превращаете рутину в эффективный процесс привлечения клиентов.',
+        'Это освобождает до 15 часов в неделю, позволяя вам сфокусироваться на улучшении продукта, создании новых предложений и масштабировании.'
+      ]
+    },
+    checklist: {
+      en: [
+        'Map out all daily repetitive administrative tasks.',
+        'Track exact minutes spent on administrative work for one week.',
+        'Unified scheduling links (e.g. Cal.com / Calendly) configured for clients.',
+        'Connect web form submissions directly to CRM via API or webhooks.',
+        'Set up automatic SMS/Email notifications for new form inputs.',
+        'Implement automated follow-up flows for pending proposals.',
+        'Enable self-scheduling calendar links inside contact pages.',
+        'Configure automated payment reminders for outstanding invoices.',
+        'Establish standard templates for common team replies.',
+        'Measure recovered admin hours weekly and refine bottlenecks.'
+      ],
+      he: [
+        'מיפוי כל המשימות המנהלתיות החוזרות ונשנות מדי יום.',
+        'מעקב אחר הדקות המדויקות המושקעות בעבודה מנהלתית במשך שבוע אחד.',
+        'הגדרת קישורי תיאום פגישות מאוחדים (למשל Cal.com או Calendly) ללקוחות.',
+        'חיבור שליחת טפסים מהאתר ישירות ל-CRM באמצעות API או וובהוקס.',
+        'הגדרת התראות SMS/מייל אוטומטיות על פניות חדשות.',
+        'הטמעת זרימת מעקבים (follow-up) אוטומטית להצעות מחיר ממתינות.',
+        'הפעלת קישורי תזמון עצמי בדפי יצירת הקשר.',
+        'הגדרת תזכורות תשלום אוטומטיות עבור חשבוניות שלא שולמו.',
+        'יצירת תבניות קבועות לתשובות נפוצות של הצוות.',
+        'מדידת שעות הניהול שנחסכו מדי שבוע וטיפול בצווארי בקבוק חדשים.'
+      ],
+      es: [
+        'Mapear todas las tareas administrativas repetitivas diarias.',
+        'Registrar los minutos exactos dedicados al trabajo administrativo durante una semana.',
+        'Configurar enlaces de programación unificados (ej. Cal.com / Calendly) para los clientes.',
+        'Conectar los formularios del sitio web directamente al CRM mediante API o webhooks.',
+        'Establecer notificaciones automáticas por SMS/Email para nuevas consultas.',
+        'Implementar flujos de seguimiento automático para propuestas pendientes.',
+        'Habilitar enlaces de autoprogramación en las páginas de contacto.',
+        'Configurar recordatorios de pago automáticos para facturas pendientes.',
+        'Crear plantillas estándar para las respuestas más comunes del equipo.',
+        'Medir las horas administrativas recuperadas semanalmente y optimizar.'
+      ],
+      ru: [
+        'Составить список всех ежедневно повторяющихся рутинных задач.',
+        'Замерить точное время, затрачиваемое на рутину в течение одной недели.',
+        'Настроить единую ссылку для онлайн-записи (например, Cal.com или Calendly).',
+        'Связать отправку форм с сайта напрямую с CRM через вебхуки.',
+        'Настроить автоуведомления (Email/SMS) о новых заявках.',
+        'Внедрить автоматические напоминания для отправленных коммерческих предложений.',
+        'Разместить ссылки на онлайн-запись на странице контактов.',
+        'Настроить автонапоминания о просроченной оплате счетов.',
+        'Создать стандартные шаблоны для ответов клиентам.',
+        'Замерять количество сэкономленных часов еженедельно и устранять новые узкие места.'
+      ]
+    }
+  },
+  'right-sized-crm': {
+    category: 'crm',
+    color: '#6EE7F9',
+    title: {
+      he: 'אתה לא צריך Salesforce',
+      en: "You Don't Need Salesforce",
+      es: 'No necesitas Salesforce',
+      ru: 'Вам не нужен Salesforce',
+    },
+    subtitle: {
+      he: 'מדוע פלטפורמות מורכבות פוגעות בעסקים קטנים ואיך לבנות CRM יעיל.',
+      en: 'Why complex platforms hurt small businesses and how to build a streamlined CRM.',
+      es: 'Por qué las plataformas complejas dañan a las PYMES y cómo construir un CRM eficiente.',
+      ru: 'Почему сложные платформы вредят малому бизнесу и как настроить удобную CRM.',
+    },
+    situation: {
+      en: [
+        'Many business owners believe that adopting enterprise CRM software like Salesforce or HubSpot will automatically organize their sales. They buy expensive subscription tiers, spend weeks building custom workflows, and end up with a cluttered database.',
+        'Because the tool is too complex, the team stops using it. Leads remain unassigned, follow-ups are scattered, and sales reps go back to managing deals via sticky notes and spreadsheets.'
+      ],
+      he: [
+        'בעלי עסקים רבים מאמינים שאימוץ תוכנת CRM ארגונית מורכבת כמו Salesforce או HubSpot יסדר באופן אוטומטי את המכירות שלהם. הם רוכשים מנויים יקרים, משקיעים שבועות בבניית תהליכי עבודה מותאמים אישית, ומסיימים עם בסיס נתונים עמוס ומסורבל.',
+        'מכיוון שהכלי מורכב מדי, הצוות מפסיק להשתמש בו. לידים נשארים ללא טיפול, המעקבים מפוזרים, ואנשי המכירות חוזרים לניהול עסקאות באמצעות פתקיות וגיליונות אקסל.'
+      ],
+      es: [
+        'Muchos dueños de negocios creen que adoptar un CRM empresarial como Salesforce o HubSpot organizará automáticamente sus ventas. Compran suscripciones costosas, pasan semanas configurando flujos complejos y terminan con una base de datos saturada.',
+        'Como la herramienta es demasiado compleja, el equipo deja de usarla. Los prospectos quedan sin asignar, el seguimiento se dispersa y los vendedores vuelven a usar notas adhesivas y hojas de cálculo.'
+      ],
+      ru: [
+        'Многие владельцы бизнеса верят, что внедрение сложных CRM вроде Salesforce или HubSpot наведет порядок в продажах. Они покупают дорогие подписки, тратят недели на настройку и получают перегруженную базу данных.',
+        'Из-за сложности системы команда перестает ей пользоваться. Сделки зависают, напоминания теряются, а менеджеры возвращаются к блокнотам и Excel.'
+      ]
+    },
+    issues: {
+      en: [
+        'High subscription fees for features that are never used by small teams.',
+        'Resistance from sales reps because logging a simple call requires filling 10 custom fields.',
+        'Messy pipeline visibility; managers cannot accurately forecast sales because the database has outdated information.'
+      ],
+      he: [
+        'דמי מנוי גבוהים עבור תכונות שאף פעם אינן בשימוש על ידי צוותים קטנים.',
+        'התנגדות מצד אנשי המכירות מכיוון שתיעוד שיחה פשוטה דורש מילוי של 10 שדות שונים.',
+        'חוסר בהירות לגבי המכירות; מנהלים אינם יכולים לחזות הכנסות במדויק מכיוון שבסיס הנתונים מלא במידע מיושן.'
+      ],
+      es: [
+        'Altos costos de suscripción por funciones que los equipos pequeños nunca utilizan.',
+        'Resistencia del equipo de ventas porque registrar una llamada requiere completar 10 campos personalizados.',
+        'Falta de visibilidad del embudo; los gerentes no pueden pronosticar ventas porque los datos están desactualizados.'
+      ],
+      ru: [
+        'Высокая стоимость подписки за функции, которые никогда не используются.',
+        'Сопротивление менеджеров, так как фиксация звонка требует заполнения десятка полей.',
+        'Отсутствие прозрачности в сделках: руководство не может прогнозировать продажи из-за неактуальных данных.'
+      ]
+    },
+    opportunity: {
+      en: [
+        'A right-sized CRM matches the actual execution speed of your sales pipeline. It prioritizes user adoption over complex logging.',
+        'By streamlining the database to core stages (New, Contacted, Proposal, Won/Lost), your team logs updates in seconds, keeping records clean and pipeline forecasts highly accurate.'
+      ],
+      he: [
+        'CRM בגודל מתאים תואם את מהירות התפעול האמיתית של תהליך המכירה שלך. הוא נותן עדיפות לשימוש יומיומי פשוט על פני תיעוד מורכב.',
+        'על ידי פישוט בסיס הנתונים לשלבים מרכזיים (חדש, נוצר קשר, הצעה, נסגר), הצוות שלך מעדכן עסקאות בשניות, הנתונים נשארים נקיים והתחזיות מדויקות לחלוטין.'
+      ],
+      es: [
+        'Un CRM a su medida se alinea con la velocidad de ejecución real de sus ventas. Prioriza la facilidad de uso sobre el registro complejo.',
+        'Al simplificar el embudo a etapas principales (Nuevo, Contactado, Propuesta, Cerrado), su equipo registra actualizaciones en segundos, manteniendo la información limpia y al día.'
+      ],
+      ru: [
+        'Удобная CRM соответствует реальной скорости работы ваших продаж. В ней простота использования важнее сложных отчетов.',
+        'Упростив воронку до ключевых этапов (Новый, В работе, Предложение, Закрыто), сотрудники обновляют сделки за секунды, сохраняя данные в чистоте.'
+      ]
+    },
+    checklist: {
+      en: [
+        'Define the core customer journey in 4 pipeline stages or less.',
+        'Choose a visual pipeline CRM (e.g. custom Airtable, Pipedrive, simplified HubSpot).',
+        'Connect your website contact form to auto-create CRM deal cards.',
+        'Map lead sources to automated tagging labels inside the CRM.',
+        'Eliminate any custom fields that are not actively used for sales decisions.',
+        'Integrate email sync to automatically log customer conversations.',
+        'Configure automated assignment rules for newly arrived leads.',
+        'Create email response templates directly inside the CRM dashboard.',
+        'Establish a weekly 10-minute CRM cleanup routine for the team.',
+        'Build a simple dashboard showing conversion rates and pipeline values.'
+      ],
+      he: [
+        'הגדרת תהליך הלקוח המרכזי ב-4 שלבים או פחות.',
+        'בחירת CRM מבוסס לוחות ויזואליים (למשל Airtable מותאם, Pipedrive, או HubSpot מפושט).',
+        'חיבור טופס יצירת הקשר באתר ליצירה אוטומטית של כרטיסי עסקאות ב-CRM.',
+        'מיפוי מקורות הלידים לתיוג אוטומטי בתוך המערכת.',
+        'הסרת כל שדה מותאם אישית שאינו משמש בפועל לקבלת החלטות מכירה.',
+        'סנכרון תיבת המייל לתיעוד אוטומטי של שיחות עם לקוחות.',
+        'הגדרת חוקי חלוקת לידים אוטומטיים לפניות חדשות.',
+        'יצירת תבניות למייל ישירות מתוך לוח הבקרה של ה-CRM.',
+        'קביעת שגרת ניקוי CRM שבועית של 10 דקות לצוות.',
+        'בניית לוח מחוונים פשוט המציג אחוזי המרה ושווי צבר עסקאות.'
+      ],
+      es: [
+        'Definir el recorrido del cliente en 4 etapas o menos.',
+        'Seleccionar un CRM visual (ej. Airtable personalizado, Pipedrive, HubSpot simplificado).',
+        'Conectar el formulario de contacto para crear tratos automáticamente.',
+        'Vincular los canales de prospectos con etiquetas automáticas en el CRM.',
+        'Eliminar cualquier campo personalizado que no sea indispensable.',
+        'Configurar la sincronización de correos para registrar las conversaciones.',
+        'Establecer reglas automáticas para asignar nuevos prospectos.',
+        'Crear plantillas de correo accesibles desde el CRM.',
+        'Establecer una rutina de limpieza del CRM de 10 minutos semanales.',
+        'Configurar un reporte básico con tasas de conversión y valor del embudo.'
+      ],
+      ru: [
+        'Описать ключевой путь клиента максимум в 4 этапа.',
+        'Выбрать визуальную CRM-систему (например, Airtable, Pipedrive или упрощенную версию HubSpot).',
+        'Связать контактную форму сайта с автоматическим созданием сделок в CRM.',
+        'Настроить авторазметку источников лидов.',
+        'Удалить все лишние поля в базе данных сделки.',
+        'Настроить синхронизацию почты для сохранения переписки с клиентами.',
+        'Определить правила автоматического распределения новых лидов.',
+        'Создать шаблоны писем для разных этапов воронки продаж.',
+        'Внедрить 10-минутную еженедельную гигиену CRM для всей команды.',
+        'Создать простой дашборд с конверсией и суммами на каждом этапе.'
+      ]
+    }
+  },
+  'website-system': {
+    category: 'websites',
+    color: '#FF7A59',
+    title: {
+      he: 'האתר שלך הוא רק עלון שיווקי',
+      en: 'Your Website Is a Brochure',
+      es: 'Tu sitio web es un folleto',
+      ru: 'Ваш сайт — это брошюра',
+    },
+    subtitle: {
+      he: 'איך להפוך דף שיווקי סטטי למערכת תפעולית שמסווגת לקוחות ומפעילה תהליכים.',
+      en: 'How to turn a static marketing page into an active operational system.',
+      es: 'Cómo convertir una página de marketing estática en un sistema operativo activo.',
+      ru: 'Как превратить статичную визитку в активную операционную систему.',
+    },
+    situation: {
+      en: [
+        'Traditional websites exist simply to display information. They have an About page, a bulleted list of services, and a generic contact form with fields like "Name" and "Message".',
+        'This static structure forces you to perform manual qualification on every incoming lead. You spend your day scheduling introductory calls with unqualified prospects, copying form submissions, and repeating baseline business details.'
+      ],
+      he: [
+        'אתרי אינטרנט מסורתיים קיימים פשוט כדי להציג מידע. יש להם דף אודות, רשימה של שירותים, וטופס יצירת קשר גנרי עם שדות כמו "שם" ו"הודעה".',
+        'המבנה הסטטי הזה מאלץ אותך לבצע מיון וסיווג ידני עבור כל פנייה נכנסת. אתה מבזבז את יומך בתיאום שיחות היכרות עם לידים לא רלוונטיים, העתקת פרטי טפסים וחזרה על מידע בסיסי.'
+      ],
+      es: [
+        'Los sitios web tradicionales existen solo para mostrar información. Tienen una sección sobre nosotros, una lista de servicios y un formulario de contacto genérico.',
+        'Esta estructura estática le obliga a realizar la calificación manual de cada prospecto. Pasa su día programando llamadas con clientes no calificados y copiando datos a mano.'
+      ],
+      ru: [
+        'Обычные сайты служат просто визитками. На них есть страница «О нас», список услуг и стандартная форма с полями «Имя» и «Сообщение».',
+        'Такая структура заставляет вас вручную обрабатывать каждую заявку. Вы тратите время на звонки с нецелевыми клиентами и ручной перенос данных.'
+      ]
+    },
+    issues: {
+      en: [
+        'High volume of unqualified enquiries wasting valuable consulting hours.',
+        'No data captured upfront; introductory calls are spent asking basic qualification questions.',
+        'Disconnected operations; lead submissions sit in the CMS database instead of triggering workflows.'
+      ],
+      he: [
+        'נפח גבוה של פניות לא ממוקדות המבזבז שעות ייעוץ יקרות.',
+        'אין איסוף מידע מראש; שיחות ההיכרות מבוזבזות על שאלות אפיון בסיסיות.',
+        'תהליכים מנותקים; פניות לידים נשארות בבסיס הנתונים של האתר במקום להפעיל תהליכי עבודה.'
+      ],
+      es: [
+        'Alto volumen de consultas no calificadas que consumen tiempo de consultoría.',
+        'Falta de datos iniciales; las llamadas de presentación se pierden en preguntas básicas.',
+        'Operaciones desconectadas; los prospectos quedan en el sitio web sin iniciar flujos.'
+      ],
+      ru: [
+        'Большой поток нерелевантных обращений, отнимающий рабочее время.',
+        'Отсутствие предварительных данных: на первых звонках приходится задавать базовые вопросы.',
+        'Разорванные процессы: контакты клиентов лежат в админке сайта вместо запуска работы.'
+      ]
+    },
+    opportunity: {
+      en: [
+        'A website designed as an operational system qualfies leads, aggregates context, and connects to backend tools.',
+        'By embedding interactive diagnostics or step-based intake questionnaires, the site filters out bad fits, collects strategic answers, and pipes qualified accounts directly to self-scheduling tools, making client onboarding automated.'
+      ],
+      he: [
+        'אתר המעוצב כמערכת תפעולית מסווג לידים, אוסף מידע רקע, ומחבר בין מערכות פנימיות.',
+        'על ידי שילוב אבחונים אינטראקטיביים או שאלוני קליטה שלבים, האתר מסנן פניות לא רלוונטיות, אוסף תשובות אסטרטגיות ומפנה לקוחות מתאימים ישירות לתיאום פגישה אוטומטי.'
+      ],
+      es: [
+        'Un sitio web diseñado como sistema califica prospectos, recopila contexto e integra herramientas internas.',
+        'Al incluir diagnósticos interactivos o cuestionarios por pasos, el sitio filtra perfiles no adecuados, reúne respuestas clave y guía a clientes calificados hacia la agenda en línea.'
+      ],
+      ru: [
+        'Сайт, спроектированный как система, квалифицирует лидов, собирает информацию и запускает процессы.',
+        'Интегрированные тесты и пошаговые анкеты отсеивают нецелевые обращения, собирают вводные данные и направляют целевых клиентов на запись.'
+      ]
+    },
+    checklist: {
+      en: [
+        'Replace generic CTA buttons with active diagnostic or intake entry points.',
+        'Build a step-by-step interactive questionnaire (intake form).',
+        'Define clear qualification scores based on intake questionnaire answers.',
+        'Route high-score (qualified) leads directly to self-scheduling calendar pages.',
+        'Set up custom thank-you resources for low-score (unqualified) leads.',
+        'Send structured intake answers directly to the sales team inbox before calls.',
+        'Wire form webhooks to automatically insert qualified leads into the CRM.',
+        'Enable Google/Meta pixel conversion tracking on successful intake completions.',
+        'Deploy mobile-first forms to optimize load speed and focus states.',
+        'Regularly review intake questions to match evolving ideal customer profiles.'
+      ],
+      he: [
+        'החלפת כפתורי הנעה לפעולה כלליים בנקודות כניסה לאבחון או קליטה אינטראקטיבית.',
+        'בניית שאלון שלבים אינטראקטיבי (טופס קליטה מובנה).',
+        'הגדרת מדדי סינון ברורים על סמך התשובות לשאלון.',
+        'הפניית לידים ממוקדים ישירות לדפי תיאום פגישות אוטומטיים.',
+        'הצגת משאבים מועילים (מדריכים) לפניות שאינן מתאימות בשלב זה.',
+        'שליחת נתוני השאלון המובנים ישירות למייל של נציג המכירות לפני השיחה.',
+        'חיבור וובהוקס להזנת הלידים המסווגים ישירות ל-CRM.',
+        'הפעלת מעקב המרות (פיקסלים) על מילוי מוצלח של שאלון הקליטה.',
+        'התאמת הטפסים למובייל בצורה מלאה (Mobile-first).',
+        'סקירה שוטפת של שאלות הקליטה בהתאם לפרופיל הלקוח האידיאלי.'
+      ],
+      es: [
+        'Reemplazar llamadas a la acción genéricas con accesos a diagnósticos.',
+        'Crear un cuestionario interactivo por pasos para recopilar datos de entrada.',
+        'Establecer criterios de calificación según las respuestas del cuestionario.',
+        'Redirigir leads calificados directamente a la agenda en línea.',
+        'Proporcionar recursos útiles a los perfiles no calificados.',
+        'Enviar las respuestas del formulario al equipo de ventas antes de la llamada.',
+        'Vincular los formularios del sitio con el CRM por medio de webhooks.',
+        'Configurar el seguimiento de conversiones en el envío de formularios.',
+        'Optimizar los formularios para una excelente experiencia móvil.',
+        'Evaluar periódicamente las preguntas del formulario para ajustarlas a tu cliente ideal.'
+      ],
+      ru: [
+        'Заменить стандартные кнопки связи на приглашение к прохождению теста.',
+        'Создать пошаговую интерактивную форму сбора данных.',
+        'Определить правила оценки ответов для автоматической квалификации.',
+        'Направлять целевых клиентов напрямую к календарю для выбора времени звонка.',
+        'Показывать полезные ссылки или статьи тем, кто пока не готов к покупке.',
+        'Отправлять структурированные ответы анкеты менеджеру перед созвоном.',
+        'Настроить вебхуки для отправки квалифицированных лидов в CRM.',
+        'Установить пиксели отслеживания конверсий на финальную страницу.',
+        'Адаптировать формы для мобильных устройств.',
+        'Регулярно корректировать вопросы анкеты под изменения портрета клиента.'
+      ]
+    }
+  },
+  'ai-reality-check': {
+    category: 'ai',
+    color: '#C7FF4A',
+    title: {
+      he: 'מה AI יכול לעשות לעסק שלך',
+      en: 'What AI Can Do for Your Business',
+      es: 'Qué puede hacer la IA',
+      ru: 'Что ИИ может для вашего бизнеса',
+    },
+    subtitle: {
+      he: 'הפרדת השימושים האמיתיים בבינה מלאכותית מצ\'אטבוטים יקרים והבטחות שווא.',
+      en: 'Separating real-world AI utility from expensive chatbots and empty hype.',
+      es: 'Separar la utilidad real de la IA de los costosos chatbots y la publicidad exagerada.',
+      ru: 'Отделение реальной пользы ИИ от дорогих чат-ботов и пустого хайпа.',
+    },
+    situation: {
+      en: [
+        'AI is surrounded by massive marketing hype. Business owners feel pressured to "adopt AI" immediately, leading them to install generic customer chatbots on their sites or buy complex AI consultation plans.',
+        'Most of these projects fail because open-ended chatbots frustrate customers, make up inaccurate information, and do not connect to the actual operational backend of the company.'
+      ],
+      he: [
+        'הבינה המלאכותית מוקפת ברעש שיווקי עצום. בעלי עסקים חשים לחץ "לאמץ AI" מיד, מה שמוביל אותם להתקנת צ\'אטבוטים גנריים באתרים שלהם או לרכישת תוכניות ייעוץ מורכבות.',
+        'רוב הפרויקטים האלה נכשלים מכיוון שצ\'אטבוטים פתוחים מתסכלים את הלקוחות, ממציאים מידע לא מדויק (הזיות), ואינם מתחברים לתהליכי העבודה התפעוליים האמיתיים של החברה.'
+      ],
+      es: [
+        'La inteligencia artificial está rodeada de una gran publicidad. Los dueños de negocios se sienten presionados a usar IA, lo que les lleva a instalar chatbots genéricos o comprar planes costosos.',
+        'La mayoría de estos proyectos fracasan porque los chatbots frustran a los clientes, inventan información errónea y no se conectan a la operación real del negocio.'
+      ],
+      ru: [
+        'Вокруг искусственного интеллекта много маркетингового хайпа. Владельцы бизнеса чувствуют давление и спешат «внедрить ИИ», ставя глупых чат-ботов на сайт.',
+        'Большинство таких проектов проваливаются: боты раздражают клиентов, выдумывают факты и никак не связаны с реальной работой компании.'
+      ]
+    },
+    issues: {
+      en: [
+        'AI hallucinations generating false answers, leading to customer frustration.',
+        'Expensive development cycles for conversational models that do not solve concrete business issues.',
+        'Security concerns; sharing sensitive business databases with unsecured public AI platforms.'
+      ],
+      he: [
+        'הזיות AI המייצרות תשובות כוזבות, מה שמוביל לתסכול רב בקרב לקוחות.',
+        'מחזורי פיתוח יקרים עבור מודלים שיחתיים שאינם פותרים בעיות עסקיות קונקרטיות.',
+        'חששות אבטחה; שיתוף מאגרי מידע עסקיים רגישים עם פלטפורמות AI ציבוריות ולא מאובטחות.'
+      ],
+      es: [
+        'Alucinaciones de la IA que generan respuestas falsas, molestando a los clientes.',
+        'Ciclos de desarrollo costosos para modelos conversacionales que no resuelven problemas reales.',
+        'Problemas de seguridad al compartir bases de datos internas con plataformas de IA públicas.'
+      ],
+      ru: [
+        'Галлюцинации ИИ: боты дают неверные ответы, вызывая раздражение клиентов.',
+        'Дорогая разработка чат-моделей, которые не решают конкретных бизнес-задач.',
+        'Риски безопасности: передача конфиденциальных данных в публичные системы ИИ.'
+      ]
+    },
+    opportunity: {
+      en: [
+        'Practical AI focuses on classification, prediction, and extraction tasks. By keeping AI in the background, you drive massive operational leverage.',
+        'Using simple LLM prompts to classify incoming client requests, generate draft responses for human approval, and parse PDF invoices removes hours of cognitive administrative work safely.'
+      ],
+      he: [
+        'AI מעשי מתמקד במשימות סיווג, חיזוי וחילוץ נתונים. על ידי שמירת ה-AI ברקע, אתה מייצר מינוף תפעולי עצום.',
+        'שימוש ב-LLM פשוט לסיווג פניות נכנסות, ניסוח טיוטות לתגובה באישור אנושי, וניתוח חשבוניות PDF חוסך שעות של עבודה מנהלתית קוגניטיבית בצורה בטוחה.'
+      ],
+      es: [
+        'La IA práctica se enfoca en clasificación, predicción y extracción. Al mantener la IA en segundo plano, genera un gran apalancamiento operativo.',
+        'Usar indicaciones sencillas de LLM para clasificar correos, redactar respuestas para aprobación humana y procesar facturas en PDF ahorra horas de administración de forma segura.'
+      ],
+      ru: [
+        'Практичный ИИ ориентирован на задачи классификации, прогнозирования и извлечения данных. Оставляя ИИ на «бэкэнде», вы получаете огромную эффективность.',
+        'Использование простых промптов для сортировки писем, создания черновиков ответов для согласования и распознавания счетов освобождает часы рабочего времени.'
+      ]
+    },
+    checklist: {
+      en: [
+        'Audit your business operations for repetitive, text-heavy manual steps.',
+        'Filter out any task that requires genuine empathy or high-stakes relationship decisions.',
+        'Choose a secure, API-driven AI model provider (e.g. OpenAI API, Anthropic Console).',
+        'Set up automatic AI classification for incoming customer emails.',
+        'Build automated drafts for incoming customer support enquiries.',
+        'Deploy an AI-based document parser to extract text/numbers from PDF invoices.',
+        'Keep AI operations strictly internal (avoid customer-facing chatbots).',
+        'Establish a Human-in-the-Loop (HITL) step to review and approve all AI drafts.',
+        'Configure data protection guardrails to anonymize client data before API calls.',
+        'Review accuracy rates of AI classification weekly and adjust prompts.'
+      ],
+      he: [
+        'מיפוי תהליכי העבודה בעסק לאיתור משימות טקסט ידניות וחוזרות.',
+        'סינון משימות הדורשות אמפתיה אנושית או החלטות קריטיות במערכות יחסים.',
+        'בחירת ספק מודל מאובטח ומבוסס API (למשל OpenAI API או Anthropic Console).',
+        'הגדרת סיווג AI אוטומטי של מיילים נכנסים מלקוחות.',
+        'בניית טיוטות תשובה אוטומטיות לפניות שירות ותמיכה.',
+        'הטמעת מנתח מסמכים מבוסס AI לחילוץ נתונים מחשבוניות וקבלות PDF.',
+        'שמירה על יישומי ה-AI פנימיים בלבד (הימנעות מצ\'אטבוטים שפוגשים לקוח).',
+        'הגדרת שלב אישור אנושי (Human-in-the-Loop) לכל תוצרי ה-AI.',
+        'הגדרת הגנות פרטיות ואנונימיזציה של מידע לקוחות לפני שליחה ל-API.',
+        'סקירה שבועית של אחוזי הדיוק של ה-AI ועדכון הנחיות (prompts) בהתאם.'
+      ],
+      es: [
+        'Identificar tareas manuales repetitivas que involucren mucho texto.',
+        'Excluir tareas que requieran empatía humana o toma de decisiones complejas.',
+        'Elegir un proveedor de IA seguro mediante API (ej. OpenAI, Anthropic).',
+        'Configurar la clasificación automática de correos entrantes.',
+        'Desarrollar borradores automáticos para las dudas de soporte comunes.',
+        'Implementar un lector de documentos con IA para extraer datos de PDF.',
+        'Mantener la IA como herramienta interna de apoyo (evitar chats abiertos al público).',
+        'Incluir siempre una validación humana previa al envío de cualquier borrador.',
+        'Establecer filtros de seguridad para anonimizar datos personales.',
+        'Monitorear la precisión del modelo semanalmente y corregir prompts.'
+      ],
+      ru: [
+        'Найти в бизнес-процессах рутинные шаги, связанные с обработкой текстов.',
+        'Исключить задачи, требующие эмпатии и личного общения.',
+        'Выбрать безопасного API-провайдера моделей (например, OpenAI или Anthropic).',
+        'Настроить автоклассификацию входящих обращений.',
+        'Внедрить автоматическую подготовку шаблонов ответов для техподдержки.',
+        'Настроить парсер документов для извлечения данных из PDF.',
+        'Использовать ИИ только для внутренних нужд (не ставить ботов для общения с клиентами).',
+        'Внедрить шаг обязательного подтверждения человеком всех результатов работы ИИ.',
+        'Настроить маскирование личных данных перед отправкой в API.',
+        'Еженедельно проверять точность ИИ-моделей и обновлять промпты.'
+      ]
+    }
+  }
+};
+
+const article = articleContent[slug];
+if (!article) {
+  return Astro.redirect(`/${lang}/thinking`);
+}
+
+const isRTL = lang === 'he';
+const backText = backLabels[lang] || backLabels['en'];
+const tForm = formTranslations;
+---
+
+<BaseLayout
+  title={article.title[lang] || article.title['en']}
+  description={article.subtitle[lang] || article.subtitle['en']}
+  lang={lang}
+>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container max-w-3xl">
+      <!-- Back Button -->
+      <a href={`/${lang}/thinking`} class="shift-btn-ghost text-sm mb-8 inline-flex">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180 rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        {backText}
+      </a>
+
+      <!-- Article Header -->
+      <div class="mb-12 border-b border-shift-line pb-8">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="shift-label">
+            {categories[article.category as keyof typeof categories][lang] || categories[article.category as keyof typeof categories]['en']}
+          </span>
+          <span class="w-1.5 h-1.5 rounded-full animate-pulse" style={`background-color: ${article.color}`}></span>
+        </div>
+        <h1 class="shift-heading-xl mb-4 leading-tight font-extrabold text-shift-text">
+          {article.title[lang] || article.title['en']}
+        </h1>
+        <p class="text-lg text-shift-muted leading-relaxed">
+          {article.subtitle[lang] || article.subtitle['en']}
+        </p>
+      </div>
+
+      <!-- Framework Content -->
+      <div class="space-y-12 text-shift-text leading-relaxed">
+        
+        <!-- 1. Situation -->
+        <section class="space-y-4">
+          <h2 class="font-heading font-bold text-xl sm:text-2xl text-shift-text border-s-4 px-3" style={`border-color: ${article.color}`}>
+            {headings.situation[lang] || headings.situation['en']}
+          </h2>
+          {(article.situation[lang] || article.situation['en']).map((p) => (
+            <p class="text-sm sm:text-base text-shift-muted leading-relaxed">{p}</p>
+          ))}
+        </section>
+
+        <!-- 2. Issues -->
+        <section class="space-y-4">
+          <h2 class="font-heading font-bold text-xl sm:text-2xl text-shift-text border-s-4 px-3" style={`border-color: ${article.color}`}>
+            {headings.issues[lang] || headings.issues['en']}
+          </h2>
+          <ul class="space-y-3 list-none p-0 m-0">
+            {(article.issues[lang] || article.issues['en']).map((p) => (
+              <li class="flex items-start gap-3 text-sm sm:text-base text-shift-muted">
+                <span class="text-red-400 font-bold mt-0.5">✕</span>
+                <span>{p}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <!-- 3. Opportunity -->
+        <section class="space-y-4">
+          <h2 class="font-heading font-bold text-xl sm:text-2xl text-shift-text border-s-4 px-3" style={`border-color: ${article.color}`}>
+            {headings.opportunity[lang] || headings.opportunity['en']}
+          </h2>
+          {(article.opportunity[lang] || article.opportunity['en']).map((p) => (
+            <p class="text-sm sm:text-base text-shift-muted leading-relaxed">{p}</p>
+          ))}
+        </section>
+
+        <!-- Visual Diagram / Graph Section -->
+        <section class="space-y-4 bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8">
+          <p class="font-mono text-xs text-shift-accent uppercase tracking-widest">
+            {headings.diagram[lang] || headings.diagram['en']}
+          </p>
+
+          {slug === 'automatable-work' && (
+            <div class="py-4 flex justify-center">
+              <svg viewBox="0 0 600 200" class="w-full max-w-xl h-auto text-shift-muted" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Node 1 -->
+                <rect x="10" y="70" width="100" height="60" rx="8" fill="#18181B" stroke="#FF7A59" />
+                <text x="60" y="100" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">Lead Intake</text>
+                <text x="60" y="115" font-family="monospace" font-size="9" fill="#888" text-anchor="middle">Form / API</text>
+                
+                <!-- Arrow 1 -->
+                <path d="M110 100 H160" marker-end="url(#arrow)" stroke="#FF7A59" stroke-dasharray="3 3" />
+
+                <!-- Node 2 -->
+                <rect x="170" y="70" width="110" height="60" rx="8" fill="#18181B" stroke="#6EE7F9" />
+                <text x="225" y="100" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">Auto-Qualifier</text>
+                <text x="225" y="115" font-family="monospace" font-size="9" fill="#888" text-anchor="middle">Rules Engine</text>
+
+                <!-- Arrow 2 -->
+                <path d="M280 100 H330" marker-end="url(#arrow)" stroke="#6EE7F9" />
+
+                <!-- Node 3 -->
+                <rect x="340" y="70" width="100" height="60" rx="8" fill="#18181B" stroke="#C7FF4A" />
+                <text x="390" y="100" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">Sync CRM</text>
+                <text x="390" y="115" font-family="monospace" font-size="9" fill="#888" text-anchor="middle">Deal Created</text>
+
+                <!-- Arrow 3 -->
+                <path d="M440 100 H490" marker-end="url(#arrow)" stroke="#C7FF4A" />
+
+                <!-- Node 4 -->
+                <rect x="500" y="70" width="90" height="60" rx="8" fill="#18181B" stroke="#C7FF4A" />
+                <text x="545" y="100" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">Cal Link</text>
+                <text x="545" y="115" font-family="monospace" font-size="9" fill="#888" text-anchor="middle">Auto-Invite</text>
+                
+                <defs>
+                  <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 2 L 8 5 L 0 8 z" fill="currentColor"/>
+                  </marker>
+                </defs>
+              </svg>
+            </div>
+          )}
+
+          {slug === 'right-sized-crm' && (
+            <div class="py-4 flex justify-center">
+              <svg viewBox="0 0 600 200" class="w-full max-w-xl h-auto text-shift-muted" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Pipeline Lanes -->
+                <!-- Stage 1 -->
+                <rect x="20" y="30" width="160" height="140" rx="8" fill="#18181B" stroke="#6EE7F9" stroke-opacity="0.5" />
+                <text x="100" y="55" font-family="sans-serif" font-size="12" fill="#6EE7F9" text-anchor="middle" font-weight="bold">1. NEW LEAD</text>
+                <rect x="40" y="70" width="120" height="30" rx="4" fill="#27272A" stroke="#444" />
+                <text x="100" y="88" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">Inquiry #2894</text>
+                
+                <!-- Stage 2 -->
+                <rect x="220" y="30" width="160" height="140" rx="8" fill="#18181B" stroke="#FF7A59" stroke-opacity="0.5" />
+                <text x="300" y="55" font-family="sans-serif" font-size="12" fill="#FF7A59" text-anchor="middle" font-weight="bold">2. ENGAGED</text>
+                <rect x="240" y="70" width="120" height="30" rx="4" fill="#27272A" stroke="#444" />
+                <text x="300" y="88" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">Demo Booked</text>
+
+                <!-- Stage 3 -->
+                <rect x="420" y="30" width="160" height="140" rx="8" fill="#18181B" stroke="#C7FF4A" stroke-opacity="0.5" />
+                <text x="500" y="55" font-family="sans-serif" font-size="12" fill="#C7FF4A" text-anchor="middle" font-weight="bold">3. CLOSED</text>
+                <rect x="440" y="70" width="120" height="30" rx="4" fill="#27272A" stroke="#C7FF4A" stroke-opacity="0.3" />
+                <text x="500" y="88" font-family="sans-serif" font-size="10" fill="#C7FF4A" text-anchor="middle" font-weight="bold">Won $4,500</text>
+              </svg>
+            </div>
+          )}
+
+          {slug === 'website-system' && (
+            <div class="py-4 flex justify-center">
+              <svg viewBox="0 0 600 200" class="w-full max-w-xl h-auto text-shift-muted" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Flow chart Brochure vs System -->
+                <!-- Brochure path -->
+                <text x="50" y="40" font-family="monospace" font-size="10" fill="#FF7A59" font-weight="bold">BROCHURE (BROKEN)</text>
+                <rect x="50" y="60" width="130" height="40" rx="6" fill="#18181B" stroke="#FF7A59" />
+                <text x="115" y="84" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">Static Webpage</text>
+                <path d="M180 80 H230" stroke="#FF7A59" marker-end="url(#arrow)" />
+                <rect x="240" y="60" width="110" height="40" rx="6" fill="#18181B" stroke="#999" />
+                <text x="295" y="84" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">Generic Form</text>
+                <path d="M350 80 H400" stroke="#999" marker-end="url(#arrow)" />
+                <text x="440" y="84" font-family="sans-serif" font-size="10" fill="#FF7A59" text-anchor="middle">Leaves / 404</text>
+
+                <!-- System path -->
+                <text x="50" y="130" font-family="monospace" font-size="10" fill="#C7FF4A" font-weight="bold">SYSTEM (EFFICIENT)</text>
+                <rect x="50" y="140" width="130" height="45" rx="6" fill="#18181B" stroke="#C7FF4A" />
+                <text x="115" y="166" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">Self-Audit Form</text>
+                <path d="M180 162.5 H230" stroke="#C7FF4A" marker-end="url(#arrow)" />
+                <rect x="240" y="140" width="110" height="45" rx="6" fill="#18181B" stroke="#C7FF4A" />
+                <text x="295" y="166" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">Auto-Qualifier</text>
+                <path d="M350 162.5 H400" stroke="#C7FF4A" marker-end="url(#arrow)" />
+                <rect x="410" y="140" width="130" height="45" rx="6" fill="#18181B" stroke="#C7FF4A" />
+                <text x="475" y="166" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">CRM & Cal Sync</text>
+              </svg>
+            </div>
+          )}
+
+          {slug === 'ai-reality-check' && (
+            <div class="py-4 flex justify-center">
+              <svg viewBox="0 0 600 200" class="w-full max-w-xl h-auto text-shift-muted" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- AI Engine flowchart -->
+                <rect x="20" y="70" width="120" height="60" rx="8" fill="#18181B" stroke="#6EE7F9" />
+                <text x="80" y="98" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">1. Input Text</text>
+                <text x="80" y="113" font-family="monospace" font-size="9" fill="#888" text-anchor="middle">Email/PDF/Form</text>
+
+                <path d="M140 100 H190" stroke="#6EE7F9" marker-end="url(#arrow)" />
+
+                <rect x="200" y="70" width="140" height="60" rx="8" fill="#18181B" stroke="#FF7A59" />
+                <text x="270" y="98" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">2. LLM Parser</text>
+                <text x="270" y="113" font-family="monospace" font-size="9" fill="#888" text-anchor="middle">Classify & Draft</text>
+
+                <path d="M340 100 H390" stroke="#FF7A59" marker-end="url(#arrow)" />
+
+                <rect x="400" y="70" width="170" height="60" rx="8" fill="#18181B" stroke="#C7FF4A" />
+                <text x="485" y="98" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">3. Human Review</text>
+                <text x="485" y="113" font-family="monospace" font-size="9" fill="#888" text-anchor="middle">Approve / Correct</text>
+              </svg>
+            </div>
+          )}
+        </section>
+
+        <!-- 4. Checklist -->
+        <section class="space-y-5">
+          <h2 class="font-heading font-bold text-xl sm:text-2xl text-shift-text border-s-4 px-3" style={`border-color: ${article.color}`}>
+            {headings.checklist[lang] || headings.checklist['en']}
+          </h2>
+          <div class="grid grid-cols-1 gap-3">
+            {(article.checklist[lang] || article.checklist['en']).map((item, index) => (
+              <div class="flex items-start gap-4 p-4 bg-shift-surface border border-shift-line rounded-xl hover:border-shift-muted/30 transition-colors">
+                <span class="font-mono text-xs text-shift-muted flex-shrink-0 w-6 h-6 rounded-full bg-shift-surface-soft border border-shift-line flex items-center justify-center mt-0.5">
+                  {index + 1}
+                </span>
+                <span class="text-sm text-shift-text leading-relaxed">{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </div>
+
+      <!-- 5. Interactive Contact Form -->
+      <div id="cta-form-container" class="mt-20 border-t border-shift-line pt-12">
+        <div class="mb-8 text-center sm:text-start">
+          <h2 class="font-heading font-bold text-2xl text-shift-text mb-2">
+            {tForm.title[lang] || tForm.title['en']}
+          </h2>
+          <p class="text-sm text-shift-muted">
+            {tForm.desc[lang] || tForm.desc['en']}
+          </p>
+        </div>
+
+        <form
+          id="article-contact-form"
+          name={`article-${slug}`}
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          class="space-y-5 bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8"
+        >
+          <input type="hidden" name="form-name" value={`article-${slug}`} />
+          <input type="hidden" name="source" value={`article_${slug}`} />
+          <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="shift-label block mb-2" for="name">{tForm.name[lang] || tForm.name['en']}</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                placeholder={tForm.placeholderName[lang] || tForm.placeholderName['en']}
+                class="w-full bg-shift-bg border border-shift-line rounded-xl px-4 py-3 text-shift-text placeholder-shift-muted/30 outline-none focus:border-shift-accent/40 transition-colors text-sm"
+              />
+            </div>
+            <div>
+              <label class="shift-label block mb-2" for="email">{tForm.email[lang] || tForm.email['en']}</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder={tForm.placeholderEmail[lang] || tForm.placeholderEmail['en']}
+                class="w-full bg-shift-bg border border-shift-line rounded-xl px-4 py-3 text-shift-text placeholder-shift-muted/30 outline-none focus:border-shift-accent/40 transition-colors text-sm"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="shift-label block mb-2" for="message">{tForm.message[lang] || tForm.message['en']}</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              placeholder={tForm.placeholderMessage[lang] || tForm.placeholderMessage['en']}
+              class="w-full bg-shift-bg border border-shift-line rounded-xl px-4 py-3 text-shift-text placeholder-shift-muted/30 outline-none focus:border-shift-accent/40 transition-colors text-sm resize-none"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="shift-btn-primary w-full justify-center text-base py-4" style={`background-color: ${article.color}; color: #000; border-color: ${article.color}`}>
+            {tForm.submit[lang] || tForm.submit['en']}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+
+          <p class="text-xs text-shift-muted/50 text-center">{tForm.disclaimer[lang] || tForm.disclaimer['en']}</p>
+        </form>
+
+        <div id="form-success-message" class="hidden bg-shift-surface border border-shift-line text-shift-accent rounded-xl p-5 text-center text-sm font-medium mt-4">
+          {tForm.success[lang] || tForm.success['en']}
+        </div>
+
+        <script define:vars={{ slug }}>
+          const form = document.getElementById('article-contact-form');
+          const successBox = document.getElementById('form-success-message');
+          form?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email')?.value;
+            const name = document.getElementById('name')?.value;
+            const message = document.getElementById('message')?.value;
+            
+            if (email) {
+              fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, source: `article_${slug}` }),
+                keepalive: true
+              })
+              .then(() => {
+                form.reset();
+                form.classList.add('hidden');
+                successBox?.classList.remove('hidden');
+              })
+              .catch(() => {
+                // Fail silently or fallback to submitting form
+                form.submit();
+              });
+            }
+          });
+        </script>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

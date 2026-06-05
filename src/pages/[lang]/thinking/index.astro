@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { LOCALES, useTranslations, type Locale } from '../../../i18n/index';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+const categories = {
+  automation: { he: 'אוטומציה', en: 'Automation', es: 'Automatización', ru: 'Автоматизация' },
+  crm: { he: 'CRM', en: 'CRM', es: 'CRM', ru: 'CRM' },
+  websites: { he: 'אתרים', en: 'Websites', es: 'Sitios web', ru: 'Сайты' },
+  ai: { he: 'AI', en: 'AI', es: 'IA', ru: 'ИИ' },
+};
+
+const articles = [
+  {
+    slug: 'automatable-work',
+    category: 'automation',
+    color: '#C7FF4A',
+    title: {
+      he: 'למה עסקים קטנים מפסידים 15+ שעות בשבוע',
+      en: 'Why Small Businesses Lose 15+ Hours/Week',
+      es: 'Por qué pequeñas empresas pierden 15+ horas',
+      ru: 'Почему малый бизнес теряет 15+ часов',
+    },
+    desc: {
+      he: 'כיצד לבדוק את הפעילות היומיומית שלך, לזהות משימות ידניות חוזרות ונשנות, ולהחזיר לעצמך את הזמן באמצעות אוטומציות פשוטות.',
+      en: 'How to audit your daily operations, identify repetitive manual tasks, and reclaim your time with simple automations.',
+      es: 'Cómo auditar sus operaciones diarias, identificar tareas manuales repetitivas y recuperar su tiempo con automatizaciones sencillas.',
+      ru: 'Как провести аудит повседневных операций, выявить повторяющиеся ручные задачи и вернуть время с помощью простой автоматизации.',
+    },
+  },
+  {
+    slug: 'right-sized-crm',
+    category: 'crm',
+    color: '#6EE7F9',
+    title: {
+      he: 'אתה לא צריך Salesforce',
+      en: "You Don't Need Salesforce",
+      es: 'No necesitas Salesforce',
+      ru: 'Вам не нужен Salesforce',
+    },
+    desc: {
+      he: 'מדוע עסקים קטנים צריכים להימנע מפלטפורמות ארגוניות מורכבות מדי וכיצד להקים מערכת CRM שמתאימה לגודל האמיתי שלך.',
+      en: 'Why small businesses should avoid over-complicated enterprise platforms and how to set up a CRM that fits your actual size.',
+      es: 'Por qué las pequeñas empresas deben evitar plataformas empresariales sobrecomplicadas y cómo configurar un CRM a su medida.',
+      ru: 'Почему малому бизнесу стоит избегать перегруженных корпоративных платформ и как настроить CRM под свои реальные нужды.',
+    },
+  },
+  {
+    slug: 'website-system',
+    category: 'websites',
+    color: '#FF7A59',
+    title: {
+      he: 'האתר שלך הוא רק עלון שיווקי',
+      en: 'Your Website Is a Brochure',
+      es: 'Tu sitio web es un folleto',
+      ru: 'Ваш сайт — это брошюра',
+    },
+    desc: {
+      he: 'כיצד להפוך דף שיווקי סטטי למערכת תפעולית פעילה שמסווגת לידים, מנהלת קליטה ומזינה את ה-CRM שלך.',
+      en: 'How to turn a static marketing page into an active operational system that qualifies leads, runs intake, and feeds your CRM.',
+      es: 'Cómo convertir una página de marketing estática en un sistema operativo activo que califica leads, gestiona registros y alimenta su CRM.',
+      ru: 'Как превратить статичную маркетинговую страницу в активную операционную систему, которая квалифицирует лидов, собирает данные и наполняет CRM.',
+    },
+  },
+  {
+    slug: 'ai-reality-check',
+    category: 'ai',
+    color: '#C7FF4A',
+    title: {
+      he: 'מה AI יכול לעשות לעסק שלך',
+      en: 'What AI Can Do for Your Business',
+      es: 'Qué puede hacer la IA',
+      ru: 'Что ИИ может для вашего бизнеса',
+    },
+    desc: {
+      he: 'לחתוך את הרעש סביב AI. מדריך מעשי להפרדת תהליכי חיזוי שימושיים מצ\'אטבוטים יקרים ומילים מפוצצות.',
+      en: 'Cut through the AI hype. A practical guide to separating useful prediction workflows from expensive chatbots and buzzwords.',
+      es: 'Vaya más allá del hype de la IA. Una guía práctica para separar los flujos de predicción útiles de los chatbots costosos.',
+      ru: 'Забудьте о хайпе вокруг ИИ. Практическое руководство по отделению полезных рабочих процессов от дорогих чат-ботов.',
+    },
+  },
+];
+---
+
+<BaseLayout
+  title={t('thinking.title')}
+  description={t('thinking.subtitle')}
+  lang={lang}
+>
+  <div class="py-16 lg:py-24">
+    <div class="shift-container">
+      <div class="mb-12">
+        <p class="shift-label mb-3">{t('thinking.label')}</p>
+        <h1 class="shift-heading-xl mb-4">{t('thinking.title')}</h1>
+        <p class="shift-body max-w-xl text-lg">{t('thinking.subtitle')}</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {articles.map((art) => (
+          <a
+            href={`/${lang}/thinking/${art.slug}`}
+            class="shift-card-hover group flex flex-col gap-4 no-underline"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <span class="font-mono text-xs text-shift-muted border border-shift-line px-2 py-0.5 rounded-md flex-shrink-0">
+                {categories[art.category as keyof typeof categories][lang] || categories[art.category as keyof typeof categories]['en']}
+              </span>
+            </div>
+            <h2 class="font-heading font-semibold text-shift-text text-xl group-hover:text-shift-accent transition-colors leading-snug">
+              {art.title[lang] || art.title['en']}
+            </h2>
+            <p class="text-sm text-shift-muted leading-relaxed flex-1">
+              {art.desc[lang] || art.desc['en']}
+            </p>
+            <div class="flex items-center justify-between pt-3 border-t border-shift-line">
+              <span class="text-sm font-medium transition-colors" style={`color: ${art.color}`}>
+                {t('thinking.readMore')} →
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

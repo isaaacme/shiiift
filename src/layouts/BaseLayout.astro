@@ -48,5 +48,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer lang={lang} />
+
+    <script>
+      import Lenis from 'lenis';
+
+      // Initialize smooth scroll
+      const lenis = new Lenis({
+        autoRaf: true,
+      });
+    </script>
   </body>
 </html>

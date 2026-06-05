@@ -57,6 +57,23 @@
     scroll-behavior: smooth;
   }
 
+  /* Lenis smooth scrolling */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
   html[dir='rtl'] {
     font-family: 'Noto Sans Hebrew', 'Inter', system-ui, sans-serif;
   }
@@ -235,6 +252,7 @@
   input[type="url"],
   select,
   textarea {
+    font-family: inherit;
     box-shadow:
       0 1px 0 0 rgba(0,0,0,0.5) inset,
       0 2px 6px rgba(0,0,0,0.35) inset,
@@ -259,6 +277,7 @@
 
   /* ─── TOOL OPTION BUTTONS (React islands use inline Tailwind; add a class hook) ─── */
   .shift-option-btn {
+    font-family: inherit;
     transition: all 0.12s ease;
     background: linear-gradient(160deg, rgba(255,255,255,0.04) 0%, #151a23 100%);
     border: 1px solid rgba(255,255,255,0.08);

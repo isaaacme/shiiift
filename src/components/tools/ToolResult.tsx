@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { trackEvent } from './useToolSession';
 import { saveNewsletterSignup, saveToolResult } from '../../lib/supabase';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
@@ -128,7 +127,7 @@ const DEFAULT_ARTICLES: Record<string, RelatedArticle[]> = {
     { href: '/thinking/right-sized-crm', label: { he: 'אתה לא צריך Salesforce', en: 'You Don\'t Need Salesforce', es: 'No necesitas Salesforce', ru: 'Вам не нужен Salesforce' }, category: { he: 'CRM', en: 'CRM', es: 'CRM', ru: 'CRM' } },
   ],
   'website-audit': [
-    { href: '/thinking/website-system', label: { he: 'האתר שלך הוא פרוספקטוס', en: 'Your Website Is a Brochure', es: 'Tu sitio web es un folleto', ru: 'Ваш сайт — это брошюра' }, category: { he: 'אתרים', en: 'Websites', es: 'Sitios web', ru: 'Сайты' } },
+    { href: '/thinking/website-system', label: { he: 'האתר שלך הוא רק עלון שיווקי', en: 'Your Website Is a Brochure', es: 'Tu sitio web es un folleto', ru: 'Ваш сайт — это брошюра' }, category: { he: 'אתרים', en: 'Websites', es: 'Sitios web', ru: 'Сайты' } },
   ],
   'automation-finder': [
     { href: '/thinking/automatable-work', label: { he: 'עבודה שניתנת לאוטומציה', en: 'Automatable Work', es: 'Trabajo automatizable', ru: 'Автоматизируемая работа' }, category: { he: 'אוטומציה', en: 'Automation', es: 'Automatización', ru: 'Автоматизация' } },
@@ -238,10 +237,18 @@ export default function ToolResult({
     setSubscribed(true);
     trackEvent('newsletter_submitted', { tool: toolId, lang });
     saveNewsletterSignup({ email, tool_id: toolId, lang });
+    // Fallback/Log to Netlify Forms
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({ 'form-name': 'tool-newsletter', email, tool: toolId, lang }).toString(),
+    }).catch(() => {});
+
+    // MailerLite Integration
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: `tool_newsletter_${toolId}_${lang}` })
     }).catch(() => {});
   }
 
@@ -477,4 +484,55 @@ export default function ToolResult({
       </div>
     </div>
   );
+}
+
+export function useToolSession<S>(toolId: string, initial: S) {
+  const key = `shiiift_tool_${toolId}`;
+
+  const [state, setStateRaw] = useState<S>(() => {
+    if (typeof window === 'undefined') return initial;
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : initial;
+    } catch {
+      return initial;
+    }
+  });
+
+  function setState(next: S | ((prev: S) => S)) {
+    setStateRaw((prev) => {
+      const value = typeof next === 'function' ? (next as (p: S) => S)(prev) : next;
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+      return value;
+    });
+  }
+
+  function clearSession() {
+    try { localStorage.removeItem(key); } catch {}
+    setStateRaw(initial);
+  }
+
+  return [state, setState, clearSession] as const;
+}
+
+export function trackEvent(name: string, props?: Record<string, string | number>) {
+  if (typeof window === 'undefined') return;
+  try {
+    // Plausible
+    if ((window as any).plausible) {
+      (window as any).plausible(name, { props });
+    }
+    // PostHog
+    if ((window as any).posthog) {
+      (window as any).posthog.capture(name, props);
+    }
+    // Umami
+    if ((window as any).umami) {
+      (window as any).umami.track(name, props);
+    }
+    // console dev fallback
+    try {
+      if ((import.meta as any).env?.DEV) console.log('[track]', name, props);
+    } catch {}
+  } catch {}
 }

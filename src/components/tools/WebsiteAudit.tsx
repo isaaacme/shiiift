@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import ToolResult from './ToolResult';
-import { useToolSession, trackEvent } from './useToolSession';
+import ToolResult, { useToolSession, trackEvent } from './ToolResult';
 
 type Lang = 'he' | 'en' | 'es' | 'ru';
 

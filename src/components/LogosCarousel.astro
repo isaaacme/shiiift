@@ -14,7 +14,6 @@ const label = {
   ru: 'Работали с',
 };
 
-// Logos — text based (monospace display)
 const logos = [
   'BRIDGIFY',
   'SWU',
@@ -28,70 +27,113 @@ const logos = [
 ];
 ---
 
-<div class="logos-carousel-section py-12 border-t border-white/[0.06] overflow-hidden">
+<div class="logos-carousel-section py-10 border-t border-white/[0.06]">
   <p class="font-mono text-[10px] tracking-widest uppercase text-shift-muted text-center mb-8">
     {label[lang]}
   </p>
 
-  <div class="logos-track-wrapper relative">
-    <!-- Fade edges -->
-    <div class="pointer-events-none absolute inset-y-0 left-0 w-24 z-10 bg-gradient-to-r from-shift-bg to-transparent"></div>
-    <div class="pointer-events-none absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-shift-bg to-transparent"></div>
+  <!-- outer wrapper clips the overflow -->
+  <div class="marquee-outer" aria-hidden="true">
+    <!-- fade edges -->
+    <div class="marquee-fade-left"></div>
+    <div class="marquee-fade-right"></div>
 
-    <div class="logos-track flex items-center gap-16" aria-hidden="true">
-      <!-- First set -->
-      {logos.map((name) => (
-        <span class="logos-item font-mono text-sm tracking-widest whitespace-nowrap text-[#F4F1EA]/40 hover:text-[#F4F1EA]/70 transition-colors duration-300 flex-shrink-0">
-          {name}
-        </span>
-      ))}
-      <!-- Separator -->
-      <span class="logos-item text-shift-accent/30 flex-shrink-0 font-mono">◆</span>
-      <!-- Duplicate for seamless loop -->
-      {logos.map((name) => (
-        <span class="logos-item font-mono text-sm tracking-widest whitespace-nowrap text-[#F4F1EA]/40 hover:text-[#F4F1EA]/70 transition-colors duration-300 flex-shrink-0">
-          {name}
-        </span>
-      ))}
-      <!-- Separator -->
-      <span class="logos-item text-shift-accent/30 flex-shrink-0 font-mono">◆</span>
-      <!-- Third set for safety -->
-      {logos.map((name) => (
-        <span class="logos-item font-mono text-sm tracking-widest whitespace-nowrap text-[#F4F1EA]/40 hover:text-[#F4F1EA]/70 transition-colors duration-300 flex-shrink-0">
-          {name}
-        </span>
-      ))}
-      <span class="logos-item text-shift-accent/30 flex-shrink-0 font-mono">◆</span>
+    <!-- scrolling band: two identical copies side by side -->
+    <div class="marquee-track">
+      <!-- copy A -->
+      <div class="marquee-set">
+        {logos.map((name) => (
+          <>
+            <span class="marquee-item">{name}</span>
+            <span class="marquee-sep">◆</span>
+          </>
+        ))}
+      </div>
+      <!-- copy B (identical — for the seamless loop) -->
+      <div class="marquee-set" aria-hidden="true">
+        {logos.map((name) => (
+          <>
+            <span class="marquee-item">{name}</span>
+            <span class="marquee-sep">◆</span>
+          </>
+        ))}
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-  .logos-track-wrapper {
+  .marquee-outer {
+    position: relative;
     overflow: hidden;
   }
 
-  .logos-track {
-    display: flex;
-    width: max-content;
-    animation: logos-scroll 30s linear infinite;
+  .marquee-fade-left,
+  .marquee-fade-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6rem;
+    z-index: 10;
+    pointer-events: none;
   }
 
-  .logos-track:hover {
+  .marquee-fade-left {
+    left: 0;
+    background: linear-gradient(to right, #0E1117 0%, transparent 100%);
+  }
+
+  .marquee-fade-right {
+    right: 0;
+    background: linear-gradient(to left, #0E1117 0%, transparent 100%);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    /* animate exactly one copy-width to the left, then snap back to 0 — seamless */
+    animation: marquee-scroll 28s linear infinite;
+  }
+
+  .marquee-track:hover {
     animation-play-state: paused;
   }
 
-  @keyframes logos-scroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(calc(-100% / 3));
-    }
+  .marquee-set {
+    display: flex;
+    align-items: center;
+    /* padding-inline-end creates the gap between the two sets */
+    padding-inline-end: 3rem;
+  }
+
+  .marquee-item {
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+    color: rgba(244, 241, 234, 0.38);
+    transition: color 0.3s;
+    padding-inline: 1.5rem;
+  }
+
+  .marquee-item:hover {
+    color: rgba(244, 241, 234, 0.7);
+  }
+
+  .marquee-sep {
+    font-family: ui-monospace, monospace;
+    font-size: 0.5rem;
+    color: rgba(126, 231, 135, 0.25);
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .logos-track {
+    .marquee-track {
       animation: none;
     }
   }

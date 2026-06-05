@@ -34,15 +34,18 @@ const topics = [1, 2, 3, 4, 5, 6] as const;
       </div>
 
       <!-- Topics list -->
-      <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8">
-        <p class="shift-label mb-5">30 min</p>
-        <ul class="space-y-3 list-none p-0 m-0">
+      <div class="shift-card">
+        <div class="flex items-center justify-between mb-5">
+          <p class="shift-label">30 MIN SESSION</p>
+          <span class="text-[10px] font-mono text-shift-accent border border-shift-accent/20 bg-shift-accent/5 px-2 py-0.5 rounded-md">LIVE BOARD</span>
+        </div>
+        <ul class="space-y-4 list-none p-0 m-0">
           {topics.map((n) => (
-            <li class="flex items-start gap-3">
-              <span class="flex-shrink-0 w-5 h-5 rounded-full bg-shift-surface-soft border border-shift-line flex items-center justify-center mt-0.5">
-                <span class="font-mono text-[10px] text-shift-muted">{n}</span>
+            <li class="flex items-start gap-3 group/item">
+              <span class="flex-shrink-0 w-5 h-5 rounded-full bg-shift-surface-soft border border-shift-line flex items-center justify-center mt-0.5 group-hover/item:border-shift-accent group-hover/item:bg-shift-accent/5 transition-all">
+                <span class="font-mono text-[10px] text-shift-muted group-hover/item:text-shift-accent transition-colors">{n}</span>
               </span>
-              <span class="text-sm text-shift-muted leading-snug">
+              <span class="text-sm text-shift-muted group-hover/item:text-shift-text transition-colors leading-snug">
                 {t(`workshop.topics.${n}` as any)}
               </span>
             </li>

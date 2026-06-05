@@ -13,8 +13,10 @@ const t = useTranslations(lang);
   <!-- Background grid -->
   <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(244,241,234,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(244,241,234,0.04)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" aria-hidden="true"></div>
 
-  <!-- Accent glow -->
-  <div class="absolute top-1/4 start-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-shift-accent/5 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+  <!-- Layered Accent Glows -->
+  <div class="absolute top-12 start-1/4 w-[500px] h-[350px] bg-shift-accent/6 rounded-full blur-[120px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-24 end-1/4 w-[450px] h-[300px] bg-shift-accent-2/4 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-48 start-1/3 w-[300px] h-[200px] bg-shift-warm/3 rounded-full blur-[90px] pointer-events-none" aria-hidden="true"></div>
 
   <div class="shift-container relative z-10">
     <div class="max-w-4xl">
@@ -56,30 +58,47 @@ const t = useTranslations(lang);
 
     <!-- Visual system diagram -->
     <div class="mt-16 lg:mt-20 relative">
-      <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 sm:p-8 max-w-3xl overflow-hidden">
-        <p class="shift-label mb-5">
-          {lang === 'he' ? 'זרימת מערכת' : lang === 'ru' ? 'Поток системы' : lang === 'es' ? 'Flujo del sistema' : 'System flow'}
-        </p>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {(lang === 'he'
-            ? ['טפסים', 'וואטסאפ', 'אימייל', 'CRM', 'חשבוניות', 'דוחות', 'מעקב', 'אנליטיקס']
-            : lang === 'ru'
-            ? ['Формы', 'WhatsApp', 'Email', 'CRM', 'Счета', 'Отчёты', 'Ремаркетинг', 'Аналитика']
-            : lang === 'es'
-            ? ['Formularios', 'WhatsApp', 'Email', 'CRM', 'Facturas', 'Reportes', 'Seguimiento', 'Analítica']
-            : ['Forms', 'WhatsApp', 'Email', 'CRM', 'Invoices', 'Reports', 'Follow-ups', 'Analytics']
-          ).map((item, i) => (
-            <div
-              class="bg-shift-surface-soft border border-shift-line rounded-lg px-3 py-2 text-xs font-mono text-shift-muted flex items-center gap-2"
-              style={`animation-delay: ${i * 80}ms`}
-            >
-              <span class="w-1 h-1 rounded-full bg-shift-muted/50 flex-shrink-0"></span>
-              {item}
-            </div>
-          ))}
+      <div class="shift-card max-w-3xl overflow-hidden backdrop-blur-md bg-opacity-70">
+        <div class="flex items-center justify-between mb-6">
+          <p class="shift-label text-xs">
+            {lang === 'he' ? 'זרימת מערכת תפעולית' : lang === 'ru' ? 'Операционный системный поток' : lang === 'es' ? 'Flujo del sistema operativo' : 'Operational System Flow'}
+          </p>
+          <span class="text-[9px] font-mono text-shift-muted/40 uppercase tracking-widest">Console v1.0.4</span>
         </div>
-        <div class="mt-4 flex items-center gap-3">
-          <div class="bg-shift-accent/10 border border-shift-accent/30 rounded-lg px-4 py-2 font-mono text-sm text-shift-accent font-medium">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { name: { he: 'טפסים', en: 'Forms', es: 'Formularios', ru: 'Формы' }, status: 'READY', color: 'accent' },
+            { name: { he: 'וואטסאפ', en: 'WhatsApp', es: 'WhatsApp', ru: 'WhatsApp' }, status: 'LIVE', color: 'warm' },
+            { name: { he: 'אימייל', en: 'Email', es: 'Email', ru: 'Email' }, status: 'SYNC', color: 'accent-2' },
+            { name: { he: 'CRM', en: 'CRM', es: 'CRM', ru: 'CRM' }, status: 'CONN', color: 'accent' },
+            { name: { he: 'חשבוניות', en: 'Invoices', es: 'Facturas', ru: 'Счета' }, status: 'AUTO', color: 'warm' },
+            { name: { he: 'דוחות', en: 'Reports', es: 'Reportes', ru: 'Отчёты' }, status: 'LIVE', color: 'accent-2' },
+            { name: { he: 'מעקב', en: 'Follow-ups', es: 'Seguimiento', ru: 'Ремаркетинг' }, status: 'RUN', color: 'accent' },
+            { name: { he: 'אנליטיקס', en: 'Analytics', es: 'Analítica', ru: 'Аналитика' }, status: 'OK', color: 'accent-2' },
+          ].map((item, i) => {
+            const dotColor = item.color === 'accent' ? 'bg-shift-accent' : item.color === 'accent-2' ? 'bg-shift-accent-2' : 'bg-shift-warm';
+            const textColor = item.color === 'accent' ? 'text-shift-accent' : item.color === 'accent-2' ? 'text-shift-accent-2' : 'text-shift-warm';
+            const hoverBorder = item.color === 'accent' ? 'group-hover:border-shift-accent/30' : item.color === 'accent-2' ? 'group-hover:border-shift-accent-2/30' : 'group-hover:border-shift-warm/30';
+            return (
+              <div
+                class={`bg-shift-surface-soft/80 border border-shift-line rounded-xl p-3 text-xs font-mono transition-all duration-300 hover:bg-shift-surface hover:-translate-y-0.5 hover:shadow-sm group ${hoverBorder}`}
+                style={`animation-delay: ${i * 80}ms`}
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <span class={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`}></span>
+                  <span class="text-[9px] text-shift-muted/30 font-mono tracking-wider">0{i+1}_SYS</span>
+                </div>
+                <p class="text-shift-text font-medium text-[13px] group-hover:text-shift-text transition-colors">{item.name[lang] ?? item.name.en}</p>
+                <div class="mt-2 flex items-center justify-between pt-1.5 border-t border-white/[0.04]">
+                  <span class={`text-[9px] uppercase tracking-wider font-semibold ${textColor}`}>{item.status}</span>
+                  <span class="text-[8px] text-shift-muted/30">100ms</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div class="mt-5 flex items-center gap-3">
+          <div class="bg-shift-accent/10 border border-shift-accent/30 rounded-lg px-4 py-2 font-mono text-sm text-shift-accent font-medium shadow-inner">
             {lang === 'he' ? 'מערכת' : lang === 'ru' ? 'Система' : lang === 'es' ? 'Sistema' : 'System'}
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-shift-accent rtl:rotate-180">

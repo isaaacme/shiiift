@@ -19,14 +19,32 @@ const currentPath = Astro.url.pathname;
       </a>
 
       <!-- Desktop Nav -->
-      <div class="hidden md:flex items-center gap-6 text-sm font-medium">
-        <a href={`/${lang}/tools`} class="text-shift-muted hover:text-shift-text transition-colors no-underline">
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium font-mono uppercase tracking-wider text-xs">
+        <a
+          href={`/${lang}/tools`}
+          class:list={[
+            'transition-colors no-underline',
+            currentPath.includes('/tools') ? 'text-shift-accent font-semibold' : 'text-shift-muted hover:text-shift-text'
+          ]}
+        >
           {t('nav.tools')}
         </a>
-        <a href={`/${lang}/thinking`} class="text-shift-muted hover:text-shift-text transition-colors no-underline">
+        <a
+          href={`/${lang}/thinking`}
+          class:list={[
+            'transition-colors no-underline',
+            currentPath.includes('/thinking') ? 'text-shift-accent font-semibold' : 'text-shift-muted hover:text-shift-text'
+          ]}
+        >
           {t('nav.thinking')}
         </a>
-        <a href={`/${lang}/workshop`} class="text-shift-muted hover:text-shift-text transition-colors no-underline">
+        <a
+          href={`/${lang}/workshop`}
+          class:list={[
+            'transition-colors no-underline',
+            currentPath.includes('/workshop') ? 'text-shift-accent font-semibold' : 'text-shift-muted hover:text-shift-text'
+          ]}
+        >
           {t('nav.workshop')}
         </a>
       </div>
@@ -89,17 +107,35 @@ const currentPath = Astro.url.pathname;
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden md:hidden border-t border-shift-line bg-shift-surface">
-    <div class="shift-container py-4 flex flex-col gap-1">
-      <a href={`/${lang}/tools`} class="px-3 py-2.5 text-shift-muted hover:text-shift-text text-sm no-underline rounded-lg hover:bg-shift-surface-soft transition-colors">
+    <div class="shift-container py-4 flex flex-col gap-1 font-mono uppercase tracking-wider text-xs">
+      <a
+        href={`/${lang}/tools`}
+        class:list={[
+          'px-3 py-2.5 no-underline rounded-lg transition-colors',
+          currentPath.includes('/tools') ? 'text-shift-accent bg-shift-surface-soft font-semibold' : 'text-shift-muted hover:text-shift-text hover:bg-shift-surface-soft'
+        ]}
+      >
         {t('nav.tools')}
       </a>
-      <a href={`/${lang}/thinking`} class="px-3 py-2.5 text-shift-muted hover:text-shift-text text-sm no-underline rounded-lg hover:bg-shift-surface-soft transition-colors">
+      <a
+        href={`/${lang}/thinking`}
+        class:list={[
+          'px-3 py-2.5 no-underline rounded-lg transition-colors',
+          currentPath.includes('/thinking') ? 'text-shift-accent bg-shift-surface-soft font-semibold' : 'text-shift-muted hover:text-shift-text hover:bg-shift-surface-soft'
+        ]}
+      >
         {t('nav.thinking')}
       </a>
-      <a href={`/${lang}/workshop`} class="px-3 py-2.5 text-shift-muted hover:text-shift-text text-sm no-underline rounded-lg hover:bg-shift-surface-soft transition-colors">
+      <a
+        href={`/${lang}/workshop`}
+        class:list={[
+          'px-3 py-2.5 no-underline rounded-lg transition-colors',
+          currentPath.includes('/workshop') ? 'text-shift-accent bg-shift-surface-soft font-semibold' : 'text-shift-muted hover:text-shift-text hover:bg-shift-surface-soft'
+        ]}
+      >
         {t('nav.workshop')}
       </a>
-      <a href={`/${lang}/start`} class="mt-2 shift-btn-primary justify-center">
+      <a href={`/${lang}/start`} class="mt-2 shift-btn-primary justify-center font-sans normal-case tracking-normal text-sm">
         {t('nav.start')}
       </a>
     </div>

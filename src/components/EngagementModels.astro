@@ -45,33 +45,39 @@ const models = [
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {models.map((model) => (
-        <div class={`shift-card group flex flex-col gap-4 ${model.border} transition-all duration-200`}>
-          <div class="flex items-start gap-4">
-            <div class={`w-11 h-11 rounded-xl bg-shift-surface-soft border border-shift-line flex items-center justify-center text-shift-muted ${model.accent} ${model.border} transition-colors flex-shrink-0`}>
-              <Fragment set:html={model.icon} />
+      {models.map((model) => {
+        const hoverShadow = model.key === 'audit' ? 'hover:shadow-[0_0_15px_rgba(199,255,74,0.08)] hover:border-shift-accent/30' :
+          model.key === 'sprint' ? 'hover:shadow-[0_0_15px_rgba(255,122,89,0.08)] hover:border-shift-warm/30' :
+          model.key === 'partner' ? 'hover:shadow-[0_0_15px_rgba(110,231,249,0.08)] hover:border-shift-accent-2/30' :
+          'hover:shadow-[0_0_15px_rgba(199,255,74,0.08)] hover:border-shift-accent/30';
+        return (
+          <div class={`shift-card group flex flex-col gap-4 transition-all duration-200 ${hoverShadow}`}>
+            <div class="flex items-start gap-4">
+              <div class={`w-11 h-11 rounded-xl bg-shift-surface-soft border border-shift-line flex items-center justify-center text-shift-muted ${model.accent} ${model.border} transition-colors flex-shrink-0`}>
+                <Fragment set:html={model.icon} />
+              </div>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-heading font-semibold text-shift-text text-base leading-snug">
+                  {t(`services.${model.key}.title` as any)}
+                </h3>
+                <p class={`font-mono text-xs mt-0.5 text-shift-muted ${model.accent} transition-colors`}>
+                  {t(`services.${model.key}.for` as any)}
+                </p>
+              </div>
             </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="font-heading font-semibold text-shift-text text-base leading-snug">
-                {t(`services.${model.key}.title` as any)}
-              </h3>
-              <p class={`font-mono text-xs mt-0.5 text-shift-muted ${model.accent} transition-colors`}>
-                {t(`services.${model.key}.for` as any)}
+
+            <p class="text-sm text-shift-muted leading-relaxed flex-1">
+              {t(`services.${model.key}.desc` as any)}
+            </p>
+
+            <div class="pt-3 border-t border-shift-line">
+              <p class="font-mono text-xs text-shift-muted/60">
+                Output: <span class="text-shift-text">{t(`services.${model.key}.output` as any)}</span>
               </p>
             </div>
           </div>
-
-          <p class="text-sm text-shift-muted leading-relaxed flex-1">
-            {t(`services.${model.key}.desc` as any)}
-          </p>
-
-          <div class="pt-3 border-t border-shift-line">
-            <p class="font-mono text-xs text-shift-muted/60">
-              Output: <span class="text-shift-text">{t(`services.${model.key}.output` as any)}</span>
-            </p>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
 
     <div class="mt-8 text-center">

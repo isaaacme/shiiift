@@ -15,6 +15,10 @@ const es: Record<TranslationKey, string> = {
   'hero.cta.primary': 'Auditar mi empresa',
   'hero.cta.secondary': 'Ver el taller',
   'hero.cta.tertiary': 'Ver cómo pienso',
+  'hero.new.title': 'Implementación tecnológica para eliminar la fricción operativa',
+  'hero.new.desc': 'Shiiift es un socio de implementación técnica estratégica fundado por Isaac Feldman. Ayudamos a las empresas a automatizar flujos de trabajo manuales, crear sitios web de alta conversión, simplificar stacks de herramientas e integrar utilidades de IA. Utiliza la consola a continuación para diagnosticar tus cuellos de botella y obtener propuestas de proyectos personalizadas.',
+  'hero.new.cta.console': 'Ejecutar un diagnóstico',
+  'hero.new.cta.start': 'Programar implementación',
 
   // Diagnostic Entry
   'diagnostic.title': '¿Dónde pierde tiempo tu empresa?',

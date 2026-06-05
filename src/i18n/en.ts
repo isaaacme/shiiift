@@ -15,8 +15,8 @@ const en: Record<TranslationKey, string> = {
   'hero.cta.primary': 'Audit my business',
   'hero.cta.secondary': 'Watch the workshop',
   'hero.cta.tertiary': 'See how I think',
-  'hero.new.title': 'Technology Implementation to Remove Operational Friction',
-  'hero.new.desc': 'Shiiift is a strategic technical implementation partner founded by Isaac Feldman. We help businesses automate manual workflows, build high-converting websites, simplify tool stacks, and integrate AI utilities. Use the console below to diagnose your bottlenecks and receive custom project proposals.',
+  'hero.new.title': 'We build the systems that make your business easier to run.',
+  'hero.new.desc': 'No complex jargon or over-engineered tools. Shiiift is a strategic implementation partner founded by Isaac Feldman. We connect your tools, automate manual tasks, speed up websites, and deploy AI where it actually saves you hours. Choose a tool below to diagnose your bottlenecks and see how we work.',
   'hero.new.cta.console': 'Run a Diagnostic',
   'hero.new.cta.start': 'Book an Implementation',
 

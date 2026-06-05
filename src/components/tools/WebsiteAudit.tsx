@@ -336,10 +336,10 @@ export default function WebsiteAudit({ t }: Props) {
     setLoadingProgress(5);
     const interval = setInterval(() => {
       setLoadingProgress((prev) => {
-        if (prev >= 95) return prev;
-        const increment = Math.max(1, Math.floor((95 - prev) / 8));
+        if (prev >= 99) return prev;
+        const increment = prev >= 95 ? 0.5 : Math.max(1, Math.floor((95 - prev) / 8));
         const randomBonus = Math.random() > 0.7 ? 1 : 0;
-        return Math.min(95, prev + increment + randomBonus);
+        return Math.min(99, +(prev + increment + randomBonus).toFixed(1));
       });
     }, 400);
 
@@ -513,7 +513,13 @@ export default function WebsiteAudit({ t }: Props) {
 
     return (
       <div style={cardStyle} className="flex flex-col items-center justify-center py-12 gap-5">
-        <div className="relative flex items-center justify-center w-24 h-24">
+        <style>{`
+          @keyframes ring-pulse {
+            0%, 100% { filter: drop-shadow(0 0 2px rgba(110,231,249,0.2)); }
+            50% { filter: drop-shadow(0 0 8px rgba(110,231,249,0.6)); }
+          }
+        `}</style>
+        <div className="relative flex items-center justify-center w-24 h-24 animate-pulse">
           <svg className="w-full h-full transform -rotate-90">
             <circle
               cx="48"
@@ -533,11 +539,11 @@ export default function WebsiteAudit({ t }: Props) {
               strokeDasharray={strokeDasharray}
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"
-              style={{ transition: 'stroke-dashoffset 0.3s ease-out' }}
+              style={{ transition: 'stroke-dashoffset 0.3s ease-out', animation: 'ring-pulse 2s ease-in-out infinite' }}
             />
           </svg>
           <span className="absolute text-lg font-mono font-bold text-[#F4F1EA]" style={{ fontFamily: "'Inter Tight', system-ui, sans-serif" }}>
-            {loadingProgress}%
+            {Math.floor(loadingProgress)}%
           </span>
         </div>
         <div className="text-center space-y-1.5">

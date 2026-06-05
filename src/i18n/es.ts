@@ -68,6 +68,16 @@ const es: Record<TranslationKey, string> = {
   'tools.leadFlow.time': '4',
   'tools.leadFlow.output': 'Diagrama de flujo + puntos débiles + primera corrección',
 
+  'tools.pricingCalculator.title': 'Calculadora de presupuesto de proyecto',
+  'tools.pricingCalculator.desc': 'Estima el presupuesto de implementación y los requerimientos de recursos.',
+  'tools.pricingCalculator.time': '3',
+  'tools.pricingCalculator.output': 'Estimación de presupuesto + asignación de recursos',
+
+  'tools.proposalBuilder.title': 'Generador de propuestas',
+  'tools.proposalBuilder.desc': 'Genera una propuesta técnica personalizada adaptada a los desafíos de tu negocio.',
+  'tools.proposalBuilder.time': '4',
+  'tools.proposalBuilder.output': 'Propuesta de implementación descargable personalizada',
+
   // Workshop
   'workshop.label': 'Taller',
   'workshop.title': 'Cómo pensar sobre la tecnología en tu empresa',
@@ -121,6 +131,9 @@ const es: Record<TranslationKey, string> = {
   'about.desc': 'Mi formación es en diseño y desarrollo web, pero el trabajo se ha expandido hacia la automatización, la estrategia técnica y la IA. Entiendo tanto la conversación empresarial como los detalles de implementación.',
   'about.body':
     'Mi formación es en diseño y desarrollo web, pero el trabajo se ha expandido hacia la automatización, la estrategia técnica, los flujos de trabajo con IA, las integraciones y los sistemas digitales que ayudan a las empresas a operar mejor. Entiendo tanto la conversación empresarial como los detalles de implementación.',
+  'about.founder.name': 'Isaac Feldman',
+  'about.founder.title': 'Fundador de Shiiift',
+  'about.founder.bio': 'Soy Isaac Feldman, fundador de Shiiift. Mi formación es en diseño, desarrollo web, estrategia digital e implementación técnica. Comencé Shiiift para ayudar a las empresas a ir más allá de las herramientas desconectadas, el trabajo manual repetitivo y los sistemas digitales que crean más fricción de la que resuelven. Mi función es comprender cómo funciona realmente un negocio, identificar dónde se pierde tiempo, prospectos y rentabilidad, y luego diseñar y construir una solución práctica en consecuencia.',
 
   // Final CTA
   'finalCta.title': 'Encuentra tu primera victoria tecnológica',
@@ -175,6 +188,18 @@ const es: Record<TranslationKey, string> = {
   'tool.newsletter.placeholder': 'you@example.com',
   'tool.newsletter.cta': 'Notificarme',
   'tool.newsletter.disclaimer': 'Sin spam. Sin embudo de ventas. Herramientas y notas ocasionales.',
+
+  // OS Console
+  'console.searchPlaceholder': 'Buscar herramientas (ej. automatización, CRM)...',
+  'console.backToDashboard': 'Volver al panel',
+  'console.runTool': 'Ejecutar',
+  'console.outputLabel': 'Resultado',
+  'console.categories.all': 'Todas las herramientas',
+  'console.categories.leads': 'Leads y Conversión',
+  'console.categories.ops': 'Automatización y Ops',
+  'console.categories.ai': 'IA y Tecnología',
+  'console.categories.strategy': 'Estrategia',
+  'console.categories.finance': 'Presupuesto y Precios',
 };
 
 export default es;

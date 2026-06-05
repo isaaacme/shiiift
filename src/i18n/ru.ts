@@ -68,6 +68,16 @@ const ru: Record<TranslationKey, string> = {
   'tools.leadFlow.time': '4',
   'tools.leadFlow.output': 'Схема потока + слабые места + первое исправление',
 
+  'tools.pricingCalculator.title': 'Калькулятор стоимости проекта',
+  'tools.pricingCalculator.desc': 'Оцените бюджет внедрения и требования к ресурсам.',
+  'tools.pricingCalculator.time': '3',
+  'tools.pricingCalculator.output': 'Оценка бюджета + распределение ресурсов',
+
+  'tools.proposalBuilder.title': 'Конструктор коммерческих предложений',
+  'tools.proposalBuilder.desc': 'Создайте персонализированное техническое предложение, адаптированное к задачам вашего бизнеса.',
+  'tools.proposalBuilder.time': '4',
+  'tools.proposalBuilder.output': 'Индивидуальное загружаемое предложение по внедрению',
+
   // Workshop
   'workshop.label': 'Мастер-класс',
   'workshop.title': 'Как думать о технологиях в своём бизнесе',
@@ -121,6 +131,9 @@ const ru: Record<TranslationKey, string> = {
   'about.desc': 'Мой background — веб-дизайн и разработка, но работа расширилась до автоматизации, технической стратегии и ИИ. Я понимаю как деловой разговор, так и детали реализации.',
   'about.body':
     'Мой background — веб-дизайн и разработка, но работа расширилась до автоматизации, технической стратегии, рабочих процессов с ИИ, интеграций и цифровых систем, которые помогают бизнесу работать лучше. Я понимаю как деловой разговор, так и детали реализации.',
+  'about.founder.name': 'Исаак Фельдман',
+  'about.founder.title': 'Основатель Shiiift',
+  'about.founder.bio': 'Я Исаак Фельдман, основатель Shiiift. Мой опыт включает дизайн, веб-разработку, цифровую стратегию и техническую реализацию. Я запустил Shiiift, чтобы помочь бизнесу избавиться от разрозненных инструментов, рутины и цифровых систем, которые создают больше сложностей, чем решают. Моя роль — понять, как работает ваш бизнес, найти утечки времени и лидов, а затем спроектировать и внедрить практичное решение.',
 
   // Final CTA
   'finalCta.title': 'Найдите свою первую технологическую победу',
@@ -175,6 +188,18 @@ const ru: Record<TranslationKey, string> = {
   'tool.newsletter.placeholder': 'you@example.com',
   'tool.newsletter.cta': 'Уведомить меня',
   'tool.newsletter.disclaimer': 'Без спама. Без воронки продаж. Иногда — инструменты и заметки.',
+
+  // OS Console
+  'console.searchPlaceholder': 'Поиск инструментов (например: автоматизация, CRM)...',
+  'console.backToDashboard': 'Назад в панель',
+  'console.runTool': 'Запустить',
+  'console.outputLabel': 'Результат',
+  'console.categories.all': 'Все инструменты',
+  'console.categories.leads': 'Лиды и конверсия',
+  'console.categories.ops': 'Автоматизация и процессы',
+  'console.categories.ai': 'ИИ и технологии',
+  'console.categories.strategy': 'Стратегия',
+  'console.categories.finance': 'Бюджет и цены',
 };
 
 export default ru;

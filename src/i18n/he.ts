@@ -66,6 +66,16 @@ const he = {
   'tools.leadFlow.time': '4',
   'tools.leadFlow.output': 'דיאגרמת זרימה + נקודות חלשות + תיקון ראשון',
 
+  'tools.pricingCalculator.title': 'מחשבון עלויות פרויקט',
+  'tools.pricingCalculator.desc': 'חשב הערכת תקציב ומשאבים ליישום דיגיטלי.',
+  'tools.pricingCalculator.time': '3',
+  'tools.pricingCalculator.output': 'הערכת תקציב + דרישות משאבים',
+
+  'tools.proposalBuilder.title': 'מחולל הצעות פרויקט',
+  'tools.proposalBuilder.desc': 'צור הצעת פרויקט מותאמת אישית לפתרון הבעיות בעסק.',
+  'tools.proposalBuilder.time': '4',
+  'tools.proposalBuilder.output': 'הצעת פרויקט מותאמת להורדה',
+
   // Workshop
   'workshop.label': 'סדנה',
   'workshop.title': 'איך לחשוב על טכנולוגיה בעסק שלך',
@@ -119,6 +129,9 @@ const he = {
   'about.desc': 'הרקע שלי הוא עיצוב ופיתוח אתרים, אבל העבודה התרחבה לאוטומציה, אסטרטגיה טכנית, ו-AI. אני מבין גם את השיחה העסקית וגם את פרטי היישום.',
   'about.body':
     'הרקע שלי הוא עיצוב ופיתוח אתרים, אבל העבודה התרחבה לאוטומציה, אסטרטגיה טכנית, תהליכי עבודה עם AI, אינטגרציות ומערכות דיגיטליות שעוזרות לעסקים לפעול טוב יותר. אני מבין גם את השיחה העסקית וגם את פרטי היישום.',
+  'about.founder.name': 'יצחק פלדמן',
+  'about.founder.title': 'מייסד Shiiift',
+  'about.founder.bio': 'אני יצחק פלדמן, מייסד Shiiift. הרקע שלי הוא בעיצוב, פיתוח אתרים, אסטרטגיה דיגיטלית ויישום טכני. הקמתי את Shiiift כדי לעזור לעסקים להתקדם מעבר לכלים מנותקים, עבודה ידנית חוזרת ומערכות דיגיטליות שיוצרות יותר חיכוך מאשר פתרון. התפקיד שלי הוא להבין כיצד עסק עובד בפועל, לזהות היכן הולך לאיבוד זמן, לידים ותנופה, ואז לעצב ולבנות פתרון מעשי ומותאם.',
 
   // Final CTA
   'finalCta.title': 'מצא את הניצחון הטכנולוגי הראשון שלך',
@@ -173,6 +186,18 @@ const he = {
   'tool.newsletter.placeholder': 'you@example.com',
   'tool.newsletter.cta': 'עדכן אותי',
   'tool.newsletter.disclaimer': 'ללא ספאם. ללא משפך מכירות. כלים ורשימות חשיבה מדי פעם.',
+
+  // OS Console
+  'console.searchPlaceholder': 'חפש כלי (לדוגמה: אוטומציה, CRM)...',
+  'console.backToDashboard': 'חזור ללוח הכלים',
+  'console.runTool': 'הפעל',
+  'console.outputLabel': 'תוצר',
+  'console.categories.all': 'כל הכלים',
+  'console.categories.leads': 'לידים והמרות',
+  'console.categories.ops': 'אוטומציה ותהליכים',
+  'console.categories.ai': 'בינה מלאכותית (AI)',
+  'console.categories.strategy': 'אסטרטגיה וטכנולוגיה',
+  'console.categories.finance': 'תקציב ותמחור',
 } as const;
 
 export default he;

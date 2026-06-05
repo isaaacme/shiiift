@@ -68,6 +68,16 @@ const en: Record<TranslationKey, string> = {
   'tools.leadFlow.time': '4',
   'tools.leadFlow.output': 'Flow diagram + weak points + first fix',
 
+  'tools.pricingCalculator.title': 'Project Pricing Calculator',
+  'tools.pricingCalculator.desc': 'Estimate implementation budget and resource requirements.',
+  'tools.pricingCalculator.time': '3',
+  'tools.pricingCalculator.output': 'Budget estimate + resource allocations',
+
+  'tools.proposalBuilder.title': 'Proposal Builder',
+  'tools.proposalBuilder.desc': 'Generate a custom technical proposal tailored to your business challenges.',
+  'tools.proposalBuilder.time': '4',
+  'tools.proposalBuilder.output': 'Tailored downloadable implementation proposal',
+
   // Workshop
   'workshop.label': 'Workshop',
   'workshop.title': 'How to Think About Technology in Your Business',
@@ -121,6 +131,9 @@ const en: Record<TranslationKey, string> = {
   'about.desc': 'My background is in web design and development, but the work has expanded into automation, technical strategy, and AI. I understand both the business conversation and the implementation details.',
   'about.body':
     'My background is in web design and development, but the work has expanded into automation, technical strategy, AI workflows, integrations, and digital systems that help businesses operate better. I understand both the business conversation and the implementation details.',
+  'about.founder.name': 'Isaac Feldman',
+  'about.founder.title': 'Founder of Shiiift',
+  'about.founder.bio': 'I’m Isaac Feldman, founder of Shiiift. My background is in design, web development, digital strategy, and technical implementation. I started Shiiift to help businesses move beyond disconnected tools, repetitive manual work, and digital systems that create more friction than they solve. My role is to understand how a business actually works, identify where time, leads, and momentum are being lost, and then design and build a practical solution around it.',
 
   // Final CTA
   'finalCta.title': 'Find your first technology win',
@@ -175,6 +188,18 @@ const en: Record<TranslationKey, string> = {
   'tool.newsletter.placeholder': 'you@example.com',
   'tool.newsletter.cta': 'Notify me',
   'tool.newsletter.disclaimer': 'No spam. No sales funnel. Occasional tools and thinking notes.',
+
+  // OS Console
+  'console.searchPlaceholder': 'Search tools (e.g. automation, CRM)...',
+  'console.backToDashboard': 'Back to Dashboard',
+  'console.runTool': 'Run',
+  'console.outputLabel': 'Output',
+  'console.categories.all': 'All Tools',
+  'console.categories.leads': 'Leads & Conversions',
+  'console.categories.ops': 'Automation & Ops',
+  'console.categories.ai': 'AI & Tech',
+  'console.categories.strategy': 'Strategy',
+  'console.categories.finance': 'Budget & Pricing',
 };
 
 export default en;

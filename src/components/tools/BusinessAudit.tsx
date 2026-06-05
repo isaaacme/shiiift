@@ -280,13 +280,13 @@ export default function BusinessAudit({ t }: Props) {
         onReset={handleReset}
         scoreBlock={
           <div>
-            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-3">{t.yourScore}</p>
+            <p className="font-mono text-xs tracking-widest uppercase text-shift-accent mb-3">{t.yourScore}</p>
             <div className="flex items-end gap-4 mb-4">
-              <span className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-5xl text-[#F4F1EA]">{score}</span>
-              <span className="text-[#A7AFBA] font-mono text-sm mb-2">/ 100 — {maturity}</span>
+              <span className="font-heading font-bold text-5xl text-shift-text">{score}</span>
+              <span className="text-shift-muted font-mono text-sm mb-2">/ 100 — {maturity}</span>
             </div>
-            <div className="h-2 rounded-full overflow-hidden mb-4" style={{ background: 'linear-gradient(90deg,#0c1018,#1a2030)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
-              <div className="h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${score}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a,#d8ff6a)', boxShadow: '0 0 8px rgba(199,255,74,0.4)' }} />
+            <div className="shift-score-bar mb-4">
+              <div className="shift-score-fill" style={{ width: `${score}%` }} />
             </div>
             {currency && HOURS_COST_MAP[answers.manualWork] > 0 && (() => {
               const weeklyHours = HOURS_COST_MAP[answers.manualWork] ?? 0;
@@ -294,10 +294,10 @@ export default function BusinessAudit({ t }: Props) {
               const annualLocal = Math.round(annualUsd * currency.rate);
               const costLabel: Record<Lang, string> = { he: 'עלות עבודה ידנית שנתית משוערת', en: 'Est. annual manual work cost', es: 'Costo anual estimado de trabajo manual', ru: 'Ориентировочные годовые затраты на ручной труд' };
               return (
-                <div className="border-t border-[rgba(244,241,234,0.08)] pt-4">
-                  <p className="font-mono text-xs text-[#A7AFBA]/60 uppercase tracking-widest mb-1">{costLabel[lang]}</p>
-                  <p className="font-bold text-2xl text-[#FF7A59]">{currency.symbol}{annualLocal.toLocaleString()}</p>
-                  <p className="text-xs text-[#A7AFBA]/50 mt-0.5 font-mono">{currency.code} @ $25/hr × {weeklyHours}h/wk × 52</p>
+                <div className="border-t border-shift-line pt-4">
+                  <p className="font-mono text-xs text-shift-muted/60 uppercase tracking-widest mb-1">{costLabel[lang]}</p>
+                  <p className="font-bold text-2xl text-shift-warm">{currency.symbol}{annualLocal.toLocaleString()}</p>
+                  <p className="text-xs text-shift-muted/50 mt-0.5 font-mono">{currency.code} @ $25/hr × {weeklyHours}h/wk × 52</p>
                 </div>
               );
             })()}
@@ -311,18 +311,18 @@ export default function BusinessAudit({ t }: Props) {
     <div className="space-y-6">
       {/* Progress */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs font-mono text-[#A7AFBA]">
+        <div className="flex items-center justify-between text-xs font-mono text-shift-muted">
           <span>{step + 1} / {QUESTIONS.length}</span>
           <span>{progress}%</span>
         </div>
-        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
-          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a)', boxShadow: '0 0 6px rgba(199,255,74,0.35)' }} />
+        <div className="shift-progress-track">
+          <div className="shift-progress-fill" style={{ width: `${progress}%` }} />
         </div>
       </div>
 
       {/* Question */}
-      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
-        <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-6">
+      <div className="shift-card">
+        <h2 className="font-heading font-semibold text-xl text-shift-text mb-6">
           {getLabel(currentQ.question, lang)}
         </h2>
         <div className="space-y-2">
@@ -330,11 +330,7 @@ export default function BusinessAudit({ t }: Props) {
             <button
               key={opt.value}
               onClick={() => handleSelect(opt.value)}
-              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150"
-              style={selected === opt.value
-                ? { background: 'linear-gradient(160deg,rgba(199,255,74,0.1) 0%,rgba(199,255,74,0.04) 100%)', border: '1px solid rgba(199,255,74,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
-                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
-              }
+              className={`w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150 shift-option-btn ${selected === opt.value ? 'shift-option-btn-selected' : ''}`}
             >
               {getLabel(opt.label, lang)}
             </button>
@@ -344,7 +340,7 @@ export default function BusinessAudit({ t }: Props) {
 
       {/* Navigation */}
       <div className="flex items-center justify-between">
-        <button onClick={handleBack} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-mono">
+        <button onClick={handleBack} disabled={step === 0} className="text-sm text-shift-muted hover:text-shift-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded px-1">
           {lang === 'he' ? '→' : '←'} {t.back}
         </button>
         <button
@@ -352,8 +348,7 @@ export default function BusinessAudit({ t }: Props) {
             ? () => { if (selected) { setSession((s) => ({ ...s, answers: { ...s.answers, [currentQ.id]: selected }, selected: '', step: s.step + 1 })); } }
             : handleNext}
           disabled={!selected}
-          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          style={{ background: 'linear-gradient(180deg,#d6ff5e 0%,#c7ff4a 45%,#aee038 100%)', color: '#0E1117', boxShadow: 'var(--v-shadow-accent)', border: '1px solid rgba(255,255,255,0.15)' }}
+          className="shift-btn-primary"
         >
           {step === QUESTIONS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>

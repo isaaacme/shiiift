@@ -94,15 +94,15 @@ const DEFAULT_RELATED_TOOLS: Record<string, RelatedTool[]> = {
   'business-audit': [
     { href: 'automation-finder', label: { he: 'מאתר הזדמנויות אוטומציה', en: 'Automation Opportunity Finder', es: 'Buscador de Automatización', ru: 'Поиск возможностей автоматизации' } },
     { href: 'website-audit', label: { he: 'ביקורת מינוף אתרים', en: 'Website Leverage Audit', es: 'Auditoría de Sitio Web', ru: 'Аудит сайта' } },
-    { href: 'lead-flow', label: { he: 'ממפה זרימת לידים', en: 'Lead Flow Mapper', es: 'Mapeador de Leads', ru: 'Карта потока лидов' } },
+    { href: 'lead-flow', label: { he: 'ממפה זרימת לידים', en: 'Lead Flow Mapper', es: 'Mapeador de Leads', ru: 'Карта потока לידים' } },
   ],
   'website-audit': [
     { href: 'business-audit', label: { he: 'ביקורת טכנולוגיה עסקית', en: 'Business Technology Audit', es: 'Auditoría Tecnológica', ru: 'Бизнес-аудит' } },
-    { href: 'lead-flow', label: { he: 'ממפה זרימת לידים', en: 'Lead Flow Mapper', es: 'Mapeador de Leads', ru: 'Карта потока лидов' } },
+    { href: 'lead-flow', label: { he: 'ממפה זרימת לידים', en: 'Lead Flow Mapper', es: 'Mapeador de Leads', ru: 'Карта потока לידים' } },
     { href: 'automation-finder', label: { he: 'מאתר אוטומציה', en: 'Automation Finder', es: 'Buscador de Automatización', ru: 'Поиск автоматизации' } },
   ],
   'automation-finder': [
-    { href: 'lead-flow', label: { he: 'ממפה זרימת לידים', en: 'Lead Flow Mapper', es: 'Mapeador de Leads', ru: 'Карта потока лидов' } },
+    { href: 'lead-flow', label: { he: 'ממפה זרימת לידים', en: 'Lead Flow Mapper', es: 'Mapeador de Leads', ru: 'Карта потока לידים' } },
     { href: 'tool-stack', label: { he: 'מפשט מחסנית כלים', en: 'Tool Stack Simplifier', es: 'Simplificador de Herramientas', ru: 'Упрощение стека инструментов' } },
     { href: 'business-audit', label: { he: 'ביקורת עסקית', en: 'Business Audit', es: 'Auditoría Empresarial', ru: 'Бизнес-аудит' } },
   ],
@@ -112,7 +112,7 @@ const DEFAULT_RELATED_TOOLS: Record<string, RelatedTool[]> = {
   ],
   'tool-stack': [
     { href: 'automation-finder', label: { he: 'מאתר הזדמנויות אוטומציה', en: 'Automation Finder', es: 'Buscador de Automatización', ru: 'Поиск автоматизации' } },
-    { href: 'business-audit', label: { he: 'ביקורת עסקית', en: 'Business Audit', es: 'Auditoría Empresarial', ru: 'Бизнес-аудит' } },
+    { href: 'business-audit', label: { he: 'ביקורת עסקית', en: 'Business Audit', es: 'Auditoría Empresarial', ru: 'Бизнес-אקטיבי' } },
   ],
   'lead-flow': [
     { href: 'automation-finder', label: { he: 'מאתר הזדמנויות אוטומציה', en: 'Automation Finder', es: 'Buscador de Automatización', ru: 'Поиск автоматизации' } },
@@ -256,14 +256,7 @@ export default function ToolResult({
     <div className="space-y-5">
       {/* Score / custom header block */}
       {scoreBlock && (
-        <div style={{
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.055) 0%, #151A23 30%, #111620 100%)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderBottomColor: 'rgba(0,0,0,0.4)',
-          boxShadow: 'var(--v-shadow-md)',
-          borderRadius: '1rem',
-          padding: '1.5rem 2rem',
-        }}>
+        <div className="shift-card">
           {scoreBlock}
         </div>
       )}
@@ -273,19 +266,12 @@ export default function ToolResult({
 
       {/* Findings */}
       {findings.length > 0 && (
-        <div style={{
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, #151A23 30%, #111620 100%)',
-          border: '1px solid rgba(255,255,255,0.09)',
-          borderBottomColor: 'rgba(0,0,0,0.4)',
-          boxShadow: 'var(--v-shadow-md)',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-        }}>
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.topFindings}</p>
-          <ul className="space-y-3">
+        <div className="shift-card">
+          <p className="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{t.topFindings}</p>
+          <ul className="space-y-3 list-none p-0 m-0">
             {findings.map((f, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-[#A7AFBA] leading-snug">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FF7A59] flex-shrink-0 mt-2"></span>
+              <li key={i} className="flex items-start gap-3 text-sm text-shift-muted leading-snug">
+                <span className="w-1.5 h-1.5 rounded-full bg-shift-warm flex-shrink-0 mt-2"></span>
                 {f}
               </li>
             ))}
@@ -295,20 +281,12 @@ export default function ToolResult({
 
       {/* Quick Wins */}
       {quickWins.length > 0 && (
-        <div style={{
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, #151A23 30%, #111620 100%)',
-          border: '1px solid rgba(255,255,255,0.09)',
-          borderBottomColor: 'rgba(0,0,0,0.4)',
-          boxShadow: 'var(--v-shadow-md)',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-        }}>
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.quickWins}</p>
-          <ul className="space-y-3">
+        <div className="shift-card">
+          <p className="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{t.quickWins}</p>
+          <ul className="space-y-3 list-none p-0 m-0">
             {quickWins.map((w, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-[#F4F1EA] leading-snug">
-                <span className="w-5 h-5 rounded-full flex-shrink-0 mt-0.5 flex items-center justify-center font-mono text-[10px] text-[#C7FF4A]"
-                  style={{ background: 'rgba(199,255,74,0.08)', border: '1px solid rgba(199,255,74,0.25)', boxShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
+              <li key={i} className="flex items-start gap-3 text-sm text-shift-text leading-snug">
+                <span className="w-5 h-5 rounded-full flex-shrink-0 mt-0.5 flex items-center justify-center font-mono text-[10px] text-shift-accent bg-shift-accent/10 border border-shift-accent/25 shadow-sm">
                   {i + 1}
                 </span>
                 {w}
@@ -320,19 +298,12 @@ export default function ToolResult({
 
       {/* Next Actions */}
       {nextActions.length > 0 && (
-        <div style={{
-          background: 'linear-gradient(160deg, rgba(199,255,74,0.04) 0%, #151A23 60%, #111620 100%)',
-          border: '1px solid rgba(199,255,74,0.12)',
-          borderBottomColor: 'rgba(0,0,0,0.4)',
-          boxShadow: 'var(--v-shadow-md)',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-        }}>
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.nextActions}</p>
-          <ol className="space-y-3">
+        <div className="shift-card border-shift-accent/15">
+          <p className="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{t.nextActions}</p>
+          <ol className="space-y-3 list-none p-0 m-0">
             {nextActions.map((a, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-[#F4F1EA] leading-snug">
-                <span className="font-mono text-[#C7FF4A]/60 text-xs mt-0.5 flex-shrink-0 w-4">{i + 1}.</span>
+              <li key={i} className="flex items-start gap-3 text-sm text-shift-text leading-snug">
+                <span className="font-mono text-shift-accent/60 text-xs mt-0.5 flex-shrink-0 w-4">{i + 1}.</span>
                 {a}
               </li>
             ))}
@@ -342,27 +313,19 @@ export default function ToolResult({
 
       {/* Related Articles */}
       {articles.length > 0 && (
-        <div style={{
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, #151A23 100%)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderBottomColor: 'rgba(0,0,0,0.35)',
-          boxShadow: 'var(--v-shadow-sm)',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-        }}>
-          <p className="font-mono text-xs tracking-widest uppercase text-[#A7AFBA] mb-4">{articlesLabel[lang]}</p>
+        <div className="shift-card">
+          <p className="font-mono text-xs tracking-widest uppercase text-shift-muted mb-4">{articlesLabel[lang]}</p>
           <div className="space-y-2">
             {articles.map((a) => (
               <a
                 key={a.href}
                 href={`/${lang}${a.href}`}
                 onClick={() => trackEvent('related_article_clicked', { tool: toolId, article: a.href, lang })}
-                className="flex items-center justify-between px-4 py-3 rounded-xl text-sm text-[#A7AFBA] hover:text-[#F4F1EA] no-underline transition-all group"
-                style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(14,17,23,0.5) 100%)', border: '1px solid rgba(255,255,255,0.07)', borderBottomColor: 'rgba(0,0,0,0.3)', boxShadow: 'var(--v-shadow-sm)' }}
+                className="shift-option-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm text-shift-muted hover:text-shift-text no-underline transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
               >
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-[10px] text-[#A7AFBA]/50 border border-[rgba(255,255,255,0.08)] px-1.5 py-0.5 rounded">{gl(a.category, lang)}</span>
-                  <span className="group-hover:text-[#F4F1EA] transition-colors">{gl(a.label, lang)}</span>
+                  <span className="font-mono text-[10px] text-shift-muted/50 border border-shift-line px-1.5 py-0.5 rounded">{gl(a.category, lang)}</span>
+                  <span className="group-hover:text-shift-text transition-colors">{gl(a.label, lang)}</span>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 rtl:rotate-180 opacity-40 group-hover:opacity-80">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -375,26 +338,18 @@ export default function ToolResult({
 
       {/* Related Tools */}
       {tools.length > 0 && (
-        <div style={{
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, #151A23 100%)',
-          border: '1px solid rgba(255,255,255,0.09)',
-          borderBottomColor: 'rgba(0,0,0,0.4)',
-          boxShadow: 'var(--v-shadow-md)',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-        }}>
-          <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{t.relatedTools}</p>
+        <div className="shift-card">
+          <p className="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{t.relatedTools}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {tools.map((tool) => (
               <a
                 key={tool.href}
                 href={`/${lang}/tools/${tool.href}`}
                 onClick={() => trackEvent('related_tool_clicked', { tool: toolId, target: tool.href, lang })}
-                className="flex items-center justify-between px-4 py-3 rounded-xl text-sm text-[#A7AFBA] hover:text-[#F4F1EA] no-underline transition-all group"
-                style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, #1a202c 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', boxShadow: 'var(--v-shadow-sm)' }}
+                className="shift-option-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm text-shift-muted hover:text-shift-text no-underline transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
               >
-                <span className="group-hover:text-[#F4F1EA] transition-colors">{gl(tool.label, lang)}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 rtl:rotate-180 opacity-40 group-hover:opacity-80">
+                <span className="group-hover:text-shift-text transition-colors">{gl(tool.label, lang)}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 rtl:rotate-180 opacity-40 group-hover:opacity-80">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </a>
@@ -404,17 +359,10 @@ export default function ToolResult({
       )}
 
       {/* Newsletter */}
-      <div style={{
-        background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, #151A23 40%, #111620 100%)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderBottomColor: 'rgba(0,0,0,0.4)',
-        boxShadow: 'var(--v-shadow-md)',
-        borderRadius: '1rem',
-        padding: '1.5rem',
-      }}>
-        <p className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-[#F4F1EA] mb-1">{t.newsletterTitle}</p>
+      <div className="shift-card">
+        <p className="font-heading font-semibold text-shift-text mb-1">{t.newsletterTitle}</p>
         {subscribed ? (
-          <p className="text-sm text-[#C7FF4A] mt-2">✓</p>
+          <p className="text-sm text-shift-accent mt-2">✓</p>
         ) : (
           <form
             name="tool-newsletter"
@@ -431,19 +379,17 @@ export default function ToolResult({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t.newsletterPlaceholder}
-              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-[#F4F1EA] placeholder-[#A7AFBA]/50 outline-none"
-              style={{ background: 'linear-gradient(180deg, #0f131b 0%, #141921 100%)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 1px 0 0 rgba(0,0,0,0.5) inset, 0 2px 6px rgba(0,0,0,0.35) inset' }}
+              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-shift-text bg-shift-bg border border-white/10 placeholder-shift-muted/40 outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
             />
             <button
               type="submit"
-              className="flex-shrink-0 font-semibold text-sm px-4 py-2.5 rounded-xl transition-all"
-              style={{ background: 'linear-gradient(180deg, #d6ff5e 0%, #c7ff4a 45%, #aee038 100%)', color: '#0E1117', boxShadow: 'var(--v-shadow-accent)', border: '1px solid rgba(255,255,255,0.15)' }}
+              className="shift-btn-primary flex-shrink-0 px-4 py-2.5"
             >
               {t.newsletterCta}
             </button>
           </form>
         )}
-        <p className="mt-2 text-xs text-[#A7AFBA]/60">{t.newsletterDisclaimer}</p>
+        <p className="mt-2 text-xs text-shift-muted/60">{t.newsletterDisclaimer}</p>
       </div>
 
       {/* Roadmap request */}
@@ -455,20 +401,20 @@ export default function ToolResult({
               trackEvent('roadmap_requested', { tool: toolId, lang });
               window.location.href = `/${lang}/start`;
             }}
-            className="text-sm text-[#A7AFBA] hover:text-[#C7FF4A] font-mono transition-colors underline underline-offset-4"
+            className="text-sm text-shift-muted hover:text-shift-accent font-mono transition-colors underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
           >
             {roadmapLabel[lang]}
           </button>
         </div>
       ) : (
-        <p className="text-center text-sm text-[#C7FF4A] font-mono">{roadmapSentLabel[lang]}</p>
+        <p className="text-center text-sm text-shift-accent font-mono">{roadmapSentLabel[lang]}</p>
       )}
 
       {/* Download + Reset row */}
       <div className="flex items-center justify-between pt-2">
         <button
           onClick={onReset}
-          className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] transition-colors font-mono"
+          className="text-sm text-shift-muted hover:text-shift-text transition-colors font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
         >
           ↺ {t.startOver}
         </button>
@@ -477,7 +423,7 @@ export default function ToolResult({
             downloadSummary(toolId, lang, findings, quickWins, nextActions);
             trackEvent('summary_downloaded', { tool: toolId, lang });
           }}
-          className="text-sm text-[#A7AFBA] hover:text-[#C7FF4A] transition-colors font-mono"
+          className="text-sm text-shift-muted hover:text-shift-accent transition-colors font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
         >
           ↓ {dlLabel[lang]}
         </button>

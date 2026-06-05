@@ -166,7 +166,7 @@
 
   /* ─── PRIMARY BUTTON (accent / lime) ─── */
   .shift-btn-primary {
-    @apply inline-flex items-center gap-2 font-heading font-semibold text-sm px-5 py-3 rounded-xl transition-all duration-150 no-underline;
+    @apply inline-flex items-center gap-2 font-heading font-semibold text-sm px-5 py-3 rounded-xl transition-all duration-150 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg;
     color: #0E1117;
     background: linear-gradient(
       180deg,
@@ -201,7 +201,7 @@
 
   /* ─── SECONDARY BUTTON ─── */
   .shift-btn-secondary {
-    @apply inline-flex items-center gap-2 font-heading font-medium text-sm px-5 py-3 rounded-xl transition-all duration-150 no-underline;
+    @apply inline-flex items-center gap-2 font-heading font-medium text-sm px-5 py-3 rounded-xl transition-all duration-150 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg;
     color: var(--shift-text);
     background: linear-gradient(
       160deg,
@@ -237,7 +237,7 @@
 
   /* ─── GHOST BUTTON ─── */
   .shift-btn-ghost {
-    @apply inline-flex items-center gap-2 font-medium text-sm transition-all duration-150 no-underline;
+    @apply inline-flex items-center gap-2 font-medium text-sm transition-all duration-150 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg;
     color: var(--shift-muted);
     text-shadow: 0 1px 2px rgba(0,0,0,0.4);
   }
@@ -293,6 +293,9 @@
       0 4px 8px rgba(0,0,0,0.4),
       0 0 0 1px rgba(199,255,74,0.08);
     transform: translateY(-1px);
+  }
+  .shift-option-btn:focus-visible {
+    @apply outline-none ring-2 ring-shift-accent ring-offset-2 ring-offset-shift-bg;
   }
   .shift-option-btn-selected {
     background: linear-gradient(160deg, rgba(199,255,74,0.1) 0%, rgba(199,255,74,0.04) 100%);

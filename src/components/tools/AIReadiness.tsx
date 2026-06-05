@@ -125,18 +125,18 @@ export default function AIReadiness({ t }: { t: T }) {
   const aiInsightLabel = { he: 'תובנת AI מותאמת אישית', en: 'Personalised AI insight', es: 'Perspectiva de IA personalizada', ru: 'Персонализированный AI-инсайт' };
 
   const insightBlock = (aiLoading || aiInsight) ? (
-    <div style={{ background: 'linear-gradient(160deg,rgba(199,255,74,0.06) 0%,#151A23 100%)', border: '1px solid rgba(199,255,74,0.2)', borderRadius: '1rem', padding: '1.5rem' }}>
+    <div className="rounded-2xl p-6 bg-gradient-to-br from-shift-accent/5 to-shift-surface border border-shift-accent/20 shadow-md">
       <div className="flex items-center gap-2 mb-3">
-        <span className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A]">{gl(aiInsightLabel, lang)}</span>
-        <span className="font-mono text-[10px] text-[#A7AFBA]/50 border border-[rgba(255,255,255,0.08)] px-1.5 py-0.5 rounded">Gemini AI</span>
+        <span className="font-mono text-xs tracking-widest uppercase text-shift-accent">{gl(aiInsightLabel, lang)}</span>
+        <span className="font-mono text-[10px] text-shift-muted/50 border border-shift-line px-1.5 py-0.5 rounded">Gemini AI</span>
       </div>
       {aiLoading ? (
         <div className="flex items-center gap-3">
-          <div className="w-4 h-4 rounded-full border-2 border-[#C7FF4A] border-t-transparent animate-spin flex-shrink-0" />
-          <span className="text-sm text-[#A7AFBA] font-mono">{lang === 'he' ? 'מייצר תובנה...' : lang === 'ru' ? 'Генерируем инсайт...' : lang === 'es' ? 'Generando perspectiva...' : 'Generating insight...'}</span>
+          <div className="w-4 h-4 rounded-full border-2 border-shift-accent border-t-transparent animate-spin flex-shrink-0" />
+          <span className="text-sm text-shift-muted font-mono">{lang === 'he' ? 'מייצר תובנה...' : lang === 'ru' ? 'Генерируем инсайт...' : lang === 'es' ? 'Generando perspectiva...' : 'Generating insight...'}</span>
         </div>
       ) : (
-        <p className="text-sm text-[#F4F1EA] leading-relaxed">{aiInsight}</p>
+        <p className="text-sm text-shift-text leading-relaxed">{aiInsight}</p>
       )}
     </div>
   ) : null;
@@ -153,10 +153,10 @@ export default function AIReadiness({ t }: { t: T }) {
         onReset={clearSession}
         scoreBlock={
           <div>
-            <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-3">{t.topFindings}</p>
-            <div className="border-t border-[rgba(244,241,234,0.08)] mt-4 pt-4">
-              <p className="font-mono text-xs text-[#FF7A59] mb-2 uppercase tracking-widest">{gl(keepHumanLabel, lang)}</p>
-              <p className="text-sm text-[#A7AFBA]">{BAD[lang] ?? BAD['en']}</p>
+            <p className="font-mono text-xs tracking-widest uppercase text-shift-accent mb-3">{t.topFindings}</p>
+            <div className="border-t border-shift-line mt-4 pt-4">
+              <p className="font-mono text-xs text-shift-warm mb-2 uppercase tracking-widest">{gl(keepHumanLabel, lang)}</p>
+              <p className="text-sm text-shift-muted">{BAD[lang] ?? BAD['en']}</p>
             </div>
           </div>
         }
@@ -170,37 +170,35 @@ export default function AIReadiness({ t }: { t: T }) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
-        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
-          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a)', boxShadow: '0 0 6px rgba(199,255,74,0.35)' }} />
+        <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
+        <div className="shift-progress-track">
+          <div className="shift-progress-fill" style={{ width: `${progress}%` }} />
         </div>
       </div>
-      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
-        <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-6">{gl(cq.q, lang)}</h2>
+      <div className="shift-card">
+        <h2 className="font-heading font-semibold text-xl text-shift-text mb-6">{gl(cq.q, lang)}</h2>
         <div className="space-y-2">
-          {cq.opts.map((o) => (
-            <button key={o.v} onClick={() => setSession((s) => ({ ...s, selected: o.v }))}
-              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all"
-              style={selected === o.v
-                ? { background: 'linear-gradient(160deg,rgba(199,255,74,0.1) 0%,rgba(199,255,74,0.04) 100%)', border: '1px solid rgba(199,255,74,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
-                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
-              }
-            >
-              {gl(o.l, lang)}
-            </button>
-          ))}
+          {cq.opts.map((o) => {
+            const isSelected = selected === o.v;
+            return (
+              <button key={o.v} onClick={() => setSession((s) => ({ ...s, selected: o.v }))}
+                className={`w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150 shift-option-btn ${isSelected ? 'shift-option-btn-selected' : ''}`}
+              >
+                {gl(o.l, lang)}
+              </button>
+            );
+          })}
         </div>
       </div>
       <div className="flex items-center justify-between">
         <button
           onClick={() => { if (step === 0) return; const pq = QS[step-1]; setSession((s) => ({...s, step:s.step-1, selected:s.answers[pq.id]||''})); }}
-          disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">{lang === 'he' ? '→' : '←'} {t.back}
+          disabled={step === 0} className="text-sm text-shift-muted hover:text-shift-text disabled:opacity-30 disabled:cursor-not-allowed font-mono transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded px-1">{lang === 'he' ? '→' : '←'} {t.back}
         </button>
         <button
           onClick={() => { if (!selected) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]:selected}, selected:'', step:s.step+1})); }}
           disabled={!selected}
-          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          style={{ background: 'linear-gradient(180deg,#d6ff5e 0%,#c7ff4a 45%,#aee038 100%)', color: '#0E1117', boxShadow: 'var(--v-shadow-accent)', border: '1px solid rgba(255,255,255,0.15)' }}
+          className="shift-btn-primary"
         >
           {step === QS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>

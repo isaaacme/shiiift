@@ -1,5 +1,5 @@
 ---
-import { useTranslations, type Locale } from '../i18n/index';
+import { useTranslations, type Locale, LOCALES, getLocalizedPath } from '../i18n/index';
 
 interface Props {
   lang: Locale;
@@ -8,6 +8,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const year = new Date().getFullYear();
+const currentPath = Astro.url.pathname;
 ---
 
 <footer class="border-t border-shift-line bg-shift-bg mt-24">
@@ -58,13 +59,18 @@ const year = new Date().getFullYear();
         &copy; {year} shiiift. {t('footer.rights')}.
       </p>
       <div class="flex items-center gap-4 text-xs text-shift-muted font-mono">
-        <span>he</span>
-        <span class="text-shift-line">|</span>
-        <a href="/en" class="hover:text-shift-text transition-colors no-underline">en</a>
-        <span class="text-shift-line">|</span>
-        <a href="/es" class="hover:text-shift-text transition-colors no-underline">es</a>
-        <span class="text-shift-line">|</span>
-        <a href="/ru" class="hover:text-shift-text transition-colors no-underline">ru</a>
+        {LOCALES.map((locale, idx) => (
+          <>
+            {idx > 0 && <span class="text-shift-line">|</span>}
+            {locale === lang ? (
+              <span class="text-shift-accent font-bold uppercase">{locale}</span>
+            ) : (
+              <a href={getLocalizedPath(currentPath, locale)} class="hover:text-shift-text transition-colors no-underline uppercase">
+                {locale}
+              </a>
+            )}
+          </>
+        ))}
       </div>
     </div>
   </div>

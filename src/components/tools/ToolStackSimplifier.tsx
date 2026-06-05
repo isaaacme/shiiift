@@ -127,62 +127,69 @@ export default function ToolStackSimplifier({ t }: { t: T }) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / 2</span><span>{step * 50}%</span></div>
-        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
-          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${step * 50}%`, background: 'linear-gradient(90deg,#4dcfed,#6ee7f9)', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
+        <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / 2</span><span>{step * 50}%</span></div>
+        <div className="shift-progress-track">
+          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${step * 50}%`, background: 'linear-gradient(90deg,#4dcfed,var(--shift-accent-2))', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
         </div>
       </div>
 
-      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
-        <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-2">{gl(step === 0 ? lbl.toolsQ : lbl.painQ, lang)}</h2>
-        <p className="text-xs text-[#A7AFBA]/60 font-mono mb-5">{gl(lbl.selectAll, lang)}</p>
+      <div className="shift-card">
+        <h2 className="font-heading font-semibold text-xl text-shift-text mb-2">{gl(step === 0 ? lbl.toolsQ : lbl.painQ, lang)}</h2>
+        <p className="text-xs text-shift-muted/60 font-mono mb-5">{gl(lbl.selectAll, lang)}</p>
         {step === 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {TOOL_OPTIONS.map((o) => (
-              <button key={o.v} onClick={() => setSession((s) => ({ ...s, tools: s.tools.includes(o.v) ? s.tools.filter((x) => x !== o.v) : [...s.tools, o.v] }))}
-                className="text-start px-4 py-3 rounded-xl text-sm transition-all flex items-center gap-3"
-                style={tools.includes(o.v)
-                  ? { background: 'linear-gradient(160deg,rgba(110,231,249,0.1) 0%,rgba(110,231,249,0.04) 100%)', border: '1px solid rgba(110,231,249,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
-                  : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
-                }
-              >
-                <span className="w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all"
-                  style={tools.includes(o.v) ? { background: '#6EE7F9', border: '1px solid #6EE7F9' } : { border: '1px solid rgba(244,241,234,0.25)' }}>
-                  {tools.includes(o.v) && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
-                </span>
-                {TOOL_LOGO[o.v] && <img src={`https://logo.clearbit.com/${TOOL_LOGO[o.v]}`} alt="" width="14" height="14" className="w-3.5 h-3.5 rounded object-contain flex-shrink-0 opacity-70" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />}
-                {gl(o.l, lang)}
-              </button>
-            ))}
+            {TOOL_OPTIONS.map((o) => {
+              const isSelected = tools.includes(o.v);
+              return (
+                <button key={o.v} onClick={() => setSession((s) => ({ ...s, tools: s.tools.includes(o.v) ? s.tools.filter((x) => x !== o.v) : [...s.tools, o.v] }))}
+                  className={`text-start px-4 py-3 rounded-xl text-sm transition-all flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-shift-accent-2/10 to-shift-accent-2/5 border border-shift-accent-2/45 text-shift-text shadow-sm'
+                      : 'bg-gradient-to-br from-white/[0.04] to-shift-surface border border-white/[0.08] border-b-black/35 text-shift-muted shadow-sm hover:border-shift-accent-2/25'
+                  }`}
+                >
+                  <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all ${
+                    isSelected ? 'bg-shift-accent-2 border-shift-accent-2' : 'border-shift-text/25'
+                  }`}>
+                    {isSelected && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+                  </span>
+                  {TOOL_LOGO[o.v] && <img src={`https://logo.clearbit.com/${TOOL_LOGO[o.v]}`} alt="" width="14" height="14" className="w-3.5 h-3.5 rounded object-contain flex-shrink-0 opacity-70" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />}
+                  {gl(o.l, lang)}
+                </button>
+              );
+            })}
           </div>
         ) : (
           <div className="space-y-2">
-            {PAIN_OPTIONS.map((o) => (
-              <button key={o.v} onClick={() => setSession((s) => ({ ...s, pains: s.pains.includes(o.v) ? s.pains.filter((x) => x !== o.v) : [...s.pains, o.v] }))}
-                className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all flex items-center gap-3"
-                style={pains.includes(o.v)
-                  ? { background: 'linear-gradient(160deg,rgba(110,231,249,0.1) 0%,rgba(110,231,249,0.04) 100%)', border: '1px solid rgba(110,231,249,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
-                  : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
-                }
-              >
-                <span className="w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all"
-                  style={pains.includes(o.v) ? { background: '#6EE7F9', border: '1px solid #6EE7F9' } : { border: '1px solid rgba(244,241,234,0.25)' }}>
-                  {pains.includes(o.v) && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
-                </span>
-                {gl(o.l, lang)}
-              </button>
-            ))}
+            {PAIN_OPTIONS.map((o) => {
+              const isSelected = pains.includes(o.v);
+              return (
+                <button key={o.v} onClick={() => setSession((s) => ({ ...s, pains: s.pains.includes(o.v) ? s.pains.filter((x) => x !== o.v) : [...s.pains, o.v] }))}
+                  className={`w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-shift-accent-2/10 to-shift-accent-2/5 border border-shift-accent-2/45 text-shift-text shadow-sm'
+                      : 'bg-gradient-to-br from-white/[0.04] to-shift-surface border border-white/[0.08] border-b-black/35 text-shift-muted shadow-sm hover:border-shift-accent-2/25'
+                  }`}
+                >
+                  <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all ${
+                    isSelected ? 'bg-shift-accent-2 border-shift-accent-2' : 'border-shift-text/25'
+                  }`}>
+                    {isSelected && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+                  </span>
+                  {gl(o.l, lang)}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
 
       <div className="flex items-center justify-between">
-        <button onClick={() => step > 0 && setSession((s) => ({...s, step:s.step-1}))} disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">{lang === 'he' ? '→' : '←'} {t.back}</button>
+        <button onClick={() => step > 0 && setSession((s) => ({...s, step:s.step-1}))} disabled={step === 0} className="text-sm text-shift-muted hover:text-shift-text disabled:opacity-30 disabled:cursor-not-allowed font-mono transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded px-1">{lang === 'he' ? '→' : '←'} {t.back}</button>
         <button
           onClick={() => setSession((s) => ({...s, step:s.step+1}))}
           disabled={step === 0 ? tools.length === 0 : pains.length === 0}
-          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 1px 0 0 rgba(255,255,255,0.22) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
+          className="inline-flex items-center gap-2 font-heading font-semibold text-sm px-6 py-2.5 rounded-xl transition-all duration-150 no-underline bg-gradient-to-b from-[#7df0ff] via-shift-accent-2 to-[#4dcfed] text-[#0E1117] shadow-[0_1px_0_0_rgba(255,255,255,0.22)_inset,0_-1px_0_0_rgba(0,0,0,0.2)_inset,0_4px_12px_rgba(110,231,249,0.25)] border border-white/15 disabled:opacity-40 disabled:cursor-not-allowed hover:from-[#9ef5ff] hover:to-[#5fd7f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
         >
           {step === 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>

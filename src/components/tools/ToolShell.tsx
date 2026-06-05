@@ -14,15 +14,15 @@ export default function ToolShell({ children, title, description, time, timeLabe
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         <div className="mb-10">
           <div className="inline-flex items-center gap-2 mb-4">
-            <span className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A]">Tool</span>
-            <span className="font-mono text-xs text-[#A7AFBA] border border-[rgba(244,241,234,0.14)] px-2 py-0.5 rounded-md">
+            <span className="font-mono text-xs tracking-widest uppercase text-shift-accent">Tool</span>
+            <span className="font-mono text-xs text-shift-muted border border-shift-line px-2 py-0.5 rounded-md">
               {time} {timeLabel}
             </span>
           </div>
-          <h1 className="font-['Inter_Tight',system-ui,sans-serif] font-bold text-3xl sm:text-4xl text-[#F4F1EA] leading-tight mb-3">
+          <h1 className="font-heading font-bold text-3xl sm:text-4xl text-shift-text leading-tight mb-3">
             {title}
           </h1>
-          <p className="text-[#A7AFBA] leading-relaxed">{description}</p>
+          <p className="text-shift-muted leading-relaxed">{description}</p>
         </div>
         {children}
       </div>

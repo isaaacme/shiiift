@@ -149,19 +149,18 @@ export default function LeadFlowMapper({ t }: { t: T }) {
         onReset={clearSession}
         scoreBlock={
           <div>
-            <div className="overflow-x-auto mb-5">
-              <p className="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-5">{t.yourScore}</p>
-              <div className="flex items-center gap-2 min-w-max">
+            <div className="mb-5">
+              <p className="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{t.yourScore}</p>
+              <div className="flex flex-col md:flex-row items-center gap-2 w-full">
                 {(flowSteps[lang as Lang] ?? flowSteps.en).map((s, i, arr) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="px-3 py-1.5 rounded-lg border text-xs font-mono"
-                      style={i === 2 && (followup === 'nothing' || followup === 'manual')
-                        ? { border: '1px solid rgba(255,122,89,0.5)', background: 'rgba(255,122,89,0.1)', color: '#FF7A59' }
-                        : { border: '1px solid rgba(244,241,234,0.12)', background: 'rgba(255,255,255,0.04)', color: '#A7AFBA' }
-                      }
-                    >{s}</div>
+                  <div key={i} className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+                    <div className={`px-3 py-1.5 rounded-lg border text-xs font-mono w-full text-center md:w-auto ${
+                      i === 2 && (followup === 'nothing' || followup === 'manual')
+                        ? 'border-shift-warm/50 bg-shift-warm/10 text-shift-warm'
+                        : 'border-shift-line bg-white/[0.04] text-shift-muted'
+                    }`}>{s}</div>
                     {i < arr.length - 1 && (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#A7AFBA]/40 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-shift-muted/40 flex-shrink-0 rotate-90 md:rotate-0 md:rtl:rotate-180 my-1 md:my-0">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                       </svg>
                     )}
@@ -173,10 +172,10 @@ export default function LeadFlowMapper({ t }: { t: T }) {
               const crm = getCrmForRegion(geo);
               const crmLabel: Record<Lang, string> = { he: 'CRM מומלץ לאזורך', en: 'Recommended CRM for your region', es: 'CRM recomendado para tu región', ru: 'Рекомендуемый CRM для вашего региона' };
               return (
-                <div className="border-t border-[rgba(244,241,234,0.08)] pt-4">
-                  <p className="font-mono text-xs text-[#A7AFBA]/60 uppercase tracking-widest mb-2">{crmLabel[lang]}{geo ? ` (${geo.country_name})` : ''}</p>
+                <div className="border-t border-shift-line pt-4">
+                  <p className="font-mono text-xs text-shift-muted/60 uppercase tracking-widest mb-2">{crmLabel[lang]}{geo ? ` (${geo.country_name})` : ''}</p>
                   <a href={crm.url} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#C7FF4A] hover:text-[#d6ff5e] transition-colors no-underline"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-shift-accent hover:text-shift-accent/80 transition-colors no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded"
                   >
                     {crm.name}
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="rtl:rotate-180"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -194,45 +193,46 @@ export default function LeadFlowMapper({ t }: { t: T }) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
-        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
-          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#aee038,#c7ff4a)', boxShadow: '0 0 6px rgba(199,255,74,0.35)' }} />
+        <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
+        <div className="shift-progress-track">
+          <div className="shift-progress-fill" style={{ width: `${progress}%` }} />
         </div>
       </div>
-      <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' }}>
-        <h2 className="font-['Inter_Tight',system-ui,sans-serif] font-semibold text-xl text-[#F4F1EA] mb-2">{gl(cq.q, lang)}</h2>
-        {cq.multi && <p className="text-xs text-[#A7AFBA]/60 font-mono mb-5">{gl(selectAllLabel, lang)}</p>}
+      <div className="shift-card">
+        <h2 className="font-heading font-semibold text-xl text-shift-text mb-2">{gl(cq.q, lang)}</h2>
+        {cq.multi && <p className="text-xs text-shift-muted/60 font-mono mb-5">{gl(selectAllLabel, lang)}</p>}
         <div className="space-y-2">
-          {cq.opts.map((o: any) => (
-            <button key={o.v} onClick={() => toggle(o.v)}
-              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all flex items-center gap-3"
-              style={selected.includes(o.v)
-                ? { background: 'linear-gradient(160deg,rgba(199,255,74,0.1) 0%,rgba(199,255,74,0.04) 100%)', border: '1px solid rgba(199,255,74,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
-                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
-              }
-            >
-              {cq.multi && (
-                <span className="w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all"
-                  style={selected.includes(o.v) ? { background: '#C7FF4A', border: '1px solid #C7FF4A' } : { border: '1px solid rgba(244,241,234,0.25)' }}>
-                  {selected.includes(o.v) && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
-                </span>
-              )}
-              <span className="flex-1">{gl(o.l, lang)}</span>
-              {o.weak && <span className="text-[10px] font-mono text-[#FF7A59] border border-[#FF7A59]/30 px-1.5 py-0.5 rounded flex-shrink-0">{gl(riskLabel, lang)}</span>}
-            </button>
-          ))}
+          {cq.opts.map((o: any) => {
+            const isSelected = selected.includes(o.v);
+            return (
+              <button key={o.v} onClick={() => toggle(o.v)}
+                className={`w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150 flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg ${
+                  isSelected ? 'shift-option-btn-selected' : 'shift-option-btn'
+                }`}
+              >
+                {cq.multi && (
+                  <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all ${
+                    isSelected ? 'bg-shift-accent border-shift-accent' : 'border-shift-text/25'
+                  }`}>
+                    {isSelected && <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0E1117" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+                  </span>
+                )}
+                <span className="flex-1">{gl(o.l, lang)}</span>
+                {o.weak && <span className="text-[10px] font-mono text-shift-warm border border-shift-warm/30 px-1.5 py-0.5 rounded flex-shrink-0">{gl(riskLabel, lang)}</span>}
+              </button>
+            );
+          })}
         </div>
       </div>
       <div className="flex items-center justify-between">
         <button
           onClick={() => { if (step === 0) return; const pq = QS[step-1]; const prev = answers[pq.id]; setSession((s) => ({...s, step:s.step-1, selected: Array.isArray(prev) ? prev : prev ? [prev as string] : []})); }}
-          disabled={step === 0} className="text-sm text-[#A7AFBA] hover:text-[#F4F1EA] disabled:opacity-30 font-mono transition-colors">{lang === 'he' ? '→' : '←'} {t.back}
+          disabled={step === 0} className="text-sm text-shift-muted hover:text-shift-text disabled:opacity-30 disabled:cursor-not-allowed font-mono transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded px-1">{lang === 'he' ? '→' : '←'} {t.back}
         </button>
         <button
           onClick={() => { if (!selected.length) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]: cq.multi ? selected : selected[0]}, selected:[], step:s.step+1})); }}
           disabled={!selected.length}
-          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          style={{ background: 'linear-gradient(180deg,#d6ff5e 0%,#c7ff4a 45%,#aee038 100%)', color: '#0E1117', boxShadow: 'var(--v-shadow-accent)', border: '1px solid rgba(255,255,255,0.15)' }}
+          className="shift-btn-primary"
         >
           {step === QS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>

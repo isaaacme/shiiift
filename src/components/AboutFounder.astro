@@ -10,16 +10,62 @@ const { lang } = Astro.props;
 const labels = {
   sectionLabel:  { he: 'על המייסד', en: 'About the founder', es: 'Sobre el fundador', ru: 'Об основателе' },
   name:          { he: 'יצחק פלדמן', en: 'Isaac Feldman', es: 'Isaac Feldman', ru: 'Исаак Фельдман' },
-  role:          { he: 'בונה אתרים, מומחה SEO טכני ואסטרטג דיגיטלי', en: 'Web builder, technical SEO expert & digital strategist', es: 'Desarrollador web, experto SEO técnico y estratega digital', ru: 'Веб-разработчик, эксперт по техническому SEO и цифровой стратег' },
-  bio:           { he: 'אני יצחק פלדמן — בונה אתרי פרימיום ומומחה SEO טכני מנתניה. אני מחבר בין עיצוב, ביצועים ואסטרטגיה כדי לעזור לעסקים ואנשים לבנות נוכחות דיגיטלית שעובדת באמת. מעל עשר שנות ניסיון בפרויקטים מסוגים שונים — מסטארטאפים טכנולוגיים ועד מותגים בינלאומיים.', en: 'I\'m Isaac Feldman — premium web builder and technical SEO expert based in Netanya, IL. I bridge design, performance and strategy to help businesses and people build digital presences that actually work. Over ten years of experience across a wide range of projects — from tech startups to international brands.', es: 'Soy Isaac Feldman — constructor de sitios web premium y experto en SEO técnico con base en Netanya, IL. Conecto diseño, rendimiento y estrategia para ayudar a empresas y personas a construir presencias digitales que realmente funcionan. Más de diez años de experiencia en proyectos muy variados.', ru: 'Я Исаак Фельдман — создатель премиум-сайтов и эксперт по техническому SEO из Нетании. Я соединяю дизайн, производительность и стратегию, чтобы помочь бизнесу и людям создавать цифровое присутствие, которое действительно работает. Более десяти лет опыта в проектах самого разного масштаба.' },
+  role:          { he: 'מייסד Shiiift — יישום טכנולוגי ואסטרטגיה', en: 'Founder of Shiiift — Technical Implementation & Strategy', es: 'Fundador de Shiiift — Implementación técnica y estrategia', ru: 'Основатель Shiiift — Техническое внедрение и стратегия' },
   canHelpTitle:  { he: 'במה אני יכול לעזור', en: 'How I can help', es: 'Cómo puedo ayudar', ru: 'Чем могу помочь' },
   projectsTitle: { he: 'פרויקטים נבחרים', en: 'Selected projects', es: 'Proyectos seleccionados', ru: 'Избранные проекты' },
   expTitle:      { he: 'ניסיון והסמכות', en: 'Experience & qualifications', es: 'Experiencia y calificaciones', ru: 'Опыт и квалификации' },
   viewProject:   { he: 'צפה בפרויקט', en: 'View project', es: 'Ver proyecto', ru: 'Смотреть проект' },
   close:         { he: 'סגור', en: 'Close', es: 'Cerrar', ru: 'Закрыть' },
+  bioParagraphs: {
+    he: [
+      "אני יצחק פלדמן, מייסד Shiiift.",
+      "הרקע שלי הוא בעיצוב, פיתוח אתרים, אסטרטגיה דיגיטלית ויישום טכנולוגי. במהלך השנים עבדתי במיתוג, חוויית משתמש (UX), וורדפרס, שופיפיי, אוטומציה, אנליטיקס, SEO ומערכות דיגיטליות מותאמות אישית.",
+      "מה שמחבר בין כל העבודה הזו הוא רעיון פשוט: טכנולוגיה צריכה להקל על ניהול העסק.",
+      "הקמתי את Shiiift כדי לעזור לעסקים להתקדם מעבר לכלים מנותקים, עבודה ידנית חוזרת ונשנית ומערכות דיגיטליות שמייצרות יותר חיכוך מאשר פתרונות.",
+      "התפקיד שלי הוא להבין כיצד העסק פועל בפועל, לזהות היכן הולכים לאיבוד זמן, לידים ומומנטום, ואז לעצב פתרון מעשי עבורו.",
+      "הפתרון הזה יכול להיות אתר אינטרנט טוב יותר, תהליך עבודה אוטומטי, כלי פנימי, תהליך CRM מחובר, מערכת מבוססת AI, או שילוב של כמה דברים שעובדים יחד.",
+      "אני עובד בצורה מעשית ואישית משלב האסטרטגיה ועד ליישום, מה שאומר שהחשיבה והביצוע נשארים מחוברים.",
+      "Shiiift אינה בנויה סביב מכירת שירות קבוע אחד. היא בנויה סביב מציאת הצעד הטכנולוגי הנכון עבור כל עסק והפיכתו למציאות.",
+      "מערכות ברורות. טכנולוגיה שימושית. פחות חיכוך."
+    ],
+    en: [
+      "I’m Isaac Feldman, founder of Shiiift.",
+      "My background is in design, web development, digital strategy, and technical implementation. Over the years, I’ve worked across branding, UX, WordPress, Shopify, automation, analytics, SEO, and custom digital systems.",
+      "What connects all of that work is a simple idea: technology should make a business easier to run.",
+      "I started Shiiift to help businesses move beyond disconnected tools, repetitive manual work, and digital systems that create more friction than they solve.",
+      "My role is to understand how a business actually works, identify where time, leads, and momentum are being lost, and then design a practical solution around it.",
+      "That solution might be a better website, an automated workflow, an internal tool, a connected CRM process, an AI-assisted system, or a combination of several things working together.",
+      "I work hands-on from strategy through implementation, which means the thinking and the execution stay connected.",
+      "Shiiift is not built around selling one fixed service. It is built around finding the right technical move for each business and making it real.",
+      "Clear systems. Useful technology. Less friction."
+    ],
+    es: [
+      "Soy Isaac Feldman, fundador de Shiiift.",
+      "Mi experiencia abarca diseño, desarrollo web, estrategia digital e implementación técnica. A lo largo de los años, he trabajado en branding, UX, WordPress, Shopify, automatización, analítica, SEO y sistemas digitales a medida.",
+      "Lo que conecta todo ese trabajo es una idea simple: la tecnología debería facilitar la gestión de un negocio.",
+      "Fundé Shiiift para ayudar a las empresas a ir más allá de herramientas desconectadas, trabajo manual repetitivo y sistemas digitales que crean más fricción de la que resuelven.",
+      "Mi función es entender cómo funciona realmente un negocio, identificar dónde se están perdiendo tiempo, leads y el impulso, y luego diseñar una solución práctica para ello.",
+      "Esa solución puede ser un mejor sitio web, un flujo de trabajo automatizado, una herramienta interna, un proceso de CRM conectado, un sistema asistido por IA o una combinación de varias cosas trabajando juntas.",
+      "Trabajo de manera práctica desde la estrategia hasta la implementación, lo que significa que el pensamiento y la ejecución permanecen conectados.",
+      "Shiiift no se basa en vender un único servicio fijo. Se basa en encontrar el movimiento técnico adecuado para cada negocio y hacerlo realidad.",
+      "Sistemas claros. Tecnología útil. Menos fricción."
+    ],
+    ru: [
+      "Я Исаак Фельдман, основатель Shiiift.",
+      "Мой опыт включает дизайн, веб-разработку, цифровую стратегию и техническое внедрение. За эти годы я работал с брендингом, UX, WordPress, Shopify, автоматизацией, аналитикой, SEO и заказными цифровыми системами.",
+      "Все эти направления связывает одна простая идея: технологии должны облегчать ведение бизнеса.",
+      "Я создал Shiiift, чтобы помочь бизнесу избавиться от разрозненных инструментов, рутинной ручной работы и цифровых систем, которые создают больше проблем, чем решают.",
+      "Моя роль — понять, как на самом деле устроен бизнес, определить, где теряются время, лиды и динамика развития, а затем разработать практическое решение.",
+      "Этим решением может стать качественный веб-сайт, автоматизированный рабочий процесс, внутренний инструмент, связанный процесс в CRM, система с поддержкой ИИ или сочетание нескольких решений, работающих вместе.",
+      "Я лично веду проекты от стратегии до внедрения, благодаря чему концепция и ее реализация остаются неразрывно связанными.",
+      "Shiiift не продает одну фиксированную услугу. Мы находим правильное технологическое решение для конкретного бизнеса и воплощаем его в жизнь.",
+      "Понятные системы. Полезные технологии. Меньше трения."
+    ]
+  }
 };
 
 function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
+function glParagraphs(o: Record<string, string[]>) { return o[lang] ?? o['en'] ?? []; }
 
 const skills = [
   { he: 'פיתוח אתרי פרימיום (Astro, React, WordPress)', en: 'Premium web development (Astro, React, WordPress)', es: 'Desarrollo web premium (Astro, React, WordPress)', ru: 'Разработка премиум-сайтов (Astro, React, WordPress)' },
@@ -115,19 +161,27 @@ const projects = [
     <div class="flex flex-col lg:flex-row lg:items-start gap-12 mb-16">
       <div class="flex-1 max-w-xl">
         <p class="shift-label mb-3">{gl(labels.sectionLabel)}</p>
-        <h2 class="shift-heading-lg mb-4">{gl(labels.name)}</h2>
-        <p class="font-mono text-xs text-shift-accent mb-5">{gl(labels.role)}</p>
-        <p class="shift-body leading-relaxed">{gl(labels.bio)}</p>
+        <h2 class="shift-heading-lg mb-2">{gl(labels.name)}</h2>
+        <div class="flex items-center gap-3 mb-5">
+          <span class="font-mono text-xs text-shift-accent">{gl(labels.role)}</span>
+          <span class="text-shift-line">|</span>
+          <a href="https://isaaac.me" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-shift-accent-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg">isaaac.me ↗</a>
+        </div>
+        <div class="space-y-4">
+          {glParagraphs(labels.bioParagraphs).map((para) => (
+            <p class="shift-body leading-relaxed">{para}</p>
+          ))}
+        </div>
       </div>
 
       <!-- Can help -->
       <div class="lg:w-80 flex-shrink-0">
-        <div class="bg-shift-surface border border-shift-line rounded-2xl p-6">
-          <p class="font-mono text-xs tracking-widest uppercase text-[#C7FF4A] mb-4">{gl(labels.canHelpTitle)}</p>
-          <ul class="space-y-3">
+        <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 shadow-volume-md">
+          <p class="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{gl(labels.canHelpTitle)}</p>
+          <ul class="space-y-3 list-none p-0 m-0">
             {skills.map((s) => (
               <li class="flex items-start gap-3 text-sm text-shift-muted leading-snug">
-                <span class="w-1.5 h-1.5 rounded-full bg-shift-accent flex-shrink-0 mt-1.5"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-shift-accent flex-shrink-0 mt-1.5 animate-pulse"></span>
                 {gl(s)}
               </li>
             ))}
@@ -138,11 +192,11 @@ const projects = [
 
     <!-- Projects grid -->
     <div class="mb-16">
-      <p class="font-mono text-xs tracking-widest uppercase text-[#A7AFBA] mb-6">{gl(labels.projectsTitle)}</p>
+      <p class="font-mono text-xs tracking-widest uppercase text-shift-muted mb-6">{gl(labels.projectsTitle)}</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="projects-grid">
         {projects.map((p) => (
           <button
-            class="project-card text-start bg-shift-surface border border-shift-line rounded-xl p-5 flex flex-col gap-3 hover:border-shift-accent/40 transition-all cursor-pointer group"
+            class="project-card text-start bg-shift-surface border border-shift-line rounded-xl p-5 flex flex-col gap-3 hover:border-shift-accent/40 transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
             data-project={p.id}
             data-name={p.name}
             data-tag={gl(p.tag)}
@@ -165,10 +219,10 @@ const projects = [
 
     <!-- Experience & qualifications -->
     <div>
-      <p class="font-mono text-xs tracking-widest uppercase text-[#A7AFBA] mb-6">{gl(labels.expTitle)}</p>
+      <p class="font-mono text-xs tracking-widest uppercase text-shift-muted mb-6">{gl(labels.expTitle)}</p>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {experience.map((e) => (
-          <div class="bg-shift-surface border border-shift-line rounded-xl p-5 flex flex-col gap-2">
+          <div class="bg-shift-surface border border-shift-line rounded-xl p-5 flex flex-col gap-2 shadow-volume-sm">
             {e.year && <span class="font-mono text-xs text-shift-accent">{e.year}</span>}
             <p class="font-heading font-semibold text-shift-text text-sm">{gl(e.title)}</p>
             <p class="text-xs text-shift-muted">{gl(e.note)}</p>
@@ -188,8 +242,8 @@ const projects = [
   aria-modal="true"
 >
   <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="lightbox-backdrop"></div>
-  <div class="relative z-10 bg-[#151A23] border border-shift-line rounded-2xl p-8 max-w-lg w-full shadow-[0_8px_40px_rgba(0,0,0,0.6)]">
-    <button id="lightbox-close" class="absolute top-4 end-4 text-shift-muted hover:text-shift-text transition-colors font-mono text-xs">
+  <div class="relative z-10 bg-shift-surface border border-shift-line rounded-2xl p-8 max-w-lg w-full shadow-[0_8px_40px_rgba(0,0,0,0.6)]">
+    <button id="lightbox-close" class="absolute top-4 end-4 text-shift-muted hover:text-shift-text transition-colors font-mono text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded p-1">
       ✕ {gl(labels.close)}
     </button>
     <span id="lb-tag" class="font-mono text-[10px] text-shift-muted border border-shift-line px-2 py-0.5 rounded mb-4 inline-block"></span>

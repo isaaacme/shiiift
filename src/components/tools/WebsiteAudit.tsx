@@ -224,7 +224,7 @@ const LEVEL_LABELS = [
   { min: 80, max: 100, label: { he: 'שכבת תפעול', en: 'Operational Layer', es: 'Capa Operacional', ru: 'Операционный слой' }, color: '#C7FF4A' },
 ];
 
-const cardStyle = { background: 'linear-gradient(160deg,rgba(255,255,255,0.055) 0%,#151A23 30%,#111620 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottomColor: 'rgba(0,0,0,0.4)', boxShadow: 'var(--v-shadow-md)', borderRadius: '1rem', padding: '1.5rem 2rem' };
+// Card styling standard class is used instead
 
 function MetricCard({ metric, lang, expanded, onToggle }: { metric: PsiMetric; lang: Lang; expanded: boolean; onToggle: () => void }) {
   const color = RATING_COLOR[metric.rating];
@@ -232,7 +232,7 @@ function MetricCard({ metric, lang, expanded, onToggle }: { metric: PsiMetric; l
     ? `${metric.value}${metric.unit}`
     : gl(RATING_LABEL['n/a'], lang);
   return (
-    <div style={{ background: 'linear-gradient(160deg,rgba(255,255,255,0.03) 0%,#151A23 100%)', border: `1px solid ${metric.rating !== 'n/a' ? color + '33' : 'rgba(255,255,255,0.08)'}`, borderRadius: '0.875rem', overflow: 'hidden' }}>
+    <div className="rounded-xl overflow-hidden bg-gradient-to-br from-white/[0.03] to-transparent border" style={{ borderColor: metric.rating !== 'n/a' ? `${color}33` : 'rgba(255,255,255,0.08)' }}>
       <button className="w-full text-start px-4 py-3.5 flex items-center justify-between gap-3" onClick={onToggle}>
         <div className="flex items-center gap-3 min-w-0">
           <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
@@ -268,7 +268,7 @@ function PsiPanel({ psi, lang }: { psi: PsiData; lang: Lang }) {
   const allNA = psi.metrics.every((m) => m.rating === 'n/a');
   return (
     <div className="space-y-4">
-      <div style={cardStyle}>
+      <div className="shift-card">
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="font-mono text-xs text-[#A7AFBA] uppercase tracking-wider mb-1">{lang === 'he' ? 'ציון ביצועים — שולחן עבודה' : lang === 'ru' ? 'Оценка производительности — десктоп' : lang === 'es' ? 'Puntuación de rendimiento — escritorio' : 'Performance Score — Desktop'}</p>
@@ -454,7 +454,7 @@ export default function WebsiteAudit({ t }: Props) {
   if (phase === 'url') {
     return (
       <div className="space-y-6">
-        <div style={cardStyle}>
+        <div className="shift-card">
           <h2 className="font-semibold text-xl text-[#F4F1EA] mb-2" style={{ fontFamily: "'Inter Tight', system-ui, sans-serif" }}>
             {lang === 'he' ? 'מה כתובת האתר שלך?' : lang === 'ru' ? 'Какой у вас URL сайта?' : lang === 'es' ? '¿Cuál es la URL de tu sitio?' : "What's your website URL?"}
           </h2>
@@ -468,14 +468,13 @@ export default function WebsiteAudit({ t }: Props) {
               onChange={(e) => setUrlInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleUrlSubmit()}
               placeholder="https://yoursite.com"
-              className="flex-1 px-4 py-3 rounded-xl text-sm text-[#F4F1EA] font-mono outline-none transition-all"
-              style={{ background: 'rgba(255,255,255,0.05)', border: urlError ? '1px solid #FF7A59' : '1px solid rgba(255,255,255,0.1)', caretColor: '#6EE7F9' }}
+              className={`flex-1 px-4 py-3 rounded-xl text-sm text-shift-text font-mono outline-none transition-all border bg-white/[0.05] focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg ${urlError ? 'border-shift-warm' : 'border-white/10'}`}
+              style={{ caretColor: 'var(--shift-accent-2)' }}
               dir="ltr"
             />
             <button
               onClick={handleUrlSubmit}
-              className="px-5 py-3 rounded-xl font-semibold text-sm transition-all"
-              style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
+              className="px-5 py-3 rounded-xl font-heading font-semibold text-sm text-shift-bg bg-shift-accent-2 hover:bg-[#7df0ff] active:scale-95 transition-all shadow-volume-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg cursor-pointer border border-white/15"
             >
               {lang === 'he' ? 'נתח' : lang === 'ru' ? 'Анализ' : lang === 'es' ? 'Analizar' : 'Analyse'}
             </button>
@@ -512,7 +511,7 @@ export default function WebsiteAudit({ t }: Props) {
     };
 
     return (
-      <div style={cardStyle} className="flex flex-col items-center justify-center py-12 gap-5">
+      <div className="shift-card flex flex-col items-center justify-center py-12 gap-5">
         <style>{`
           @keyframes ring-pulse {
             0%, 100% { filter: drop-shadow(0 0 2px rgba(110,231,249,0.2)); }
@@ -565,8 +564,7 @@ export default function WebsiteAudit({ t }: Props) {
         <div className="flex justify-end">
           <button
             onClick={() => setPhase('questions')}
-            className="font-semibold text-sm px-6 py-2.5 rounded-xl transition-all"
-            style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
+            className="px-6 py-2.5 rounded-xl font-heading font-semibold text-sm text-shift-bg bg-shift-accent-2 hover:bg-[#7df0ff] active:scale-95 transition-all shadow-volume-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg cursor-pointer border border-white/15"
           >
             {lang === 'he' ? 'המשך לשאלון ←' : lang === 'ru' ? 'Продолжить опрос →' : lang === 'es' ? 'Continuar al cuestionario →' : 'Continue to questionnaire →'}
           </button>
@@ -584,16 +582,12 @@ export default function WebsiteAudit({ t }: Props) {
           <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#4dcfed,#6ee7f9)', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
         </div>
       </div>
-      <div style={cardStyle}>
-        <h2 className="font-semibold text-xl text-[#F4F1EA] mb-6" style={{ fontFamily: "'Inter Tight', system-ui, sans-serif" }}>{gl(cq.q, lang)}</h2>
+      <div className="shift-card">
+        <h2 className="font-heading font-semibold text-xl text-shift-text mb-6">{gl(cq.q, lang)}</h2>
         <div className="space-y-2">
           {cq.opts.map((o) => (
             <button key={o.v} onClick={() => setSession((s) => ({ ...s, selected: o.v }))}
-              className="w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150"
-              style={selected === o.v
-                ? { background: 'linear-gradient(160deg,rgba(110,231,249,0.1) 0%,rgba(110,231,249,0.04) 100%)', border: '1px solid rgba(110,231,249,0.45)', color: '#F4F1EA', boxShadow: 'var(--v-shadow-sm)' }
-                : { background: 'linear-gradient(160deg,rgba(255,255,255,0.04) 0%,#151a23 100%)', border: '1px solid rgba(255,255,255,0.08)', borderBottomColor: 'rgba(0,0,0,0.35)', color: '#A7AFBA', boxShadow: 'var(--v-shadow-sm)' }
-              }
+              className={`w-full text-start px-4 py-3.5 rounded-xl text-sm transition-all duration-150 shift-option-btn ${selected === o.v ? 'border-shift-accent-2/45 bg-shift-accent-2/10 text-shift-text shadow-sm' : ''}`}
             >
               {gl(o.l, lang)}
             </button>
@@ -614,8 +608,7 @@ export default function WebsiteAudit({ t }: Props) {
         <button
           onClick={() => { if (!selected) return; setSession((s) => ({ ...s, answers: { ...s.answers, [cq.id]: selected }, selected: '', step: s.step + 1 })); }}
           disabled={!selected}
-          className="font-semibold text-sm px-6 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          style={{ background: 'linear-gradient(180deg,#7df0ff 0%,#6ee7f9 45%,#4dcfed 100%)', color: '#0E1117', boxShadow: '0 1px 0 0 rgba(255,255,255,0.22) inset,0 -1px 0 0 rgba(0,0,0,0.2) inset,0 4px 12px rgba(110,231,249,0.25)', border: '1px solid rgba(255,255,255,0.15)' }}
+          className="px-6 py-2.5 rounded-xl font-heading font-semibold text-sm text-shift-bg bg-shift-accent-2 hover:bg-[#7df0ff] active:scale-95 transition-all shadow-volume-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg cursor-pointer border border-white/15 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {step === QUESTIONS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>

@@ -162,14 +162,14 @@ const ctaBtnSecondary = {
 >
 
   <!-- ──────────────────────────── HERO ──────────────────────────── -->
-  <section class="pt-20 pb-16">
-    <div class="shift-container max-w-3xl">
+  <section class="pt-24 pb-20 bg-grid">
+    <div class="shift-container max-w-3xl relative z-10">
       
-      <h1 class="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl leading-tight text-shift-text mb-6 text-balance" style="white-space: pre-line;">
+      <h1 class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl tracking-tighter leading-tight text-shift-text mb-8 text-balance" style="white-space: pre-line;">
         {heroTitle[lang]}
       </h1>
 
-      <p class="text-lg text-shift-muted leading-relaxed mb-10 max-w-xl">
+      <p class="text-lg sm:text-xl text-shift-muted leading-relaxed mb-10 max-w-xl">
         {heroDesc[lang]}
       </p>
 
@@ -185,7 +185,7 @@ const ctaBtnSecondary = {
         </a>
         <a
           href={`/${lang}/start`}
-          class="text-sm text-shift-muted hover:text-shift-text transition-colors py-3 px-1 inline-flex items-center gap-1.5"
+          class="text-sm text-shift-muted hover:text-shift-text transition-colors py-3 px-1 inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent rounded-md"
         >
           {heroCtaSecondary[lang]}
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -196,7 +196,7 @@ const ctaBtnSecondary = {
 
   <!-- ──────────────────────────── TOOLS CONSOLE ──────────────────────────── -->
   <section class="pb-20 bg-shift-surface border-y border-shift-line" id="tools-section">
-    <div class="pt-16 pb-2 shift-container max-w-3xl mb-8">
+    <div class="pt-16 pb-2 shift-container max-w-5xl mb-8">
       <p class="shift-label mb-2">{t('tools.section.title')}</p>
       <p class="text-shift-muted text-sm">{t('tools.section.subtitle')}</p>
     </div>

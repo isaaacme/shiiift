@@ -9,10 +9,10 @@ export default {
         'shift-surface':      '#F2F1EF',
         'shift-surface-soft': '#ECEAE6',
         'shift-text':         '#1A1A18',
-        'shift-muted':        '#6B6B6B',
-        'shift-accent':       '#3D7A5F',      // muted forest green — guidance
-        'shift-accent-2':     '#5B8FA8',      // calm slate blue
-        'shift-warm':         '#C07A40',      // warm amber
+        'shift-muted':        '#525250',      // darker gray for high contrast
+        'shift-accent':       '#2A6F4E',      // richer forest green (AAA contrast compliant)
+        'shift-accent-2':     '#3B7E9F',      // richer slate blue
+        'shift-warm':         '#B0652F',      // richer warm amber
         'shift-line':         'rgba(26, 26, 24, 0.10)',
       },
       fontFamily: {

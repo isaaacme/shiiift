@@ -10,10 +10,10 @@
     --shift-surface:      #F2F1EF;
     --shift-surface-soft: #ECEAE6;
     --shift-text:         #1A1A18;
-    --shift-muted:        #6B6B6B;
-    --shift-accent:       #3D7A5F;
-    --shift-accent-2:     #5B8FA8;
-    --shift-warm:         #C07A40;
+    --shift-muted:        #525250;
+    --shift-accent:       #2A6F4E;
+    --shift-accent-2:     #3B7E9F;
+    --shift-warm:         #B0652F;
     --shift-line:         rgba(26, 26, 24, 0.10);
 
     /* Soft shadows — calm, not dramatic */
@@ -303,4 +303,22 @@
   .shadow-volume-md  { box-shadow: var(--v-shadow-md); }
   .shadow-volume-lg  { box-shadow: var(--v-shadow-lg); }
   .shadow-volume-accent { box-shadow: var(--v-shadow-accent); }
+
+  /* Background Grid Pattern */
+  .bg-grid {
+    position: relative;
+  }
+  .bg-grid::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-size: 32px 32px;
+    background-image: 
+      linear-gradient(to right, rgba(26, 26, 24, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(26, 26, 24, 0.03) 1px, transparent 1px);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    pointer-events: none;
+  }
 }

@@ -142,7 +142,7 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
           {/* Back button */}
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 mb-8 text-sm text-[#6B6B6B] hover:text-[#1A1A18] transition-colors cursor-pointer bg-transparent border-0 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A5F] focus-visible:ring-offset-2 rounded-md"
+            className="flex items-center gap-2 mb-8 text-sm text-shift-muted hover:text-shift-text transition-colors cursor-pointer bg-transparent border-0 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 rounded-md"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -165,14 +165,14 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-2xl">{activeTool.emoji}</span>
-              <span className="text-xs font-mono text-[#6B6B6B] border border-[rgba(26,26,24,0.10)] px-2 py-0.5 rounded-md bg-white">
+              <span className="text-xs font-mono text-shift-muted border border-shift-line px-2 py-0.5 rounded-md bg-white">
                 {t.tools[activeTool.key]?.time} {t.timeLabel}
               </span>
             </div>
-            <h2 className="font-heading font-bold text-2xl sm:text-3xl text-[#1A1A18] mb-2">
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl text-shift-text mb-2">
               {t.tools[activeTool.key]?.title}
             </h2>
-            <p className="text-sm text-[#6B6B6B] leading-relaxed max-w-2xl">
+            <p className="text-sm text-shift-muted leading-relaxed max-w-2xl">
               {t.tools[activeTool.key]?.desc}
             </p>
           </div>
@@ -193,9 +193,9 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.searchPlaceholder}
-                className="w-full ps-9 pe-4 py-2 rounded-lg text-sm bg-white text-[#1A1A18] placeholder-[#6B6B6B]/50 border border-[rgba(26,26,24,0.12)] outline-none focus:border-[#3D7A5F] focus:ring-1 focus:ring-[#3D7A5F] transition-all"
+                className="w-full ps-9 pe-4 py-2 rounded-lg text-sm bg-white text-shift-text placeholder-shift-muted/50 border border-[rgba(26,26,24,0.12)] outline-none focus:border-shift-accent focus:ring-1 focus:ring-shift-accent transition-all"
               />
-              <div className="absolute start-3 top-2.5 text-[#6B6B6B]/50">
+              <div className="absolute start-3 top-2.5 text-shift-muted/50">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
                 </svg>
@@ -208,10 +208,10 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
                 <button
                   key={key}
                   onClick={() => setSelectedCategory(key)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A5F] focus-visible:ring-offset-2 ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 ${
                     selectedCategory === key
-                      ? 'bg-[#1A1A18] text-white border-[#1A1A18]'
-                      : 'bg-white text-[#6B6B6B] border-[rgba(26,26,24,0.12)] hover:border-[rgba(26,26,24,0.25)] hover:text-[#1A1A18]'
+                      ? 'bg-shift-text text-white border-shift-text'
+                      : 'bg-white text-shift-muted border-[rgba(26,26,24,0.12)] hover:border-[rgba(26,26,24,0.25)] hover:text-shift-text'
                   }`}
                 >
                   {label}
@@ -230,27 +230,27 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
                 <button
                   key={tool.id}
                   onClick={() => handleSelectTool(tool.id)}
-                  className="group flex flex-col text-start gap-3 p-5 rounded-xl border border-[rgba(26,26,24,0.10)] bg-white cursor-pointer transition-all duration-150 outline-none hover:border-[rgba(26,26,24,0.22)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#3D7A5F]"
+                  className="group flex flex-col text-start gap-3 p-5 rounded-xl border border-[rgba(26,26,24,0.10)] bg-white cursor-pointer transition-all duration-150 outline-none hover:border-[rgba(26,26,24,0.22)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-shift-accent"
                 >
                   {/* Emoji */}
                   <span className="text-2xl leading-none">{tool.emoji}</span>
 
                   {/* Title */}
-                  <h3 className="font-heading font-semibold text-[#1A1A18] text-sm leading-snug">
+                  <h3 className="font-heading font-semibold text-shift-text text-sm leading-snug">
                     {toolTrans.title}
                   </h3>
 
                   {/* Desc */}
-                  <p className="text-xs text-[#6B6B6B] leading-relaxed flex-1">
+                  <p className="text-xs text-shift-muted leading-relaxed flex-1">
                     {toolTrans.desc}
                   </p>
 
                   {/* Footer */}
                   <div className="flex items-center justify-between w-full pt-2 border-t border-[rgba(26,26,24,0.07)] mt-auto">
-                    <span className="text-[11px] text-[#6B6B6B]">
+                    <span className="text-[11px] text-shift-muted">
                       {toolTrans.time} {t.timeLabel}
                     </span>
-                    <span className="text-[11px] font-medium text-[#3D7A5F] group-hover:underline">
+                    <span className="text-[11px] font-medium text-shift-accent group-hover:underline">
                       {t.runTool} →
                     </span>
                   </div>
@@ -261,7 +261,7 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
 
           {filteredTools.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-sm text-[#6B6B6B]">No tools match your search.</p>
+              <p className="text-sm text-shift-muted">No tools match your search.</p>
             </div>
           )}
         </div>

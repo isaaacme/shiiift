@@ -8,167 +8,59 @@ interface Props {
 const { lang } = Astro.props;
 
 const labels = {
-  sectionLabel:  { he: 'על המייסד', en: 'About the founder', es: 'Sobre el fundador', ru: 'Об основателе' },
-  name:          { he: 'יצחק פלדמן', en: 'Isaac Feldman', es: 'Isaac Feldman', ru: 'Исаак Фельдман' },
-  role:          { he: 'מייסד Shiiift — יישום טכנולוגי ואסטרטגיה', en: 'Founder of Shiiift — Technical Implementation & Strategy', es: 'Fundador de Shiiift — Implementación técnica y estrategia', ru: 'Основатель Shiiift — Техническое внедрение и стратегия' },
-  canHelpTitle:  { he: 'במה אני יכול לעזור', en: 'How I can help', es: 'Cómo puedo ayudar', ru: 'Чем могу помочь' },
-  expTitle:      { he: 'ניסיון והסמכות', en: 'Experience & qualifications', es: 'Experiencia y calificaciones', ru: 'Опыт и квалификации' },
-  viewProject:   { he: 'צפה בפרויקט', en: 'View project', es: 'Ver proyecto', ru: 'Смотреть проект' },
-  close:         { he: 'סגור', en: 'Close', es: 'Cerrar', ru: 'Закрыть' },
-  ctaTitle:      { he: 'מוכנים להתחיל?', en: 'Ready to work together?', es: '¿Listos para trabajar juntos?', ru: 'Готовы начать работу?' },
-  ctaDesc:       { he: 'תאמו שיחת היכרות קצרה כדי לגלות מה ניתן לשפר בעסק שלכם.', en: 'Book a short discovery call to find out what can be improved in your business.', es: 'Agenda una llamada breve para descubrir qué se puede mejorar en tu negocio.', ru: 'Запишитесь на короткий звонок, чтобы узнать, что можно улучшить в вашем бизнесе.' },
-  ctaBtn:        { he: 'תאם שיחה', en: 'Book a call', es: 'Agenda una llamada', ru: 'Записаться на звонок' },
-  bioParagraphs: {
-    he: [
-      "אני יצחק פלדמן, מייסד Shiiift.",
-      "הרקע שלי הוא בעיצוב, פיתוח אתרים, אסטרטגיה דיגיטלית ויישום טכנולוגי. במהלך השנים עבדתי במיתוג, חוויית משתמש (UX), וורדפרס, שופיפיי, אוטומציה, אנליטיקס, SEO ומערכות דיגיטליות מותאמות אישית.",
-      "מה שמחבר בין כל העבודה הזו הוא רעיון פשוט: טכנולוגיה צריכה להקל על ניהול העסק.",
-      "הקמתי את Shiiift כדי לעזור לעסקים להתקדם מעבר לכלים מנותקים, עבודה ידנית חוזרת ונשנית ומערכות דיגיטליות שמייצרות יותר חיכוך מאשר פתרונות.",
-      "התפקיד שלי הוא להבין כיצד העסק פועל בפועל, לזהות היכן הולכים לאיבוד זמן, לידים ומומנטום, ואז לעצב פתרון מעשי עבורו.",
-    ],
-    en: [
-      "I'm Isaac Feldman, founder of Shiiift.",
-      "My background is in design, web development, digital strategy, and technical implementation. Over the years, I've worked across branding, UX, WordPress, Shopify, automation, analytics, SEO, and custom digital systems.",
-      "What connects all of that work is a simple idea: technology should make a business easier to run.",
-      "I started Shiiift to help businesses move beyond disconnected tools, repetitive manual work, and digital systems that create more friction than they solve.",
-      "My role is to understand how a business actually works, identify where time, leads, and momentum are being lost, and then design a practical solution around it.",
-    ],
-    es: [
-      "Soy Isaac Feldman, fundador de Shiiift.",
-      "Mi experiencia abarca diseño, desarrollo web, estrategia digital e implementación técnica. A lo largo de los años, he trabajado en branding, UX, WordPress, Shopify, automatización, analítica, SEO y sistemas digitales a medida.",
-      "Lo que conecta todo ese trabajo es una idea simple: la tecnología debería facilitar la gestión de un negocio.",
-      "Fundé Shiiift para ayudar a las empresas a ir más allá de herramientas desconectadas, trabajo manual repetitivo y sistemas digitales que crean más fricción de la que resuelven.",
-      "Mi función es entender cómo funciona realmente un negocio, identificar dónde se están perdiendo tiempo, leads y el impulso, y luego diseñar una solución práctica para ello.",
-    ],
-    ru: [
-      "Я Исаак Фельдман, основатель Shiiift.",
-      "Мой опыт включает дизайн, веб-разработку, цифровую стратегию и техническое внедрение. За эти годы я работал с брендингом, UX, WordPress, Shopify, автоматизацией, аналитикой, SEO и заказными цифровыми системами.",
-      "Все эти направления связывает одна простая идея: технологии должны облегчать ведение бизнеса.",
-      "Я создал Shiiift, чтобы помочь бизнесу избавиться от разрозненных инструментов, рутинной ручной работы и цифровых систем, которые создают больше проблем, чем решают.",
-      "Моя роль — понять, как на самом деле устроен бизнес, определить, где теряются время, лиды и динамика развития, а затем разработать практическое решение.",
-    ]
-  }
+  sectionLabel: { he: 'על המייסד', en: 'About', es: 'Sobre el fundador', ru: 'Об основателе' },
+  name:         { he: 'יצחק פלדמן', en: 'Isaac Feldman', es: 'Isaac Feldman', ru: 'Исаак Фельдман' },
+  role:         { he: 'מייסד Shiiift', en: 'Founder, Shiiift', es: 'Fundador, Shiiift', ru: 'Основатель, Shiiift' },
+  bio:          {
+    he: 'אני מבלה את הזמן שלי במציאת דרכים מעשיות לעזור לאנשים לעשות פחות עבודה חוזרת ולנצל טוב יותר את הטכנולוגיה. אם משהו כאן נראה שימושי, פשוט בחרו כלי והתחילו.',
+    en: 'I spend my time finding practical ways to help people do less repetitive work and make better use of technology. If something here looks useful, just pick a tool and get started.',
+    es: 'Dedico mi tiempo a encontrar formas prácticas de ayudar a las personas a hacer menos trabajo repetitivo y aprovechar mejor la tecnología. Si algo aquí parece útil, elige una herramienta y empieza.',
+    ru: 'Я трачу время на поиск практичных способов помочь людям делать меньше рутинной работы и лучше использовать технологии. Если что-то здесь кажется полезным — просто выберите инструмент.',
+  },
+  cta:          { he: 'שוחח עם יצחק', en: 'Talk to Isaac', es: 'Hablar con Isaac', ru: 'Поговорить с Исааком' },
+  portfolio:    { he: 'פורטפוליו', en: 'Portfolio', es: 'Portafolio', ru: 'Портфолио' },
 };
 
 function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
-function glParagraphs(o: Record<string, string[]>) { return o[lang] ?? o['en'] ?? []; }
-
-const skills = [
-  { he: 'פיתוח אתרי פרימיום (Astro, React, WordPress)', en: 'Premium web development (Astro, React, WordPress)', es: 'Desarrollo web premium (Astro, React, WordPress)', ru: 'Разработка премиум-сайтов (Astro, React, WordPress)' },
-  { he: 'SEO טכני מתקדם ואופטימיזציית ביצועים', en: 'Advanced technical SEO & performance optimisation', es: 'SEO técnico avanzado y optimización de rendimiento', ru: 'Продвинутое техническое SEO и оптимизация производительности' },
-  { he: 'אוטומציות ואינטגרציות בין מערכות', en: 'Automations & system integrations', es: 'Automatizaciones e integraciones de sistemas', ru: 'Автоматизации и системные интеграции' },
-  { he: 'עיצוב UX/UI וחוויית משתמש', en: 'UX/UI design & user experience', es: 'Diseño UX/UI y experiencia de usuario', ru: 'UX/UI-дизайн и пользовательский опыт' },
-  { he: 'אסטרטגיה דיגיטלית ומיתוג', en: 'Digital strategy & branding', es: 'Estrategia digital y branding', ru: 'Цифровая стратегия и брендинг' },
-  { he: 'הדרכה ומנטורינג לעולם הווב', en: 'Web & design mentoring', es: 'Mentoría en web y diseño', ru: 'Наставничество в сфере веба и дизайна' },
-];
-
-const experience = [
-  {
-    year: '2014 –',
-    title: { he: 'פרילנסר עצמאי — בניית אתרים, SEO ועיצוב', en: 'Independent freelancer — web, SEO & design', es: 'Freelancer independiente — web, SEO y diseño', ru: 'Независимый фрилансер — веб, SEO и дизайн' },
-    note:  { he: 'לקוחות בישראל, אירופה וצפון אמריקה', en: 'Clients in Israel, Europe & North America', es: 'Clientes en Israel, Europa y América del Norte', ru: 'Клиенты в Израиле, Европе и Северной Америке' },
-  },
-  {
-    year: '',
-    title: { he: 'שותף טכני — Paz Interactive', en: 'Technical partner — Paz Interactive', es: 'Socio técnico — Paz Interactive', ru: 'Технический партнёр — Paz Interactive' },
-    note:  { he: 'סוכנות דיגיטלית, תל אביב — ניו יורק', en: 'Digital agency, Tel Aviv – New York', es: 'Agencia digital, Tel Aviv – Nueva York', ru: 'Цифровое агентство, Тель-Авив – Нью-Йорк' },
-  },
-  {
-    year: '',
-    title: { he: 'ייעוץ SEO — פרויקטים טכנולוגיים', en: 'SEO consulting — tech projects', es: 'Consultoría SEO — proyectos tecnológicos', ru: 'SEO-консалтинг — технологические проекты' },
-    note:  { he: 'Bridgify, Alchemiq, Enhance ועוד', en: 'Bridgify, Alchemiq, Enhance & more', es: 'Bridgify, Alchemiq, Enhance y más', ru: 'Bridgify, Alchemiq, Enhance и другие' },
-  },
-];
 ---
 
-<section class="py-16 lg:py-24 border-t border-shift-line" id="about-founder">
+<section class="py-16 lg:py-20 border-t border-shift-line" id="about-founder">
   <div class="shift-container">
+    <div class="flex flex-col sm:flex-row items-start gap-8 max-w-2xl">
 
-    <!-- Header: Photo + Bio + Skills -->
-    <div class="flex flex-col lg:flex-row lg:items-start gap-12 mb-16">
-
-      <!-- Photo column -->
+      <!-- Photo -->
       <div class="flex-shrink-0">
-        <div class="relative w-48 h-48 lg:w-56 lg:h-56 mx-auto lg:mx-0">
-          <img
-            src="/isaac-feldman.png"
-            alt={gl(labels.name)}
-            width="224"
-            height="224"
-            class="w-full h-full object-cover rounded-2xl border border-shift-line shadow-volume-md grayscale hover:grayscale-0 transition-all duration-500"
-          />
-          <div class="absolute -bottom-3 -end-3 bg-shift-surface border border-shift-line rounded-xl px-3 py-2 shadow-volume-sm">
-            <span class="font-mono text-[9px] tracking-widest uppercase text-shift-accent block">Shiiift</span>
-            <span class="font-mono text-[9px] text-shift-muted block">{gl(labels.role).split('—')[0].trim()}</span>
-          </div>
-        </div>
+        <img
+          src="/isaac-feldman.png"
+          alt={gl(labels.name)}
+          width="80"
+          height="80"
+          class="w-20 h-20 object-cover rounded-xl border border-shift-line"
+        />
       </div>
 
-      <!-- Bio column -->
-      <div class="flex-1 min-w-0">
+      <!-- Content -->
+      <div>
         <p class="shift-label mb-3">{gl(labels.sectionLabel)}</p>
-        <h2 class="shift-heading-lg mb-2">{gl(labels.name)}</h2>
-        <div class="flex flex-wrap items-center gap-3 mb-5">
-          <span class="font-mono text-xs text-shift-accent">{gl(labels.role)}</span>
-          <span class="text-shift-line">|</span>
-          <a href="https://isaaac.me" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-shift-accent-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg">isaaac.me ↗</a>
-        </div>
-        <div class="space-y-3 mb-6">
-          {glParagraphs(labels.bioParagraphs).map((para) => (
-            <p class="shift-body text-sm leading-relaxed">{para}</p>
-          ))}
-        </div>
-
-        <!-- CTA buttons -->
-        <div class="flex flex-col sm:flex-row gap-3">
-          <a
-            href={`/${lang}/start`}
-            class="shift-btn-primary px-6 py-2.5 text-sm inline-flex items-center gap-2"
-          >
-            {gl(labels.ctaBtn)}
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <p class="font-heading font-semibold text-shift-text text-lg mb-1">{gl(labels.name)}</p>
+        <p class="text-sm text-shift-muted mb-4">{gl(labels.role)}</p>
+        <p class="text-shift-muted text-sm leading-relaxed mb-5 max-w-lg">{gl(labels.bio)}</p>
+        <div class="flex flex-wrap items-center gap-3">
+          <a href={`/${lang}/start`} class="shift-btn-primary text-sm px-5 py-2.5">
+            {gl(labels.cta)}
           </a>
           <a
             href="https://isaaac.me"
             target="_blank"
             rel="noopener noreferrer"
-            class="shift-btn-ghost border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/20 px-6 py-2.5 text-sm text-shift-muted inline-flex items-center gap-2"
+            class="text-sm text-shift-muted hover:text-shift-accent transition-colors inline-flex items-center gap-1"
           >
-            {lang === 'he' ? 'צפה בפורטפוליו' : lang === 'es' ? 'Ver portafolio' : lang === 'ru' ? 'Смотреть портфолио' : 'View portfolio'}
+            {gl(labels.portfolio)}
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
         </div>
       </div>
 
-      <!-- Can help sidebar -->
-      <div class="lg:w-72 flex-shrink-0">
-        <div class="bg-shift-surface border border-shift-line rounded-2xl p-6 shadow-volume-md">
-          <p class="font-mono text-xs tracking-widest uppercase text-shift-accent mb-4">{gl(labels.canHelpTitle)}</p>
-          <ul class="space-y-3 list-none p-0 m-0">
-            {skills.map((s) => (
-              <li class="flex items-start gap-3 text-sm text-shift-muted leading-snug">
-                <span class="w-1.5 h-1.5 rounded-full bg-shift-accent flex-shrink-0 mt-1.5 animate-pulse"></span>
-                {gl(s)}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
     </div>
-
-    <!-- Experience & qualifications -->
-    <div>
-      <p class="font-mono text-xs tracking-widest uppercase text-shift-muted mb-6">{gl(labels.expTitle)}</p>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {experience.map((e) => (
-          <div class="bg-shift-surface border border-shift-line rounded-xl p-5 flex flex-col gap-2 shadow-volume-sm">
-            {e.year && <span class="font-mono text-xs text-shift-accent">{e.year}</span>}
-            <p class="font-heading font-semibold text-shift-text text-sm">{gl(e.title)}</p>
-            <p class="text-xs text-shift-muted">{gl(e.note)}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-
   </div>
 </section>

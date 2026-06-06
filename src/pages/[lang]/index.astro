@@ -16,7 +16,6 @@ const isRtl = lang === 'he';
 
 // Build translation properties for the React console
 const tProps = {
-  // Shared React tools keys
   back: t('tool.back'),
   next: t('tool.next'),
   seeResults: t('tool.seeResults'),
@@ -31,8 +30,6 @@ const tProps = {
   newsletterCta: t('tool.newsletter.cta'),
   newsletterDisclaimer: t('tool.newsletter.disclaimer'),
   lang,
-
-  // OS Console specific
   searchPlaceholder: t('console.searchPlaceholder' as any),
   allTools: t('console.categories.all' as any),
   diagnosticTitle: t('diagnostic.title'),
@@ -41,7 +38,6 @@ const tProps = {
   runTool: t('console.runTool' as any),
   timeLabel: t('tools.time'),
   outputLabel: t('console.outputLabel' as any),
-
   categories: {
     all: t('console.categories.all' as any),
     leads: t('console.categories.leads' as any),
@@ -50,7 +46,6 @@ const tProps = {
     strategy: t('console.categories.strategy' as any),
     finance: t('console.categories.finance' as any),
   },
-
   tools: {
     businessAudit: {
       title: t('tools.businessAudit.title'),
@@ -103,245 +98,134 @@ const tProps = {
   },
 };
 
+const heroTitle = {
+  he: 'פחות עבודה חוזרת.\nיותר זמן למה שחשוב.',
+  en: 'Spend less time\non repetitive work.',
+  es: 'Dedica menos tiempo\nal trabajo repetitivo.',
+  ru: 'Меньше повторяющейся\nработы. Больше времени.',
+};
 
+const heroDesc = {
+  he: 'בחרו כלי למטה — ענו על כמה שאלות — קבלו תשובה שימושית תוך דקות.',
+  en: 'Pick a tool below. Answer a few questions. Get a useful answer in minutes.',
+  es: 'Elige una herramienta. Responde algunas preguntas. Obtén una respuesta útil en minutos.',
+  ru: 'Выберите инструмент. Ответьте на несколько вопросов. Получите полезный ответ за минуты.',
+};
+
+const heroCta = {
+  he: 'בחרו כלי',
+  en: 'Choose a tool',
+  es: 'Elegir herramienta',
+  ru: 'Выбрать инструмент',
+};
+
+const heroCtaSecondary = {
+  he: 'שוחחו עם יצחק',
+  en: 'Talk to Isaac',
+  es: 'Hablar con Isaac',
+  ru: 'Поговорить с Исааком',
+};
 
 const ctaHeadline = {
-  he: 'מוכנים להסיר את החיכוך התפעולי בעסק שלכם?',
-  en: 'Ready to remove operational friction in your business?',
-  es: '¿Listo para eliminar la fricción operativa en tu negocio?',
-  ru: 'Готовы устранить операционные препятствия в бизнесе?',
+  he: 'מוכנים לקבל זמן חזרה?',
+  en: 'Ready to get some time back?',
+  es: '¿Listo para recuperar tiempo?',
+  ru: 'Готовы вернуть себе время?',
 };
 
 const ctaSub = {
-  he: 'בחר מודל מעורבות או תאם שיחת אפיון קצרה לקבלת מפת דרכים מלאה.',
-  en: 'Choose an engagement model or book a call to get your custom technical roadmap.',
-  es: 'Elige un modelo de colaboración o agenda una llamada para recibir tu plan técnico personalizado.',
-  ru: 'Выберите формат работы или запишитесь на звонок для получения дорожной карты.',
+  he: 'בחרו כלי או קבעו שיחה קצרה. בכל מקרה תצאו עם משהו שימושי.',
+  en: 'Pick a tool or book a short call. Either way, you\'ll leave with something useful.',
+  es: 'Elige una herramienta o agenda una llamada. De cualquier manera, saldrás con algo útil.',
+  ru: 'Выберите инструмент или запишитесь на звонок. В любом случае вы уйдёте с чем-то полезным.',
 };
 
 const ctaBtn = {
-  he: 'התחל תהליך אפיון',
-  en: 'Start Scoping Process',
-  es: 'Iniciar Proceso de Definición',
-  ru: 'Начать процесс оценки',
+  he: 'בחרו כלי',
+  en: 'Choose a tool',
+  es: 'Elegir herramienta',
+  ru: 'Выбрать инструмент',
+};
+
+const ctaBtnSecondary = {
+  he: 'שוחחו עם יצחק',
+  en: 'Talk to Isaac',
+  es: 'Hablar con Isaac',
+  ru: 'Поговорить',
 };
 ---
 
 <BaseLayout
-  title={lang === 'he' ? 'יישום טכנולוגיה לעסקים שצריכים מינוף' : lang === 'es' ? 'Implementación tecnológica para empresas' : lang === 'ru' ? 'Технологическое внедрение для бизнеса' : 'Technology Implementation for Business'}
+  title={lang === 'he' ? 'פחות עבודה חוזרת. יותר זמן למה שחשוב.' : lang === 'es' ? 'Menos trabajo repetitivo. Más tiempo para lo que importa.' : lang === 'ru' ? 'Меньше рутины. Больше времени.' : 'Spend less time on repetitive work.'}
   description={t('hero.subheadline')}
   lang={lang}
 >
-  <!-- Hero Section -->
-  <section class="relative pt-20 pb-16 overflow-hidden">
-    <div class="shift-container relative z-10 text-center max-w-4xl">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-shift-accent/20 bg-shift-accent/5 mb-6">
-        <span class="w-1.5 h-1.5 rounded-full bg-shift-accent animate-pulse"></span>
-        <span class="font-mono text-[10px] tracking-wider uppercase text-shift-accent">
-          {lang === 'he' ? 'שותף יישום טכנולוגי' : lang === 'ru' ? 'Партнер по внедрению технологий' : lang === 'es' ? 'Socio de Implementación Técnica' : 'Technical Implementation Partner'}
-        </span>
-      </div>
+
+  <!-- ──────────────────────────── HERO ──────────────────────────── -->
+  <section class="pt-20 pb-16">
+    <div class="shift-container max-w-3xl">
       
-      <h1 class="shift-heading-xl mb-6 tracking-tight leading-tight">
-        {t('hero.new.title' as any)}
+      <h1 class="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl leading-tight text-shift-text mb-6 text-balance" style="white-space: pre-line;">
+        {heroTitle[lang]}
       </h1>
-      <p class="shift-body text-base sm:text-lg max-w-3xl mx-auto mb-10 text-shift-muted leading-relaxed">
-        {t('hero.new.desc' as any)}
+
+      <p class="text-lg text-shift-muted leading-relaxed mb-10 max-w-xl">
+        {heroDesc[lang]}
       </p>
 
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a 
-          href="#os-console-wrapper" 
-          class="shift-btn-primary px-8 py-3.5 text-base w-full sm:w-auto justify-center"
+      <div class="flex flex-col sm:flex-row items-start gap-3">
+        <a
+          href="#tools-section"
+          class="shift-btn-primary px-7 py-3 text-base"
         >
-          {t('hero.new.cta.console' as any)}
+          {heroCta[lang]}
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
-            <path d="m9 18 6-6-6-6" />
+            <path d="m9 18 6-6-6-6"/>
           </svg>
         </a>
-        <a 
-          href={`/${lang}/start`} 
-          class="shift-btn-ghost border border-white/10 hover:border-white/20 bg-white/[0.02] px-8 py-3.5 text-base text-shift-text w-full sm:w-auto justify-center hover:bg-white/[0.04]"
+        <a
+          href={`/${lang}/start`}
+          class="text-sm text-shift-muted hover:text-shift-text transition-colors py-3 px-1 inline-flex items-center gap-1.5"
         >
-          {t('hero.new.cta.start' as any)}
+          {heroCtaSecondary[lang]}
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Interactive OS Console Dashboard -->
-  <section class="pb-16 lg:pb-24">
+  <!-- ──────────────────────────── TOOLS CONSOLE ──────────────────────────── -->
+  <section class="pb-20 bg-shift-surface border-y border-shift-line" id="tools-section">
+    <div class="pt-16 pb-2 shift-container max-w-3xl mb-8">
+      <p class="shift-label mb-2">{t('tools.section.title')}</p>
+      <p class="text-shift-muted text-sm">{t('tools.section.subtitle')}</p>
+    </div>
     <OSConsole client:load lang={lang} t={tProps} />
   </section>
 
-  <!-- Mock Reports Tabbed View Section -->
-  <section class="py-16 lg:py-24 border-t border-white/[0.06] bg-white/[0.01]">
-    <div class="shift-container">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <p class="shift-label mb-2">
-          {lang === 'he' ? 'תצוגה מקדימה של תוצרים' : lang === 'ru' ? 'Превью результатов' : lang === 'es' ? 'Vista previa de resultados' : 'System Outputs Preview'}
-        </p>
-        <h2 class="shift-heading-lg">
-          {lang === 'he' ? 'כיצד נראים דוחות הפעולה שלנו' : lang === 'ru' ? 'Как выглядят наши отчёты' : lang === 'es' ? 'Cómo se ven nuestros informes' : 'What Our Audits and Outputs Look Like'}
-        </h2>
-        <p class="mt-2 shift-body text-sm">
-          {lang === 'he' ? 'פתרונות מעשיים, ממוקדים בנתונים ומדדים עסקיים, ללא רעש שיווקי.' : lang === 'ru' ? 'Практические, основанные на данных решения для вашего бизнеса без лишней воды.' : lang === 'es' ? 'Soluciones prácticas, enfocadas en datos reales para tu negocio, sin rodeos.' : 'Actionable, data-driven answers focusing on metrics, not marketing fluff.'}
-        </p>
-      </div>
-
-      <div class="max-w-4xl mx-auto rounded-2xl border border-white/10 bg-shift-surface overflow-hidden shadow-xl" id="mock-reports-tab-deck">
-        <div class="flex border-b border-white/10 bg-white/[0.02]">
-          <button data-tab="tab-speed" class="flex-1 py-3 text-center text-xs font-mono text-shift-accent-2 border-b-2 border-shift-accent-2 transition-all cursor-pointer">
-            {lang === 'he' ? 'מדדי מהירות אתר' : lang === 'ru' ? 'Показатели скорости' : lang === 'es' ? 'Métricas de velocidad' : 'Speed Metrics'}
-          </button>
-          <button data-tab="tab-auto" class="flex-1 py-3 text-center text-xs font-mono text-shift-muted hover:text-shift-text border-b-2 border-transparent transition-all cursor-pointer">
-            {lang === 'he' ? 'זרימת אוטומציה' : lang === 'ru' ? 'Схема автоматизации' : lang === 'es' ? 'Flujo de automatización' : 'Automation Flow'}
-          </button>
-          <button data-tab="tab-stack" class="flex-1 py-3 text-center text-xs font-mono text-shift-muted hover:text-shift-text border-b-2 border-transparent transition-all cursor-pointer">
-            {lang === 'he' ? 'פישוט מערכות' : lang === 'ru' ? 'Упрощение стека' : lang === 'es' ? 'Simplificación de stack' : 'Stack Simplification'}
-          </button>
-        </div>
-
-        <div class="p-6 md:p-8 min-h-[300px]">
-          <!-- Tab 1: Speed -->
-          <div id="tab-speed" class="space-y-4">
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-xs font-mono text-shift-muted/70">shiiift_report_website_performance.log</span>
-              <span class="text-xs font-mono text-shift-accent">PASS // 98 SCORE</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs space-y-2">
-                <p class="text-shift-accent-2">Largest Contentful Paint (LCP): 1.1s</p>
-                <p class="text-shift-muted">Threshold: &lt; 2.5s is Good. Verified using Google CDN assets and Next.js ISR.</p>
-              </div>
-              <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs space-y-2">
-                <p class="text-shift-accent">Total Blocking Time (TBT): 30ms</p>
-                <p class="text-shift-muted">Threshold: &lt; 200ms is Good. Zero third-party scripts blockage.</p>
-              </div>
-            </div>
-            <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs">
-              <p class="text-shift-warm font-semibold mb-2">// RECOMMENDED ACTION STEP:</p>
-              <p class="text-shift-text leading-relaxed">
-                {lang === 'he' ? 'הגדר preload לתמונת הגיבור בראש העמוד וכווץ פונטים לפורמט WOFF2. השלב חוסך 400ms של טעינה ראשונית.' : lang === 'ru' ? 'Настройте предварительную загрузку для LCP-изображения и сконвертируйте шрифты в WOFF2. Это ускорит загрузку на 400мс.' : lang === 'es' ? 'Configura preload para la imagen LCP y convierte las fuentes a formato WOFF2. Ahorra 400ms en la carga inicial.' : 'Configure preload for the hero image and compress fonts to WOFF2. This saves 400ms of render-blocking delay.'}
-              </p>
-            </div>
-          </div>
-
-          <!-- Tab 2: Auto -->
-          <div id="tab-auto" class="space-y-4 hidden">
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-xs font-mono text-shift-muted/70">shiiift_workflow_integration.yaml</span>
-              <span class="text-xs font-mono text-shift-warm">ACTIVE // 15 HOURS SAVED</span>
-            </div>
-            <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs space-y-2 text-shift-text leading-relaxed">
-              <p class="text-shift-accent-2">Inbound WhatsApp Chat → Webhook Trigger</p>
-              <p class="text-shift-muted">→ Sync to HubSpot CRM (Assign sales representative)</p>
-              <p class="text-shift-muted">→ Generate Custom PDF Proposal via Google Docs Template</p>
-              <p class="text-shift-muted">→ Send PDF Link back to Client via WhatsApp Business API within 45 seconds</p>
-            </div>
-            <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs">
-              <p class="text-shift-warm font-semibold mb-2">// VERIFIED RESULT:</p>
-              <p class="text-shift-text leading-relaxed">
-                {lang === 'he' ? 'זמן תגובה לליד ירד מ-3 שעות ל-45 שניות. אפס משימות ידניות שנותרו לצוות המכירות.' : lang === 'ru' ? 'Время ответа на лид сократилось с 3 часов до 45 секунд. Рутина менеджеров по продажам сведена к нулю.' : lang === 'es' ? 'El tiempo de respuesta a leads bajó de 3 horas a 45 segundos. Cero tareas manuales para el equipo comercial.' : 'Lead response latency reduced from 3 hours to 45 seconds. Zero manual tasks remaining for sales agents.'}
-              </p>
-            </div>
-          </div>
-
-          <!-- Tab 3: Stack -->
-          <div id="tab-stack" class="space-y-4 hidden">
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-xs font-mono text-shift-muted/70">shiiift_stack_simplification.conf</span>
-              <span class="text-xs font-mono text-shift-accent-2">REDUCED // -8 APPS</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs space-y-2">
-                <p class="text-shift-warm font-semibold">// BEFORE:</p>
-                <p class="text-shift-muted">12 disconnected tools (Salesforce, Typeform, Calendly, Zapier basic, Slack integrations...)</p>
-                <p class="text-shift-muted">Cost: $850 / month</p>
-              </div>
-              <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs space-y-2">
-                <p class="text-shift-accent font-semibold">// AFTER:</p>
-                <p class="text-shift-accent-2">4 integrated tools (Airtable as CRM, Make for sync, clean frontend forms, Cal.com)</p>
-                <p class="text-shift-text font-bold">Cost: $240 / month</p>
-              </div>
-            </div>
-            <div class="p-4 rounded-xl bg-[#0c1018] border border-white/5 font-mono text-xs">
-              <p class="text-shift-warm font-semibold mb-2">// SYSTEM STATUS:</p>
-              <p class="text-shift-text leading-relaxed">
-                {lang === 'he' ? 'צמצום של 70% בעלויות הרישיון החודשיות וסנכרון נתונים מדויק לחלוטין ללא שגיאות Zapier.' : lang === 'ru' ? 'Экономия 70% на подписках и абсолютно точная синхронизация данных без сбоев Zapier.' : lang === 'es' ? 'Reducción del 70% en costos de licencias y sincronización de datos sin errores de Zapier.' : '70% reduction in monthly software costs and 100% data consistency without Zapier sync failures.'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Logos Carousel -->
+  <!-- ──────────────────────────── LOGOS CAROUSEL ──────────────────────────── -->
   <LogosCarousel lang={lang} />
 
-  <!-- Selected Projects (9 projects, prominent) -->
+  <!-- ──────────────────────────── PROJECTS ──────────────────────────── -->
   <ProjectsSection lang={lang} />
 
-  <!-- About Founder Biography Section -->
+  <!-- ──────────────────────────── ABOUT (compact) ──────────────────────────── -->
   <AboutFounder lang={lang} />
 
-  <!-- Lightweight CTA / Contact Trigger Section -->
-  <section class="py-20 border-t border-white/[0.06] bg-gradient-to-b from-transparent to-white/[0.01]">
-    <div class="shift-container text-center max-w-3xl mx-auto">
-      <h2 class="shift-heading-lg mb-4">
-        {ctaHeadline[lang] ?? ctaHeadline['en']}
-      </h2>
-      <p class="shift-body mb-8 max-w-xl mx-auto text-sm">
-        {ctaSub[lang] ?? ctaSub['en']}
-      </p>
-      
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href={`/${lang}/start`} class="shift-btn-primary px-8 py-3.5 text-base">
-          {ctaBtn[lang] ?? ctaBtn['en']}
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
+  <!-- ──────────────────────────── CTA ──────────────────────────── -->
+  <section class="py-20 border-t border-shift-line">
+    <div class="shift-container max-w-2xl text-center mx-auto">
+      <h2 class="shift-heading-lg mb-4">{ctaHeadline[lang]}</h2>
+      <p class="shift-body mb-8 text-base">{ctaSub[lang]}</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#tools-section" class="shift-btn-primary px-7 py-3">
+          {ctaBtn[lang]}
+        </a>
+        <a href={`/${lang}/start`} class="shift-btn-secondary px-7 py-3">
+          {ctaBtnSecondary[lang]}
         </a>
       </div>
     </div>
   </section>
+
 </BaseLayout>
-
-<script>
-  // Simple vanilla JS logic to handle Mock Reports tab deck switching
-  const tabDeck = document.getElementById('mock-reports-tab-deck');
-  if (tabDeck) {
-    const buttons = tabDeck.querySelectorAll('button[data-tab]');
-    const tabs = [
-      document.getElementById('tab-speed'),
-      document.getElementById('tab-auto'),
-      document.getElementById('tab-stack')
-    ];
-
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const targetId = btn.getAttribute('data-tab');
-
-        // Reset all buttons to inactive styling
-        buttons.forEach((b) => {
-          b.classList.remove('text-shift-accent-2', 'border-shift-accent-2');
-          b.classList.add('text-shift-muted', 'border-transparent');
-        });
-
-        // Activate clicked button
-        btn.classList.add('text-shift-accent-2', 'border-shift-accent-2');
-        btn.classList.remove('text-shift-muted', 'border-transparent');
-
-        // Hide all tabs
-        tabs.forEach((tab) => {
-          if (tab) tab.classList.add('hidden');
-        });
-
-        // Show active tab
-        const activeTab = document.getElementById(targetId);
-        if (activeTab) activeTab.classList.remove('hidden');
-      });
-    });
-  }
-</script>

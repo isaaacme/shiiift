@@ -6,48 +6,36 @@
 
 @layer base {
   :root {
-    --shift-bg: #0E1117;
-    --shift-surface: #151A23;
-    --shift-surface-soft: #1E2530;
-    --shift-text: #F4F1EA;
-    --shift-muted: #A7AFBA;
-    --shift-accent: #C7FF4A;
-    --shift-accent-2: #6EE7F9;
-    --shift-warm: #FF7A59;
-    --shift-line: rgba(244, 241, 234, 0.14);
+    --shift-bg:           #FAFAF8;
+    --shift-surface:      #F2F1EF;
+    --shift-surface-soft: #ECEAE6;
+    --shift-text:         #1A1A18;
+    --shift-muted:        #6B6B6B;
+    --shift-accent:       #3D7A5F;
+    --shift-accent-2:     #5B8FA8;
+    --shift-warm:         #C07A40;
+    --shift-line:         rgba(26, 26, 24, 0.10);
 
-    /* Volume / depth tokens */
+    /* Soft shadows — calm, not dramatic */
     --v-shadow-sm:
-      0 1px 0 0 rgba(255,255,255,0.06) inset,
-      0 -1px 0 0 rgba(0,0,0,0.35) inset,
-      0 2px 4px rgba(0,0,0,0.4),
-      0 1px 2px rgba(0,0,0,0.5);
+      0 1px 2px rgba(0,0,0,0.06),
+      0 1px 3px rgba(0,0,0,0.04);
 
     --v-shadow-md:
-      0 1px 0 0 rgba(255,255,255,0.07) inset,
-      0 -1px 0 0 rgba(0,0,0,0.4) inset,
-      0 4px 8px rgba(0,0,0,0.45),
-      0 2px 4px rgba(0,0,0,0.5),
-      0 1px 2px rgba(0,0,0,0.6);
+      0 2px 8px rgba(0,0,0,0.08),
+      0 1px 3px rgba(0,0,0,0.05);
 
     --v-shadow-lg:
-      0 1px 0 0 rgba(255,255,255,0.08) inset,
-      0 -1px 0 0 rgba(0,0,0,0.45) inset,
-      0 8px 20px rgba(0,0,0,0.5),
-      0 4px 8px rgba(0,0,0,0.45),
-      0 2px 4px rgba(0,0,0,0.55);
+      0 4px 16px rgba(0,0,0,0.10),
+      0 2px 6px rgba(0,0,0,0.06);
 
     --v-shadow-accent:
-      0 1px 0 0 rgba(255,255,255,0.22) inset,
-      0 -1px 0 0 rgba(0,0,0,0.25) inset,
-      0 4px 12px rgba(199,255,74,0.25),
-      0 2px 4px rgba(199,255,74,0.15),
-      0 1px 2px rgba(0,0,0,0.4);
+      0 2px 8px rgba(61,122,95,0.18),
+      0 1px 3px rgba(61,122,95,0.12);
 
     --v-shadow-accent-press:
-      0 1px 0 0 rgba(0,0,0,0.2) inset,
-      0 2px 4px rgba(0,0,0,0.3) inset,
-      0 1px 3px rgba(199,255,74,0.15);
+      0 1px 2px rgba(0,0,0,0.12) inset,
+      0 1px 3px rgba(61,122,95,0.1);
   }
 
   html {
@@ -78,12 +66,10 @@
     font-family: 'Noto Sans Hebrew', 'Inter', system-ui, sans-serif;
   }
 
-  /* Flip directional SVG arrows in RTL layouts */
   [dir='rtl'] .rtl\:rotate-180 {
     transform: rotate(180deg);
   }
 
-  /* Flip inline arrow SVGs that don't have the Tailwind class */
   [dir='rtl'] svg.arrow-icon {
     transform: scaleX(-1);
   }
@@ -94,15 +80,11 @@
 
   ::selection {
     background-color: var(--shift-accent);
-    color: var(--shift-bg);
+    color: #fff;
   }
 
-  /* Subtle noise texture on the page background */
   body {
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(199,255,74,0.04) 0%, transparent 70%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-    background-size: auto, 200px 200px;
+    background-color: var(--shift-bg);
   }
 }
 
@@ -134,116 +116,66 @@
   /* ─── CARDS ─── */
   .shift-card {
     @apply rounded-2xl p-6 transition-all duration-200;
-    background: linear-gradient(
-      160deg,
-      rgba(255,255,255,0.055) 0%,
-      var(--shift-surface) 30%,
-      #111620 100%
-    );
-    border: 1px solid rgba(255,255,255,0.1);
-    border-bottom-color: rgba(0,0,0,0.4);
-    border-right-color: rgba(0,0,0,0.25);
-    box-shadow: var(--v-shadow-md);
+    background: var(--shift-surface);
+    border: 1px solid var(--shift-line);
+    box-shadow: var(--v-shadow-sm);
   }
 
   .shift-card-hover {
     @apply shift-card cursor-pointer;
   }
   .shift-card-hover:hover {
-    background: linear-gradient(
-      160deg,
-      rgba(255,255,255,0.07) 0%,
-      #1b2130 30%,
-      #131720 100%
-    );
-    border-color: rgba(199,255,74,0.22);
-    border-bottom-color: rgba(0,0,0,0.5);
-    box-shadow:
-      var(--v-shadow-lg),
-      0 0 0 1px rgba(199,255,74,0.08);
+    background: var(--shift-surface-soft);
+    border-color: rgba(61,122,95,0.25);
+    box-shadow: var(--v-shadow-md);
     transform: translateY(-1px);
   }
 
-  /* ─── PRIMARY BUTTON (accent / lime) ─── */
+  /* ─── PRIMARY BUTTON (dark fill) ─── */
   .shift-btn-primary {
     @apply inline-flex items-center gap-2 font-heading font-semibold text-sm px-5 py-3 rounded-xl transition-all duration-150 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg;
-    color: #0E1117;
-    background: linear-gradient(
-      180deg,
-      #d6ff5e 0%,
-      #c7ff4a 45%,
-      #aee038 100%
-    );
-    box-shadow: var(--v-shadow-accent);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-bottom-color: rgba(0,0,0,0.2);
-    text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+    color: #FAFAF8;
+    background: var(--shift-text);
+    box-shadow: var(--v-shadow-sm);
+    border: 1px solid transparent;
   }
   .shift-btn-primary:hover {
-    background: linear-gradient(
-      180deg,
-      #dcff6a 0%,
-      #cdff52 45%,
-      #b5e840 100%
-    );
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.28) inset,
-      0 -1px 0 0 rgba(0,0,0,0.2) inset,
-      0 6px 16px rgba(199,255,74,0.35),
-      0 2px 6px rgba(199,255,74,0.2);
+    background: #2a2a27;
+    box-shadow: var(--v-shadow-md);
     transform: translateY(-1px);
   }
   .shift-btn-primary:active {
+    background: #1A1A18;
     box-shadow: var(--v-shadow-accent-press);
     transform: translateY(1px);
-    background: linear-gradient(180deg, #b8e83a 0%, #c7ff4a 100%);
   }
 
   /* ─── SECONDARY BUTTON ─── */
   .shift-btn-secondary {
     @apply inline-flex items-center gap-2 font-heading font-medium text-sm px-5 py-3 rounded-xl transition-all duration-150 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg;
     color: var(--shift-text);
-    background: linear-gradient(
-      160deg,
-      rgba(255,255,255,0.065) 0%,
-      rgba(30,37,48,0.9) 60%,
-      rgba(18,22,30,1) 100%
-    );
-    border: 1px solid rgba(255,255,255,0.1);
-    border-bottom-color: rgba(0,0,0,0.35);
+    background: var(--shift-surface);
+    border: 1px solid var(--shift-line);
     box-shadow: var(--v-shadow-sm);
   }
   .shift-btn-secondary:hover {
-    background: linear-gradient(
-      160deg,
-      rgba(255,255,255,0.09) 0%,
-      rgba(35,43,57,0.95) 60%,
-      rgba(18,22,30,1) 100%
-    );
-    border-color: rgba(199,255,74,0.28);
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.08) inset,
-      0 -1px 0 0 rgba(0,0,0,0.4) inset,
-      0 4px 10px rgba(0,0,0,0.45),
-      0 0 0 1px rgba(199,255,74,0.1);
+    background: var(--shift-surface-soft);
+    border-color: rgba(61,122,95,0.3);
+    box-shadow: var(--v-shadow-md);
     transform: translateY(-1px);
   }
   .shift-btn-secondary:active {
     transform: translateY(1px);
-    box-shadow:
-      0 1px 3px rgba(0,0,0,0.3) inset,
-      0 1px 2px rgba(0,0,0,0.4);
+    box-shadow: var(--v-shadow-sm);
   }
 
   /* ─── GHOST BUTTON ─── */
   .shift-btn-ghost {
-    @apply inline-flex items-center gap-2 font-medium text-sm transition-all duration-150 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg;
+    @apply inline-flex items-center gap-2 font-medium text-sm transition-all duration-150 no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg;
     color: var(--shift-muted);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
   }
   .shift-btn-ghost:hover {
-    color: var(--shift-text);
-    text-shadow: 0 0 8px rgba(199,255,74,0.2), 0 1px 2px rgba(0,0,0,0.4);
+    color: var(--shift-accent);
   }
 
   /* ─── INPUT FIELDS ─── */
@@ -253,58 +185,44 @@
   select,
   textarea {
     font-family: inherit;
-    box-shadow:
-      0 1px 0 0 rgba(0,0,0,0.5) inset,
-      0 2px 6px rgba(0,0,0,0.35) inset,
-      0 1px 0 0 rgba(255,255,255,0.04);
-    background: linear-gradient(
-      180deg,
-      #0f131b 0%,
-      #141921 100%
-    ) !important;
+    background: #fff !important;
+    border: 1px solid var(--shift-line) !important;
+    color: var(--shift-text) !important;
+    box-shadow: var(--v-shadow-sm);
   }
   input[type="text"]:focus,
   input[type="email"]:focus,
   input[type="url"]:focus,
   select:focus,
   textarea:focus {
-    box-shadow:
-      0 1px 0 0 rgba(0,0,0,0.5) inset,
-      0 2px 6px rgba(0,0,0,0.35) inset,
-      0 0 0 2px rgba(199,255,74,0.18),
-      0 0 12px rgba(199,255,74,0.08) !important;
+    border-color: rgba(61,122,95,0.5) !important;
+    box-shadow: 0 0 0 3px rgba(61,122,95,0.12) !important;
+    outline: none !important;
   }
 
-  /* ─── TOOL OPTION BUTTONS (React islands use inline Tailwind; add a class hook) ─── */
+  /* ─── TOOL OPTION BUTTONS ─── */
   .shift-option-btn {
     font-family: inherit;
     transition: all 0.12s ease;
-    background: linear-gradient(160deg, rgba(255,255,255,0.04) 0%, #151a23 100%);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-bottom-color: rgba(0,0,0,0.35);
+    background: #fff;
+    border: 1.5px solid var(--shift-line);
     box-shadow: var(--v-shadow-sm);
+    color: var(--shift-text);
   }
   .shift-option-btn:hover {
-    background: linear-gradient(160deg, rgba(255,255,255,0.065) 0%, #1b2130 100%);
-    border-color: rgba(199,255,74,0.2);
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.07) inset,
-      0 -1px 0 0 rgba(0,0,0,0.35) inset,
-      0 4px 8px rgba(0,0,0,0.4),
-      0 0 0 1px rgba(199,255,74,0.08);
+    border-color: rgba(61,122,95,0.35);
+    background: var(--shift-surface);
+    box-shadow: var(--v-shadow-md);
     transform: translateY(-1px);
   }
   .shift-option-btn:focus-visible {
     @apply outline-none ring-2 ring-shift-accent ring-offset-2 ring-offset-shift-bg;
   }
   .shift-option-btn-selected {
-    background: linear-gradient(160deg, rgba(199,255,74,0.1) 0%, rgba(199,255,74,0.04) 100%);
-    border-color: rgba(199,255,74,0.45);
-    box-shadow:
-      0 1px 0 0 rgba(199,255,74,0.15) inset,
-      0 -1px 0 0 rgba(0,0,0,0.3) inset,
-      0 4px 10px rgba(0,0,0,0.4),
-      0 0 0 1px rgba(199,255,74,0.12);
+    background: rgba(61,122,95,0.08);
+    border-color: rgba(61,122,95,0.5);
+    color: var(--shift-accent);
+    box-shadow: 0 0 0 1px rgba(61,122,95,0.15), var(--v-shadow-sm);
   }
 
   .shift-divider {
@@ -313,27 +231,20 @@
 
   .shift-score-bar {
     @apply h-2 rounded-full overflow-hidden;
-    background: linear-gradient(90deg, #0c1018, #1a2030);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5) inset, 0 1px 0 rgba(255,255,255,0.04);
+    background: var(--shift-surface-soft);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
   }
 
   .shift-score-fill {
     @apply h-full rounded-full transition-all duration-700 ease-out;
-    background: linear-gradient(90deg, #aee038, #c7ff4a, #d8ff6a);
-    box-shadow: 0 0 8px rgba(199,255,74,0.4), 0 1px 0 rgba(255,255,255,0.2) inset;
+    background: linear-gradient(90deg, var(--shift-accent), #4e9a77);
   }
 
   /* ─── NAV / HEADER ─── */
   .shift-nav {
-    background: linear-gradient(
-      180deg,
-      rgba(14,17,23,0.97) 0%,
-      rgba(18,22,30,0.95) 100%
-    );
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.06),
-      0 2px 12px rgba(0,0,0,0.5),
-      0 1px 3px rgba(0,0,0,0.6);
+    background: rgba(250, 250, 248, 0.92);
+    border-bottom: 1px solid var(--shift-line);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
@@ -344,32 +255,28 @@
     align-items: center;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--shift-muted);
     padding: 0.2rem 0.55rem;
     border-radius: 6px;
-    background: linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(14,17,23,0.6) 100%);
-    border: 1px solid rgba(255,255,255,0.09);
-    border-bottom-color: rgba(0,0,0,0.3);
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.04) inset,
-      0 2px 4px rgba(0,0,0,0.35);
+    background: var(--shift-surface);
+    border: 1px solid var(--shift-line);
+    box-shadow: var(--v-shadow-sm);
   }
 
   /* ─── PROGRESS BARS ─── */
   .shift-progress-track {
     height: 6px;
     border-radius: 9999px;
-    background: linear-gradient(90deg, #0c1018, #141a24);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.6) inset, 0 1px 0 rgba(255,255,255,0.035);
+    background: var(--shift-surface-soft);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.07);
     overflow: hidden;
   }
   .shift-progress-fill {
     height: 100%;
     border-radius: 9999px;
-    background: linear-gradient(90deg, #aee038, #c7ff4a);
-    box-shadow: 0 0 6px rgba(199,255,74,0.35), 0 1px 0 rgba(255,255,255,0.18) inset;
+    background: linear-gradient(90deg, var(--shift-accent), #4e9a77);
     transition: width 0.3s ease;
   }
 }
@@ -392,8 +299,8 @@
   }
 
   /* Utility depth shadows */
-  .shadow-volume-sm { box-shadow: var(--v-shadow-sm); }
-  .shadow-volume-md { box-shadow: var(--v-shadow-md); }
-  .shadow-volume-lg { box-shadow: var(--v-shadow-lg); }
+  .shadow-volume-sm  { box-shadow: var(--v-shadow-sm); }
+  .shadow-volume-md  { box-shadow: var(--v-shadow-md); }
+  .shadow-volume-lg  { box-shadow: var(--v-shadow-lg); }
   .shadow-volume-accent { box-shadow: var(--v-shadow-accent); }
 }

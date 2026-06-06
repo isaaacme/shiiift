@@ -4,15 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        'shift-bg': '#0E1117',
-        'shift-surface': '#151A23',
-        'shift-surface-soft': '#1E2530',
-        'shift-text': '#F4F1EA',
-        'shift-muted': '#A7AFBA',
-        'shift-accent': '#C7FF4A',
-        'shift-accent-2': '#6EE7F9',
-        'shift-warm': '#FF7A59',
-        'shift-line': 'rgba(244, 241, 234, 0.14)',
+        // Light, warm, calm palette
+        'shift-bg':           '#FAFAF8',
+        'shift-surface':      '#F2F1EF',
+        'shift-surface-soft': '#ECEAE6',
+        'shift-text':         '#1A1A18',
+        'shift-muted':        '#6B6B6B',
+        'shift-accent':       '#3D7A5F',      // muted forest green — guidance
+        'shift-accent-2':     '#5B8FA8',      // calm slate blue
+        'shift-warm':         '#C07A40',      // warm amber
+        'shift-line':         'rgba(26, 26, 24, 0.10)',
       },
       fontFamily: {
         heading: ['"Inter Tight"', '"Space Grotesk"', 'Sora', 'system-ui', 'sans-serif'],
@@ -20,16 +21,16 @@ export default {
         mono: ['"IBM Plex Mono"', '"JetBrains Mono"', 'monospace'],
       },
       animation: {
-        'fade-up': 'fadeUp 0.6s ease-out forwards',
-        'shift-in': 'shiftIn 0.8s ease-out forwards',
+        'fade-up': 'fadeUp 0.5s ease-out forwards',
+        'shift-in': 'shiftIn 0.6s ease-out forwards',
       },
       keyframes: {
         fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '0%':   { opacity: '0', transform: 'translateY(16px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         shiftIn: {
-          '0%': { opacity: '0', transform: 'translateX(-12px)' },
+          '0%':   { opacity: '0', transform: 'translateX(-10px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
       },

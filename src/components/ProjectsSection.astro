@@ -106,7 +106,7 @@ const projects = [
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="projects-grid">
       {projects.map((p) => (
         <button
-          class="project-card text-start bg-shift-surface border border-shift-line rounded-xl p-5 flex flex-col gap-3 hover:border-shift-accent/40 hover:shadow-volume-md transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
+          class="project-card text-start bg-white border border-shift-line rounded-xl p-5 flex flex-col gap-3 hover:border-shift-accent/40 hover:shadow-volume-md transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg hover:-translate-y-0.5"
           data-project={p.id}
           data-name={p.name}
           data-tag={gl(p.tag)}
@@ -138,8 +138,8 @@ const projects = [
   role="dialog"
   aria-modal="true"
 >
-  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="lightbox-backdrop"></div>
-  <div class="relative z-10 bg-shift-surface border border-shift-line rounded-2xl p-8 max-w-lg w-full shadow-[0_8px_40px_rgba(0,0,0,0.6)]">
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="lightbox-backdrop"></div>
+  <div class="relative z-10 bg-white border border-shift-line rounded-2xl p-8 max-w-lg w-full shadow-[0_8px_40px_rgba(0,0,0,0.12)]">
     <button id="lightbox-close" class="absolute top-4 end-4 text-shift-muted hover:text-shift-text transition-colors font-mono text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded p-1">
       ✕ {gl(labels.close)}
     </button>

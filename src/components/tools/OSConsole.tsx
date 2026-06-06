@@ -13,20 +13,20 @@ type Lang = 'he' | 'en' | 'es' | 'ru';
 interface ToolItem {
   id: string;
   key: string;
-  color: 'accent' | 'accent-2' | 'warm';
+  emoji: string;
   category: 'leads' | 'ops' | 'ai' | 'strategy' | 'finance';
   component: React.ComponentType<{ t: any }>;
 }
 
 const TOOLS_LIST: ToolItem[] = [
-  { id: 'business-audit', key: 'businessAudit', color: 'accent', category: 'strategy', component: BusinessAudit },
-  { id: 'website-audit', key: 'websiteAudit', color: 'accent-2', category: 'leads', component: WebsiteAudit },
-  { id: 'automation-finder', key: 'automationFinder', color: 'warm', category: 'ops', component: AutomationFinder },
-  { id: 'ai-readiness', key: 'aiReadiness', color: 'accent', category: 'ai', component: AIReadiness },
-  { id: 'tool-stack', key: 'toolStack', color: 'accent-2', category: 'ops', component: ToolStackSimplifier },
-  { id: 'lead-flow', key: 'leadFlow', color: 'warm', category: 'leads', component: LeadFlowMapper },
-  { id: 'pricing-calculator', key: 'pricingCalculator', color: 'accent', category: 'finance', component: PricingCalculator },
-  { id: 'proposal-builder', key: 'proposalBuilder', color: 'accent-2', category: 'strategy', component: ProposalBuilder },
+  { id: 'business-audit',    key: 'businessAudit',    emoji: '🔍', category: 'strategy', component: BusinessAudit },
+  { id: 'website-audit',     key: 'websiteAudit',     emoji: '🌐', category: 'leads',    component: WebsiteAudit },
+  { id: 'automation-finder', key: 'automationFinder', emoji: '⚡', category: 'ops',      component: AutomationFinder },
+  { id: 'ai-readiness',      key: 'aiReadiness',      emoji: '🤖', category: 'ai',       component: AIReadiness },
+  { id: 'tool-stack',        key: 'toolStack',        emoji: '🧰', category: 'ops',      component: ToolStackSimplifier },
+  { id: 'lead-flow',         key: 'leadFlow',         emoji: '📊', category: 'leads',    component: LeadFlowMapper },
+  { id: 'pricing-calculator',key: 'pricingCalculator',emoji: '💰', category: 'finance',  component: PricingCalculator },
+  { id: 'proposal-builder',  key: 'proposalBuilder',  emoji: '📄', category: 'strategy', component: ProposalBuilder },
 ];
 
 interface OSConsoleProps {
@@ -74,24 +74,6 @@ interface OSConsoleProps {
   };
 }
 
-const colorMap = {
-  accent: 'text-shift-accent border-shift-accent/20 bg-shift-accent/5',
-  'accent-2': 'text-shift-accent-2 border-shift-accent-2/20 bg-shift-accent-2/5',
-  warm: 'text-shift-warm border-shift-warm/20 bg-shift-warm/5',
-};
-
-const borderHoverMap = {
-  accent: 'hover:shadow-[0_0_20px_rgba(199,255,74,0.06)] hover:border-shift-accent/35',
-  'accent-2': 'hover:shadow-[0_0_20px_rgba(110,231,249,0.06)] hover:border-shift-accent-2/35',
-  warm: 'hover:shadow-[0_0_20px_rgba(255,122,89,0.06)] hover:border-shift-warm/35',
-};
-
-const textHoverMap = {
-  accent: 'group-hover:text-shift-accent',
-  'accent-2': 'group-hover:text-shift-accent-2',
-  warm: 'group-hover:text-shift-warm',
-};
-
 export default function OSConsole({ lang, t }: OSConsoleProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -100,218 +82,162 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
   const isRtl = lang === 'he';
 
   const activeTool = useMemo(() => {
-    return TOOLS_LIST.find((t) => t.id === activeToolId);
+    return TOOLS_LIST.find((tool) => tool.id === activeToolId);
   }, [activeToolId]);
 
   const filteredTools = useMemo(() => {
     return TOOLS_LIST.filter((tool) => {
       const toolTrans = t.tools[tool.key];
       if (!toolTrans) return false;
-
-      // Filter by category
-      if (selectedCategory !== 'all' && tool.category !== selectedCategory) {
-        return false;
-      }
-
-      // Filter by search query
+      if (selectedCategory !== 'all' && tool.category !== selectedCategory) return false;
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase();
-        const matchesTitle = toolTrans.title.toLowerCase().includes(query);
-        const matchesDesc = toolTrans.desc.toLowerCase().includes(query);
-        return matchesTitle || matchesDesc;
+        return toolTrans.title.toLowerCase().includes(query) || toolTrans.desc.toLowerCase().includes(query);
       }
-
       return true;
     });
   }, [selectedCategory, searchQuery, t.tools]);
 
   const handleSelectTool = (id: string) => {
     setActiveToolId(id);
-    // Scroll to console top
-    const el = document.getElementById('os-console-wrapper');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    const el = document.getElementById('tools-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleBack = () => {
-    setActiveToolId(null);
-  };
+  const handleBack = () => setActiveToolId(null);
 
   return (
-    <div id="os-console-wrapper" className="w-full max-w-5xl mx-auto px-4 sm:px-6 my-8">
-      {/* Console Box */}
-      <div className="relative rounded-2xl border border-white/10 bg-shift-bg/85 backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-300">
-        
-        {/* Console Header Frame */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
-          <div className="flex items-center gap-2">
-            {/* Unix/OS window circles */}
-            <span className="w-3 h-3 rounded-full bg-shift-warm/80"></span>
-            <span className="w-3 h-3 rounded-full bg-shift-accent-2/80"></span>
-            <span className="w-3 h-3 rounded-full bg-shift-accent/80"></span>
-            <span className="font-mono text-xs text-shift-muted/50 ms-3 select-none">shiiift-os v1.0.4</span>
+    <div id="os-console-wrapper" className="w-full max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+
+      {activeTool ? (
+        /* ── ACTIVE TOOL VIEW ── */
+        <div>
+          {/* Back button */}
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 mb-8 text-sm text-[#6B6B6B] hover:text-[#1A1A18] transition-colors cursor-pointer bg-transparent border-0 p-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={isRtl ? '' : 'rotate-180'}
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+            {t.backToDashboard}
+          </button>
+
+          {/* Tool header */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-2xl">{activeTool.emoji}</span>
+              <span className="text-xs font-mono text-[#6B6B6B] border border-[rgba(26,26,24,0.10)] px-2 py-0.5 rounded-md bg-white">
+                {t.tools[activeTool.key]?.time} {t.timeLabel}
+              </span>
+            </div>
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl text-[#1A1A18] mb-2">
+              {t.tools[activeTool.key]?.title}
+            </h2>
+            <p className="text-sm text-[#6B6B6B] leading-relaxed max-w-2xl">
+              {t.tools[activeTool.key]?.desc}
+            </p>
           </div>
 
-          {activeTool && (
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono text-shift-muted hover:text-shift-text bg-white/[0.05] hover:bg-white/10 border border-white/5 transition-all cursor-pointer active:scale-95"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={isRtl ? 'rotate-0' : 'rotate-180'}
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-              {t.backToDashboard}
-            </button>
-          )}
+          {/* Tool component */}
+          <activeTool.component t={t} />
         </div>
-
-        {/* Dashboard Workspace */}
-        <div className="p-6 md:p-8 min-h-[450px]">
-          {activeTool ? (
-            // Render Selected Active Tool inside OS console
-            <div className="animate-fade-in">
-              <div className="mb-8 border-b border-white/[0.06] pb-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="font-mono text-xs tracking-wider uppercase text-shift-accent">App</span>
-                  <span className="font-mono text-xs text-shift-muted border border-white/10 px-2 py-0.5 rounded">
-                    {t.tools[activeTool.key]?.time} {t.timeLabel}
-                  </span>
-                </div>
-                <h1 className="font-heading font-bold text-2xl sm:text-3xl text-shift-text">
-                  {t.tools[activeTool.key]?.title}
-                </h1>
-                <p className="text-sm text-shift-muted mt-2 max-w-3xl leading-relaxed">
-                  {t.tools[activeTool.key]?.desc}
-                </p>
+      ) : (
+        /* ── TOOL GRID VIEW ── */
+        <div>
+          {/* Search + filter bar */}
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center mb-8">
+            {/* Search */}
+            <div className="relative w-full sm:max-w-xs">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t.searchPlaceholder}
+                className="w-full ps-9 pe-4 py-2 rounded-lg text-sm bg-white text-[#1A1A18] placeholder-[#6B6B6B]/50 border border-[rgba(26,26,24,0.12)] outline-none focus:border-[#3D7A5F]/50 transition-all"
+              />
+              <div className="absolute start-3 top-2.5 text-[#6B6B6B]/50">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                </svg>
               </div>
-
-              {/* Dynamic instantiation of the react tool */}
-              <activeTool.component t={t} />
             </div>
-          ) : (
-            // Render Dashboard View: Search + Filters + Grid
-            <div className="space-y-6">
-              
-              {/* Search & Categories Bar */}
-              <div className="flex flex-col md:flex-row gap-4 items-center justify-between border-b border-white/[0.06] pb-6">
-                <div className="relative w-full md:max-w-md">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={t.searchPlaceholder}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm bg-white/[0.04] text-shift-text placeholder-shift-muted/40 border border-white/10 outline-none focus:border-shift-accent-2/50 focus:ring-1 focus:ring-shift-accent-2/50 transition-all font-mono"
-                  />
-                  <div className="absolute left-3.5 top-3.5 text-shift-muted/30">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="11" cy="11" r="8" />
-                      <path d="m21 21-4.3-4.3" />
-                    </svg>
+
+            {/* Category pills */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {Object.entries(t.categories).map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedCategory(key)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
+                    selectedCategory === key
+                      ? 'bg-[#1A1A18] text-white border-[#1A1A18]'
+                      : 'bg-white text-[#6B6B6B] border-[rgba(26,26,24,0.12)] hover:border-[rgba(26,26,24,0.25)] hover:text-[#1A1A18]'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tool cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            {filteredTools.map((tool) => {
+              const toolTrans = t.tools[tool.key];
+              if (!toolTrans) return null;
+
+              return (
+                <button
+                  key={tool.id}
+                  onClick={() => handleSelectTool(tool.id)}
+                  className="group flex flex-col text-start gap-3 p-5 rounded-xl border border-[rgba(26,26,24,0.10)] bg-white cursor-pointer transition-all duration-150 outline-none hover:border-[rgba(26,26,24,0.22)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#3D7A5F]"
+                >
+                  {/* Emoji */}
+                  <span className="text-2xl leading-none">{tool.emoji}</span>
+
+                  {/* Title */}
+                  <h3 className="font-heading font-semibold text-[#1A1A18] text-sm leading-snug">
+                    {toolTrans.title}
+                  </h3>
+
+                  {/* Desc */}
+                  <p className="text-xs text-[#6B6B6B] leading-relaxed flex-1">
+                    {toolTrans.desc}
+                  </p>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between w-full pt-2 border-t border-[rgba(26,26,24,0.07)] mt-auto">
+                    <span className="text-[11px] text-[#6B6B6B]">
+                      {toolTrans.time} {t.timeLabel}
+                    </span>
+                    <span className="text-[11px] font-medium text-[#3D7A5F] group-hover:underline">
+                      {t.runTool} →
+                    </span>
                   </div>
-                </div>
+                </button>
+              );
+            })}
+          </div>
 
-                {/* Categories Row */}
-                <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-thin">
-                  {Object.entries(t.categories).map(([key, label]) => (
-                    <button
-                      key={key}
-                      onClick={() => setSelectedCategory(key)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer whitespace-nowrap border ${
-                        selectedCategory === key
-                          ? 'bg-shift-accent-2/10 border-shift-accent-2/30 text-shift-accent-2'
-                          : 'bg-transparent border-transparent text-shift-muted hover:text-shift-text hover:bg-white/[0.03]'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Grid of Tools */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredTools.map((tool) => {
-                  const toolTrans = t.tools[tool.key];
-                  if (!toolTrans) return null;
-
-                  return (
-                    <button
-                      key={tool.id}
-                      onClick={() => handleSelectTool(tool.id)}
-                      className={`group flex flex-col text-start gap-4 p-5 rounded-xl border border-white/10 bg-white/[0.02] cursor-pointer transition-all duration-200 no-underline outline-none focus-visible:ring-2 focus-visible:ring-shift-accent-2 ${borderHoverMap[tool.color]}`}
-                    >
-                      <div className="flex items-start justify-between gap-2 w-full">
-                        <h3 className={`font-heading font-semibold text-shift-text text-base leading-snug transition-colors ${textHoverMap[tool.color]}`}>
-                          {toolTrans.title}
-                        </h3>
-                        <span className={`flex-shrink-0 font-mono text-[10px] px-2 py-0.5 rounded border ${colorMap[tool.color]}`}>
-                          {toolTrans.time} {t.timeLabel}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-shift-muted leading-relaxed flex-1">
-                        {toolTrans.desc}
-                      </p>
-
-                      <div className="flex items-center justify-between w-full pt-3 border-t border-white/[0.05]">
-                        <span className="text-[10px] font-mono text-shift-muted/70">
-                          {t.outputLabel}: <span className="text-shift-text/80">{toolTrans.output}</span>
-                        </span>
-                        <span className={`flex items-center gap-1 font-mono text-[10px] transition-colors ${textHoverMap[tool.color]}`}>
-                          {t.runTool}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="10"
-                            height="10"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className={isRtl ? 'rotate-180' : ''}
-                          >
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                          </svg>
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {filteredTools.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <p className="font-mono text-sm text-shift-muted">No tools found matching your search.</p>
-                </div>
-              )}
+          {filteredTools.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-sm text-[#6B6B6B]">No tools match your search.</p>
             </div>
           )}
         </div>
-
-      </div>
+      )}
     </div>
   );
 }

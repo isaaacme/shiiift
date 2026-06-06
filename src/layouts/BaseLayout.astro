@@ -56,6 +56,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       const lenis = new Lenis({
         autoRaf: true,
       });
+
+      // Save current language preference
+      const lang = document.documentElement.lang;
+      if (lang) {
+        localStorage.setItem('shiiift-locale', lang);
+      }
     </script>
   </body>
 </html>

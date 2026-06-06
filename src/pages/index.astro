@@ -1,3 +1,25 @@
----
-return Astro.redirect('/he', 302);
----
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url=/he" />
+    <title>shiiift</title>
+    <script is:inline>
+      (function() {
+        try {
+          const savedLang = localStorage.getItem('shiiift-locale');
+          const supported = ['he', 'en', 'es', 'ru'];
+          if (savedLang && supported.includes(savedLang)) {
+            window.location.replace('/' + savedLang);
+          } else {
+            window.location.replace('/he');
+          }
+        } catch (e) {
+          window.location.replace('/he');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

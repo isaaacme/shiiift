@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import BusinessAudit from './BusinessAudit';
 import WebsiteAudit from './WebsiteAudit';
 import AutomationFinder from './AutomationFinder';
@@ -80,6 +80,33 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
 
   const isRtl = lang === 'he';
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Focus search on '/' if not typing in any input/textarea
+      if (e.key === '/' && document.activeElement !== searchInputRef.current) {
+        if (!(document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement)) {
+          e.preventDefault();
+          searchInputRef.current?.focus();
+        }
+      }
+
+      // Handle Escape to go back or clear search
+      if (e.key === 'Escape') {
+        if (activeToolId) {
+          handleBack();
+        } else if (document.activeElement === searchInputRef.current) {
+          searchInputRef.current?.blur();
+        } else if (searchQuery) {
+          setSearchQuery('');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeToolId, searchQuery]);
 
   const activeTool = useMemo(() => {
     return TOOLS_LIST.find((tool) => tool.id === activeToolId);
@@ -115,7 +142,7 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
           {/* Back button */}
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 mb-8 text-sm text-[#6B6B6B] hover:text-[#1A1A18] transition-colors cursor-pointer bg-transparent border-0 p-0"
+            className="flex items-center gap-2 mb-8 text-sm text-[#6B6B6B] hover:text-[#1A1A18] transition-colors cursor-pointer bg-transparent border-0 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A5F] focus-visible:ring-offset-2 rounded-md"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -161,11 +188,12 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
             {/* Search */}
             <div className="relative w-full sm:max-w-xs">
               <input
+                ref={searchInputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.searchPlaceholder}
-                className="w-full ps-9 pe-4 py-2 rounded-lg text-sm bg-white text-[#1A1A18] placeholder-[#6B6B6B]/50 border border-[rgba(26,26,24,0.12)] outline-none focus:border-[#3D7A5F]/50 transition-all"
+                className="w-full ps-9 pe-4 py-2 rounded-lg text-sm bg-white text-[#1A1A18] placeholder-[#6B6B6B]/50 border border-[rgba(26,26,24,0.12)] outline-none focus:border-[#3D7A5F] focus:ring-1 focus:ring-[#3D7A5F] transition-all"
               />
               <div className="absolute start-3 top-2.5 text-[#6B6B6B]/50">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -180,7 +208,7 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
                 <button
                   key={key}
                   onClick={() => setSelectedCategory(key)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A5F] focus-visible:ring-offset-2 ${
                     selectedCategory === key
                       ? 'bg-[#1A1A18] text-white border-[#1A1A18]'
                       : 'bg-white text-[#6B6B6B] border-[rgba(26,26,24,0.12)] hover:border-[rgba(26,26,24,0.25)] hover:text-[#1A1A18]'

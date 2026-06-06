@@ -14,7 +14,7 @@ const currentPath = Astro.url.pathname;
   <div class="shift-container">
     <nav class="flex items-center justify-between h-16 gap-4">
       <!-- Logo -->
-      <a href={`/${lang}`} class="font-heading font-bold text-xl text-shift-text tracking-tight hover:text-shift-accent transition-colors no-underline flex-shrink-0">
+      <a href={`/${lang}`} class="font-heading font-bold text-xl text-shift-text tracking-tight hover:text-shift-accent transition-colors no-underline flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent rounded-md px-1">
         shiiift
       </a>
 
@@ -23,7 +23,7 @@ const currentPath = Astro.url.pathname;
         <a
           href={`/${lang}/tools`}
           class:list={[
-            'transition-colors no-underline text-sm',
+            'transition-colors no-underline text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent rounded-md px-1.5 py-0.5',
             currentPath.includes('/tools') ? 'text-shift-text font-semibold' : 'text-shift-muted hover:text-shift-text'
           ]}
         >
@@ -32,7 +32,7 @@ const currentPath = Astro.url.pathname;
         <a
           href={`/${lang}/thinking`}
           class:list={[
-            'transition-colors no-underline text-sm',
+            'transition-colors no-underline text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent rounded-md px-1.5 py-0.5',
             currentPath.includes('/thinking') ? 'text-shift-text font-semibold' : 'text-shift-muted hover:text-shift-text'
           ]}
         >
@@ -45,7 +45,7 @@ const currentPath = Astro.url.pathname;
         <!-- Language Picker -->
         <div class="relative group">
           <button
-            class="flex items-center gap-1 text-sm text-shift-muted hover:text-shift-text transition-colors"
+            class="flex items-center gap-1 text-sm text-shift-muted hover:text-shift-text transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 rounded-md p-1"
             aria-label="Select language"
           >
             <span class="uppercase text-xs font-mono">{lang}</span>
@@ -83,7 +83,7 @@ const currentPath = Astro.url.pathname;
         <!-- Mobile menu button -->
         <button
           id="mobile-menu-btn"
-          class="md:hidden text-shift-muted hover:text-shift-text transition-colors p-1"
+          class="md:hidden text-shift-muted hover:text-shift-text transition-colors p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent rounded-md"
           aria-label="Toggle menu"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

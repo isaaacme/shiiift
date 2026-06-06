@@ -38,15 +38,7 @@ const currentPath = Astro.url.pathname;
         >
           {t('nav.thinking')}
         </a>
-        <a
-          href={`/${lang}/workshop`}
-          class:list={[
-            'transition-colors no-underline',
-            currentPath.includes('/workshop') ? 'text-shift-accent font-semibold' : 'text-shift-muted hover:text-shift-text'
-          ]}
-        >
-          {t('nav.workshop')}
-        </a>
+
       </div>
 
       <!-- Right side -->
@@ -126,15 +118,7 @@ const currentPath = Astro.url.pathname;
       >
         {t('nav.thinking')}
       </a>
-      <a
-        href={`/${lang}/workshop`}
-        class:list={[
-          'px-3 py-2.5 no-underline rounded-lg transition-colors',
-          currentPath.includes('/workshop') ? 'text-shift-accent bg-shift-surface-soft font-semibold' : 'text-shift-muted hover:text-shift-text hover:bg-shift-surface-soft'
-        ]}
-      >
-        {t('nav.workshop')}
-      </a>
+
       <a href={`/${lang}/start`} class="mt-2 shift-btn-primary justify-center font-sans normal-case tracking-normal text-sm">
         {t('nav.start')}
       </a>

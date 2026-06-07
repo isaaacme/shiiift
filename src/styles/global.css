@@ -326,4 +326,45 @@
     -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
     pointer-events: none;
   }
+
+  /* Background Dot Grid with Scroll-driven Parallax */
+  .bg-parallax-grid {
+    position: relative;
+  }
+  .bg-parallax-grid::before {
+    content: '';
+    position: absolute;
+    top: -15%;
+    bottom: -15%;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    background-size: 24px 24px;
+    background-image: radial-gradient(rgba(26, 26, 24, 0.08) 1.2px, transparent 1.2px);
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    pointer-events: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @keyframes grid-parallax {
+      from {
+        transform: translateY(-5%);
+      }
+      to {
+        transform: translateY(5%);
+      }
+    }
+
+    .bg-parallax-grid::before {
+      animation: grid-parallax linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bg-parallax-grid::before {
+      animation: none !important;
+    }
+  }
 }

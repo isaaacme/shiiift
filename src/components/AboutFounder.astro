@@ -30,10 +30,10 @@ function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
   <div class="absolute -bottom-12 right-1/4 w-96 h-96 bg-shift-warm/5 rounded-full blur-3xl pointer-events-none"></div>
 
   <div class="shift-container max-w-4xl">
-    <div class="bg-gradient-to-br from-white to-shift-surface/60 backdrop-blur-md border border-shift-line/90 rounded-2xl p-8 sm:p-12 shadow-volume-md hover:shadow-volume-lg transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-10">
+    <div class="reveal-on-scroll bg-gradient-to-br from-white to-shift-surface/60 backdrop-blur-md border border-shift-line/90 rounded-2xl p-8 sm:p-12 shadow-volume-md hover:shadow-volume-lg transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-10" style="--stagger-index: 0;">
 
       <!-- Photo Container with premium framing -->
-      <div class="flex-shrink-0 relative group">
+      <div class="flex-shrink-0 relative group reveal-on-scroll" style="--stagger-index: 1;">
         <div class="absolute -inset-1.5 bg-gradient-to-br from-shift-accent/15 to-shift-warm/15 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
         <img
           src="/isaac-feldman.png"
@@ -45,7 +45,7 @@ function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
       </div>
 
       <!-- Content -->
-      <div class="flex-1 text-center md:text-start">
+      <div class="flex-1 text-center md:text-start reveal-on-scroll" style="--stagger-index: 2;">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-shift-accent/10 text-shift-accent mb-5 border border-shift-accent/15">
           <span class="w-1.5 h-1.5 rounded-full bg-shift-accent animate-pulse"></span>
           {gl(labels.sectionLabel)}

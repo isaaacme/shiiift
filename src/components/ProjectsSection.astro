@@ -104,9 +104,10 @@ const projects = [
 
     <!-- Projects grid: 3 cols on lg, 2 on md, 1 on sm -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="projects-grid">
-      {projects.map((p) => (
+      {projects.map((p, index) => (
         <button
-          class="project-card text-start bg-white border border-shift-line rounded-xl p-5 flex flex-col gap-3 hover:border-shift-accent/40 hover:shadow-volume-md transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg hover:-translate-y-0.5"
+          class="project-card reveal-on-scroll text-start bg-white border border-shift-line rounded-xl p-5 flex flex-col gap-3 hover:border-shift-accent/40 hover:shadow-volume-md transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg hover:-translate-y-0.5"
+          style={`--stagger-index: ${index};`}
           data-project={p.id}
           data-name={p.name}
           data-tag={gl(p.tag)}

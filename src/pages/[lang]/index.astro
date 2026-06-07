@@ -194,22 +194,21 @@ const philosophyPara2 = {
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-shift-accent/6 via-shift-accent-2/4 to-transparent rounded-full blur-[130px] pointer-events-none" aria-hidden="true"></div>
     <div class="absolute top-12 left-1/3 w-[300px] h-[300px] bg-shift-warm/3 rounded-full blur-[90px] pointer-events-none" aria-hidden="true"></div>
     
-    <div class="shift-container max-w-[1440px] relative z-10 flex flex-col items-center text-center">
-      
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-shift-accent/10 text-shift-accent border border-shift-accent/20 mb-8 select-none mx-auto">
+    <div class="shift-container text-center relative z-10">
+      <div class="reveal-on-scroll inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-shift-line/80 shadow-sm text-xs font-mono font-medium text-shift-muted mb-8 tracking-tight" style="--stagger-index: 0;">
         <span class="w-1.5 h-1.5 rounded-full bg-shift-accent animate-pulse"></span>
         {lang === 'he' ? 'שותף טכנולוגי ליישום מערכות' : lang === 'es' ? 'Socio de Integración Tecnológica' : lang === 'ru' ? 'Технологический партнер' : 'Technical Integration Partner'}
       </div>
 
-      <h1 class="font-heading font-extrabold text-4xl sm:text-5xl lg:text-[5rem] tracking-tighter leading-none text-shift-text mb-8 text-balance max-w-5xl mx-auto" style="white-space: pre-line;">
+      <h1 class="reveal-on-scroll font-heading font-extrabold text-4xl sm:text-5xl lg:text-[5rem] tracking-tighter leading-none text-shift-text mb-8 text-balance max-w-5xl mx-auto" style="white-space: pre-line; --stagger-index: 1;">
         {heroTitle[lang]}
       </h1>
 
-      <p class="text-base sm:text-lg md:text-xl text-shift-muted/80 leading-relaxed mb-10 max-w-3xl mx-auto text-balance font-light">
+      <p class="reveal-on-scroll text-base sm:text-lg md:text-xl text-shift-muted/80 leading-relaxed mb-10 max-w-3xl mx-auto text-balance font-light" style="--stagger-index: 2;">
         {heroDesc[lang]}
       </p>
 
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+      <div class="reveal-on-scroll flex flex-col sm:flex-row items-center justify-center gap-4 w-full" style="--stagger-index: 3;">
         <a
           href="#tools-section"
           class="shift-btn-primary px-8 py-3.5 text-base shadow-volume-accent hover:scale-[1.02] active:scale-[0.98] transition-all"
@@ -232,25 +231,27 @@ const philosophyPara2 = {
 
   <!-- ──────────────────────────── TOOLS CONSOLE ──────────────────────────── -->
   <section class="pb-20 bg-shift-surface border-y border-shift-line" id="tools-section">
-    <div class="pt-16 pb-2 shift-container max-w-5xl mb-8">
+    <div class="pt-16 pb-2 shift-container max-w-5xl mb-8 reveal-on-scroll">
       <p class="shift-label mb-2">{t('tools.section.title')}</p>
       <p class="text-shift-muted text-sm">{t('tools.section.subtitle')}</p>
     </div>
-    <OSConsole client:load lang={lang} t={tProps} />
+    <div>
+      <OSConsole client:load lang={lang} t={tProps} />
+    </div>
   </section>
 
   <!-- ──────────────────────────── PHILOSOPHY: SITES FOR NOW ──────────────────────────── -->
   <section class="py-24 bg-shift-bg border-b border-shift-line relative overflow-hidden bg-parallax-grid">
     <div class="shift-container max-w-3xl">
-      <p class="shift-label mb-3">{philosophyLabel[lang]}</p>
-      <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-shift-text mb-8 tracking-tight leading-tight">
+      <p class="reveal-on-scroll shift-label mb-3" style="--stagger-index: 0;">{philosophyLabel[lang]}</p>
+      <h2 class="reveal-on-scroll font-heading font-extrabold text-3xl sm:text-4xl text-shift-text mb-8 tracking-tight leading-tight" style="--stagger-index: 1;">
         {philosophyTitle[lang]}
       </h2>
       <div class="space-y-6 text-base sm:text-lg text-shift-muted leading-relaxed">
-        <p>
+        <p class="reveal-on-scroll" style="--stagger-index: 2;">
           {philosophyPara1[lang]}
         </p>
-        <p>
+        <p class="reveal-on-scroll" style="--stagger-index: 3;">
           {philosophyPara2[lang]}
         </p>
       </div>
@@ -266,9 +267,9 @@ const philosophyPara2 = {
   <!-- ──────────────────────────── CTA ──────────────────────────── -->
   <section class="py-20 border-t border-shift-line">
     <div class="shift-container max-w-2xl text-center mx-auto">
-      <h2 class="shift-heading-lg mb-4">{ctaHeadline[lang]}</h2>
-      <p class="shift-body mb-8 text-base">{ctaSub[lang]}</p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+      <h2 class="reveal-on-scroll shift-heading-lg mb-4" style="--stagger-index: 0;">{ctaHeadline[lang]}</h2>
+      <p class="reveal-on-scroll shift-body mb-8 text-base" style="--stagger-index: 1;">{ctaSub[lang]}</p>
+      <div class="reveal-on-scroll flex flex-col sm:flex-row items-center justify-center gap-3" style="--stagger-index: 2;">
         <a href="#tools-section" class="shift-btn-primary px-7 py-3">
           {ctaBtn[lang]}
         </a>

@@ -204,11 +204,12 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
 
             {/* Category pills */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              {Object.entries(t.categories).map(([key, label]) => (
+              {Object.entries(t.categories).map(([key, label], index) => (
                 <button
                   key={key}
                   onClick={() => setSelectedCategory(key)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 ${
+                  style={{ '--stagger-index': index } as React.CSSProperties}
+                  className={`reveal-on-scroll px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 ${
                     selectedCategory === key
                       ? 'bg-shift-text text-white border-shift-text'
                       : 'bg-white text-shift-muted border-[rgba(26,26,24,0.12)] hover:border-[rgba(26,26,24,0.25)] hover:text-shift-text'
@@ -222,7 +223,7 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
 
           {/* Tool cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-            {filteredTools.map((tool) => {
+            {filteredTools.map((tool, index) => {
               const toolTrans = t.tools[tool.key];
               if (!toolTrans) return null;
 
@@ -230,7 +231,8 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
                 <button
                   key={tool.id}
                   onClick={() => handleSelectTool(tool.id)}
-                  className="group flex flex-col text-start gap-3 p-5 rounded-xl border border-[rgba(26,26,24,0.10)] bg-white cursor-pointer transition-all duration-150 outline-none hover:border-[rgba(26,26,24,0.22)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-shift-accent"
+                  style={{ '--stagger-index': index } as React.CSSProperties}
+                  className="reveal-on-scroll group flex flex-col text-start gap-3 p-5 rounded-xl border border-[rgba(26,26,24,0.10)] bg-white cursor-pointer transition-all duration-150 outline-none hover:border-[rgba(26,26,24,0.22)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-shift-accent"
                 >
                   {/* Emoji */}
                   <span className="text-2xl leading-none">{tool.emoji}</span>

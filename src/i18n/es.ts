@@ -11,12 +11,12 @@ const es: Record<TranslationKey, string> = {
   // Hero
   'hero.headline': 'Implementación tecnológica para empresas que necesitan apalancamiento.',
   'hero.subheadline':
-    'Ayudo a las empresas a identificar dónde los sistemas digitales, la automatización, la IA y mejores sitios web pueden reducir la fricción, ahorrar tiempo y crear mejoras operativas medibles.',
+    'Construyo sitios web rápidos, automatizaciones y sistemas de IA que te ahorran tiempo valioso. He creado estas herramientas para que identifiques cuellos de botella en tu negocio hoy mismo.',
   'hero.cta.primary': 'Auditar mi empresa',
   'hero.cta.secondary': 'Ver el taller',
   'hero.cta.tertiary': 'Ver cómo pienso',
   'hero.new.title': 'Construimos los sistemas que hacen tu negocio más fácil de operar.',
-  'hero.new.desc': 'Sin jerga técnica ni soluciones sobre-diseñadas. Shiiift es un socio estratégico de implementación fundado por Isaac Feldman. Conectamos tus herramientas, automatizamos tareas repetitivas, optimizamos sitios web e integramos IA donde realmente te ahorra horas de trabajo. Elige una herramienta a continuación para diagnosticar tus cuellos de botella y ver cómo trabajamos.',
+  'hero.new.desc': 'Construyo sitios web rápidos, automatizaciones y sistemas de IA que te ahorran tiempo valioso. He creado estas herramientas para que identifiques cuellos de botella en tu negocio hoy mismo.',
   'hero.new.cta.console': 'Ejecutar un diagnóstico',
   'hero.new.cta.start': 'Programar implementación',
 

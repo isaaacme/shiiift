@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Hebrew:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Hebrew:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,10 +10,10 @@
     --shift-surface:      #F2F1EF;
     --shift-surface-soft: #ECEAE6;
     --shift-text:         #1A1A18;
-    --shift-muted:        #525250;
-    --shift-accent:       #2A6F4E;
-    --shift-accent-2:     #3B7E9F;
-    --shift-warm:         #B0652F;
+    --shift-muted:        #3E3E3C;
+    --shift-accent:       #20563C;
+    --shift-accent-2:     #244E63;
+    --shift-warm:         #8A481C;
     --shift-line:         rgba(26, 26, 24, 0.10);
 
     /* Soft shadows — calm, not dramatic */
@@ -275,9 +275,14 @@
   }
   .shift-progress-fill {
     height: 100%;
+    width: 100%;
     border-radius: 9999px;
     background: linear-gradient(90deg, var(--shift-accent), #4e9a77);
-    transition: width 0.3s ease;
+    transition: transform 0.3s ease;
+    transform-origin: left;
+  }
+  [dir='rtl'] .shift-progress-fill {
+    transform-origin: right;
   }
 }
 
@@ -287,7 +292,7 @@
   }
 
   .font-heading {
-    font-family: 'Inter Tight', 'Space Grotesk', system-ui, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   }
 
   [dir='rtl'] .font-heading {

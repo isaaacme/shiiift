@@ -10,12 +10,12 @@ const en: Record<TranslationKey, string> = {
 
   // Hero
   'hero.headline': 'Spend less time on repetitive work.',
-  'hero.subheadline': "Pick a tool below to find what's slowing you down — and get a useful answer in minutes.",
+  'hero.subheadline': 'I build high-performance websites, workflow automations, and practical AI systems that save you precious time. I built these tools so you can identify bottlenecks in your business right now.',
   'hero.cta.primary': 'Find what\'s slowing you down',
   'hero.cta.secondary': 'Talk to Isaac',
   'hero.cta.tertiary': 'Read the thinking',
   'hero.new.title': 'Spend less time on repetitive work.',
-  'hero.new.desc': 'Pick a tool below. Answer a few questions. Get a useful answer in minutes — no signup, no sales call.',
+  'hero.new.desc': 'I build high-performance websites, workflow automations, and practical AI systems that save you precious time. I built these tools so you can identify bottlenecks in your business right now.',
   'hero.new.cta.console': 'Choose a tool',
   'hero.new.cta.start': 'Talk to Isaac',
 

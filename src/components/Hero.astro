@@ -63,7 +63,7 @@ const t = useTranslations(lang);
           <p class="shift-label text-xs">
             {lang === 'he' ? 'זרימת מערכת תפעולית' : lang === 'ru' ? 'Операционный системный поток' : lang === 'es' ? 'Flujo del sistema operativo' : 'Operational System Flow'}
           </p>
-          <span class="text-[9px] font-mono text-shift-muted/40 uppercase tracking-widest">Console v1.0.4</span>
+          <span class="text-[9px] font-mono text-shift-muted/75 uppercase tracking-widest">Console v1.0.4</span>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
@@ -86,12 +86,12 @@ const t = useTranslations(lang);
               >
                 <div class="flex items-center justify-between mb-2">
                   <span class={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`}></span>
-                  <span class="text-[9px] text-shift-muted/30 font-mono tracking-wider">0{i+1}_SYS</span>
+                  <span class="text-[9px] text-shift-muted/75 font-mono tracking-wider">0{i+1}_SYS</span>
                 </div>
                 <p class="text-shift-text font-medium text-[13px] group-hover:text-shift-text transition-colors">{item.name[lang] ?? item.name.en}</p>
                 <div class="mt-2 flex items-center justify-between pt-1.5 border-t border-white/[0.04]">
                   <span class={`text-[9px] uppercase tracking-wider font-semibold ${textColor}`}>{item.status}</span>
-                  <span class="text-[8px] text-shift-muted/30">100ms</span>
+                  <span class="text-[8px] text-shift-muted/75">100ms</span>
                 </div>
               </div>
             );

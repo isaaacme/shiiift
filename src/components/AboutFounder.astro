@@ -24,39 +24,56 @@ const labels = {
 function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
 ---
 
-<section class="py-16 lg:py-20 border-t border-shift-line" id="about-founder">
-  <div class="shift-container">
-    <div class="flex flex-col sm:flex-row items-start gap-8 max-w-2xl">
+<section class="py-20 border-t border-shift-line relative overflow-hidden" id="about-founder">
+  <!-- Premium ambient glow backdrop -->
+  <div class="absolute -top-12 left-1/3 w-96 h-96 bg-shift-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-12 right-1/4 w-96 h-96 bg-shift-warm/5 rounded-full blur-3xl pointer-events-none"></div>
 
-      <!-- Photo -->
-      <div class="flex-shrink-0">
+  <div class="shift-container max-w-4xl">
+    <div class="bg-gradient-to-br from-white to-shift-surface/60 backdrop-blur-md border border-shift-line/90 rounded-2xl p-8 sm:p-12 shadow-volume-md hover:shadow-volume-lg transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-10">
+
+      <!-- Photo Container with premium framing -->
+      <div class="flex-shrink-0 relative group">
+        <div class="absolute -inset-1.5 bg-gradient-to-br from-shift-accent/15 to-shift-warm/15 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
         <img
           src="/isaac-feldman.png"
           alt={gl(labels.name)}
-          width="80"
-          height="80"
-          class="w-20 h-20 object-cover rounded-xl border border-shift-line"
+          width="160"
+          height="160"
+          class="relative w-40 h-40 object-cover rounded-2xl border border-shift-line bg-white shadow-md transition-transform duration-300 group-hover:scale-[1.03]"
         />
       </div>
 
       <!-- Content -->
-      <div>
-        <p class="shift-label mb-3">{gl(labels.sectionLabel)}</p>
-        <p class="font-heading font-semibold text-shift-text text-lg mb-1">{gl(labels.name)}</p>
-        <p class="text-sm text-shift-muted mb-4">{gl(labels.role)}</p>
-        <p class="text-shift-muted text-sm leading-relaxed mb-5 max-w-lg">{gl(labels.bio)}</p>
-        <div class="flex flex-wrap items-center gap-3">
-          <a href={`/${lang}/start`} class="shift-btn-primary text-sm px-5 py-2.5">
+      <div class="flex-1 text-center md:text-start">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-shift-accent/10 text-shift-accent mb-5 border border-shift-accent/15">
+          <span class="w-1.5 h-1.5 rounded-full bg-shift-accent animate-pulse"></span>
+          {gl(labels.sectionLabel)}
+        </div>
+
+        <h3 class="font-heading font-extrabold text-shift-text text-2xl sm:text-3xl tracking-tight mb-1">{gl(labels.name)}</h3>
+        <p class="font-mono text-xs text-shift-muted/80 tracking-widest mb-5 uppercase">{gl(labels.role)}</p>
+
+        <p class="text-shift-muted text-base sm:text-lg leading-relaxed mb-8 max-w-2xl text-balance">
+          {gl(labels.bio)}
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center md:justify-start gap-5">
+          <a href={`/${lang}/start`} class="shift-btn-primary text-base px-6 py-3.5 shadow-volume-md hover:shadow-volume-lg">
             {gl(labels.cta)}
           </a>
           <a
             href="https://isaaac.me"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-sm text-shift-muted hover:text-shift-accent transition-colors inline-flex items-center gap-1"
+            class="group/link inline-flex items-center gap-2 text-xs font-mono text-shift-muted hover:text-shift-accent transition-colors py-2"
           >
-            {gl(labels.portfolio)}
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>{gl(labels.portfolio)}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180 transform transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
           </a>
         </div>
       </div>

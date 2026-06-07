@@ -193,9 +193,9 @@ export default function OSConsole({ lang, t }: OSConsoleProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.searchPlaceholder}
-                className="w-full ps-9 pe-4 py-2 rounded-lg text-sm bg-white text-shift-text placeholder-shift-muted/50 border border-[rgba(26,26,24,0.12)] outline-none focus:border-shift-accent focus:ring-1 focus:ring-shift-accent transition-all"
+                className="w-full ps-9 pe-4 py-2 rounded-lg text-sm bg-white text-shift-text placeholder-shift-muted/75 border border-[rgba(26,26,24,0.12)] outline-none focus:border-shift-accent focus:ring-1 focus:ring-shift-accent transition-all"
               />
-              <div className="absolute start-3 top-2.5 text-shift-muted/50">
+              <div className="absolute start-3 top-2.5 text-shift-muted/80">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
                 </svg>

@@ -196,12 +196,12 @@ export default function AutomationFinder({ t }: { t: T }) {
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
         <div className="shift-progress-track">
-          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,var(--shift-warm),#e05535)', boxShadow: '0 0 6px rgba(255,122,89,0.35)' }} />
+          <div className="h-full rounded-full transition-transform duration-300" style={{ width: '100%', transform: `scaleX(${progress / 100})`, transformOrigin: lang === 'he' ? 'right' : 'left', background: 'linear-gradient(90deg,var(--shift-warm),#e05535)', boxShadow: '0 0 6px rgba(255,122,89,0.35)' }} />
         </div>
       </div>
       <div className="shift-card">
         <h2 className="font-heading font-semibold text-xl text-shift-text mb-2">{gl(cq.q, lang)}</h2>
-        {cq.multi && <p className="text-xs text-shift-muted/60 font-mono mb-5">{gl(multiLabel, lang)}</p>}
+        {cq.multi && <p className="text-xs text-shift-muted/80 font-mono mb-5">{gl(multiLabel, lang)}</p>}
         <div className="space-y-2">
           {cq.opts.map((o) => {
             const isSelected = selected.includes(o.v);

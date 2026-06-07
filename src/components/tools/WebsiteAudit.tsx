@@ -579,7 +579,7 @@ export default function WebsiteAudit({ t }: Props) {
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-[#A7AFBA]"><span>{step + 1} / {QUESTIONS.length}</span><span>{progress}%</span></div>
         <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'linear-gradient(90deg,#0c1018,#141a24)', boxShadow: '0 1px 3px rgba(0,0,0,0.5) inset' }}>
-          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: 'linear-gradient(90deg,#4dcfed,#6ee7f9)', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
+          <div className="h-full rounded-full transition-transform duration-300" style={{ width: '100%', transform: `scaleX(${progress / 100})`, transformOrigin: lang === 'he' ? 'right' : 'left', background: 'linear-gradient(90deg,#4dcfed,#6ee7f9)', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
         </div>
       </div>
       <div className="shift-card">

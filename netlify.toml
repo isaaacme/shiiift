@@ -9,8 +9,30 @@
 
 [[redirects]]
   from = "/"
+  to = "/en"
+  status = 302
+  force = true
+  conditions = {Language = ["en"]}
+
+[[redirects]]
+  from = "/"
+  to = "/es"
+  status = 302
+  force = true
+  conditions = {Language = ["es"]}
+
+[[redirects]]
+  from = "/"
+  to = "/ru"
+  status = 302
+  force = true
+  conditions = {Language = ["ru"]}
+
+[[redirects]]
+  from = "/"
   to = "/he"
   status = 302
+  force = true
 
 [build.environment]
   NODE_VERSION = "20"

@@ -129,13 +129,13 @@ export default function ToolStackSimplifier({ t }: { t: T }) {
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / 2</span><span>{step * 50}%</span></div>
         <div className="shift-progress-track">
-          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${step * 50}%`, background: 'linear-gradient(90deg,#4dcfed,var(--shift-accent-2))', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
+          <div className="h-full rounded-full transition-transform duration-300" style={{ width: '100%', transform: `scaleX(${(step * 50) / 100})`, transformOrigin: lang === 'he' ? 'right' : 'left', background: 'linear-gradient(90deg,#4dcfed,var(--shift-accent-2))', boxShadow: '0 0 6px rgba(110,231,249,0.35)' }} />
         </div>
       </div>
 
       <div className="shift-card">
         <h2 className="font-heading font-semibold text-xl text-shift-text mb-2">{gl(step === 0 ? lbl.toolsQ : lbl.painQ, lang)}</h2>
-        <p className="text-xs text-shift-muted/60 font-mono mb-5">{gl(lbl.selectAll, lang)}</p>
+        <p className="text-xs text-shift-muted/80 font-mono mb-5">{gl(lbl.selectAll, lang)}</p>
         {step === 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {TOOL_OPTIONS.map((o) => {

@@ -303,7 +303,7 @@ export default function ToolResult({
           <ol className="space-y-3 list-none p-0 m-0">
             {nextActions.map((a, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-shift-text leading-snug">
-                <span className="font-mono text-shift-accent/60 text-xs mt-0.5 flex-shrink-0 w-4">{i + 1}.</span>
+                <span className="font-mono text-shift-accent text-xs mt-0.5 flex-shrink-0 w-4">{i + 1}.</span>
                 {a}
               </li>
             ))}
@@ -324,7 +324,7 @@ export default function ToolResult({
                 className="shift-option-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm text-shift-muted hover:text-shift-text no-underline transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
               >
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-[10px] text-shift-muted/50 border border-shift-line px-1.5 py-0.5 rounded">{gl(a.category, lang)}</span>
+                  <span className="font-mono text-[10px] text-shift-muted/80 border border-shift-line px-1.5 py-0.5 rounded">{gl(a.category, lang)}</span>
                   <span className="group-hover:text-shift-text transition-colors">{gl(a.label, lang)}</span>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 rtl:rotate-180 opacity-40 group-hover:opacity-80">
@@ -379,7 +379,7 @@ export default function ToolResult({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t.newsletterPlaceholder}
-              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-shift-text bg-shift-bg border border-white/10 placeholder-shift-muted/40 outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
+              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-shift-text bg-shift-bg border border-white/10 placeholder-shift-muted/75 outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg"
             />
             <button
               type="submit"
@@ -389,7 +389,7 @@ export default function ToolResult({
             </button>
           </form>
         )}
-        <p className="mt-2 text-xs text-shift-muted/60">{t.newsletterDisclaimer}</p>
+        <p className="mt-2 text-xs text-shift-muted/80">{t.newsletterDisclaimer}</p>
       </div>
 
       {/* Roadmap request */}

@@ -308,7 +308,7 @@ export default function ProposalBuilder({ t }: { t: T }) {
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
         <div className="shift-progress-track">
-          <div className="shift-progress-fill" style={{ width: `${progress}%` }} />
+          <div className="shift-progress-fill" style={{ transform: `scaleX(${progress / 100})` }} />
         </div>
       </div>
       <div className="shift-card">

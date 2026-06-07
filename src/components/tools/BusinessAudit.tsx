@@ -295,9 +295,9 @@ export default function BusinessAudit({ t }: Props) {
               const costLabel: Record<Lang, string> = { he: 'עלות עבודה ידנית שנתית משוערת', en: 'Est. annual manual work cost', es: 'Costo anual estimado de trabajo manual', ru: 'Ориентировочные годовые затраты на ручной труд' };
               return (
                 <div className="border-t border-shift-line pt-4">
-                  <p className="font-mono text-xs text-shift-muted/60 uppercase tracking-widest mb-1">{costLabel[lang]}</p>
+                  <p className="font-mono text-xs text-shift-muted/80 uppercase tracking-widest mb-1">{costLabel[lang]}</p>
                   <p className="font-bold text-2xl text-shift-warm">{currency.symbol}{annualLocal.toLocaleString()}</p>
-                  <p className="text-xs text-shift-muted/50 mt-0.5 font-mono">{currency.code} @ $25/hr × {weeklyHours}h/wk × 52</p>
+                  <p className="text-xs text-shift-muted/80 mt-0.5 font-mono">{currency.code} @ $25/hr × {weeklyHours}h/wk × 52</p>
                 </div>
               );
             })()}
@@ -316,7 +316,7 @@ export default function BusinessAudit({ t }: Props) {
           <span>{progress}%</span>
         </div>
         <div className="shift-progress-track">
-          <div className="shift-progress-fill" style={{ width: `${progress}%` }} />
+          <div className="shift-progress-fill" style={{ transform: `scaleX(${progress / 100})` }} />
         </div>
       </div>
 

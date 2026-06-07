@@ -118,11 +118,11 @@ const projects = [
         >
           <div class="flex items-center justify-between">
             <span class="font-mono text-[10px] text-shift-muted border border-shift-line px-2 py-0.5 rounded">{gl(p.tag)}</span>
-            <span class="font-mono text-[10px] text-shift-accent/60 border border-shift-accent/20 bg-shift-accent/5 px-2 py-0.5 rounded">{gl(p.metric)}</span>
+            <span class="font-mono text-[10px] text-shift-accent border border-shift-accent/20 bg-shift-accent/5 px-2 py-0.5 rounded">{gl(p.metric)}</span>
           </div>
           <span class="font-heading font-semibold text-shift-text text-sm leading-snug group-hover:text-shift-accent transition-colors">{p.name}</span>
           <span class="text-xs text-shift-muted leading-snug line-clamp-3 flex-1">{gl(p.desc)}</span>
-          <span class="mt-auto font-mono text-xs text-shift-accent/60 group-hover:text-shift-accent transition-colors flex items-center gap-1">
+          <span class="mt-auto font-mono text-xs text-shift-accent group-hover:text-shift-accent transition-colors flex items-center gap-1">
             {lang === 'he' ? '← ' : ''}{gl(labels.viewProject)}{lang !== 'he' ? ' →' : ''}
           </span>
         </button>

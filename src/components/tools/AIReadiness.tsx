@@ -128,7 +128,7 @@ export default function AIReadiness({ t }: { t: T }) {
     <div className="rounded-2xl p-6 bg-gradient-to-br from-shift-accent/5 to-shift-surface border border-shift-accent/20 shadow-md">
       <div className="flex items-center gap-2 mb-3">
         <span className="font-mono text-xs tracking-widest uppercase text-shift-accent">{gl(aiInsightLabel, lang)}</span>
-        <span className="font-mono text-[10px] text-shift-muted/50 border border-shift-line px-1.5 py-0.5 rounded">Gemini AI</span>
+        <span className="font-mono text-[10px] text-shift-muted/80 border border-shift-line px-1.5 py-0.5 rounded">Gemini AI</span>
       </div>
       {aiLoading ? (
         <div className="flex items-center gap-3">
@@ -172,7 +172,7 @@ export default function AIReadiness({ t }: { t: T }) {
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
         <div className="shift-progress-track">
-          <div className="shift-progress-fill" style={{ width: `${progress}%` }} />
+          <div className="shift-progress-fill" style={{ transform: `scaleX(${progress / 100})` }} />
         </div>
       </div>
       <div className="shift-card">

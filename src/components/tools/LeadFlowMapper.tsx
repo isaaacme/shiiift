@@ -160,7 +160,7 @@ export default function LeadFlowMapper({ t }: { t: T }) {
                         : 'border-shift-line bg-white/[0.04] text-shift-muted'
                     }`}>{s}</div>
                     {i < arr.length - 1 && (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-shift-muted/40 flex-shrink-0 rotate-90 md:rotate-0 md:rtl:rotate-180 my-1 md:my-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-shift-muted/70 flex-shrink-0 rotate-90 md:rotate-0 md:rtl:rotate-180 my-1 md:my-0">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                       </svg>
                     )}
@@ -173,7 +173,7 @@ export default function LeadFlowMapper({ t }: { t: T }) {
               const crmLabel: Record<Lang, string> = { he: 'CRM מומלץ לאזורך', en: 'Recommended CRM for your region', es: 'CRM recomendado para tu región', ru: 'Рекомендуемый CRM для вашего региона' };
               return (
                 <div className="border-t border-shift-line pt-4">
-                  <p className="font-mono text-xs text-shift-muted/60 uppercase tracking-widest mb-2">{crmLabel[lang]}{geo ? ` (${geo.country_name})` : ''}</p>
+                  <p className="font-mono text-xs text-shift-muted/80 uppercase tracking-widest mb-2">{crmLabel[lang]}{geo ? ` (${geo.country_name})` : ''}</p>
                   <a href={crm.url} target="_blank" rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-sm font-semibold text-shift-accent hover:text-shift-accent/80 transition-colors no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg rounded"
                   >
@@ -195,12 +195,12 @@ export default function LeadFlowMapper({ t }: { t: T }) {
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-mono text-shift-muted"><span>{step + 1} / {QS.length}</span><span>{progress}%</span></div>
         <div className="shift-progress-track">
-          <div className="shift-progress-fill" style={{ width: `${progress}%` }} />
+          <div className="shift-progress-fill" style={{ transform: `scaleX(${progress / 100})` }} />
         </div>
       </div>
       <div className="shift-card">
         <h2 className="font-heading font-semibold text-xl text-shift-text mb-2">{gl(cq.q, lang)}</h2>
-        {cq.multi && <p className="text-xs text-shift-muted/60 font-mono mb-5">{gl(selectAllLabel, lang)}</p>}
+        {cq.multi && <p className="text-xs text-shift-muted/80 font-mono mb-5">{gl(selectAllLabel, lang)}</p>}
         <div className="space-y-2">
           {cq.opts.map((o: any) => {
             const isSelected = selected.includes(o.v);

@@ -643,7 +643,7 @@ const tForm = formTranslations;
       </a>
 
       <!-- Article Header -->
-      <div class="mb-12 border-b border-shift-line pb-8">
+      <div class="mb-12 pb-8">
         <div class="flex items-center gap-2 mb-4">
           <span class="shift-label">
             {categories[article.category as keyof typeof categories][lang] || categories[article.category as keyof typeof categories]['en']}
@@ -653,9 +653,16 @@ const tForm = formTranslations;
         <h1 class="shift-heading-xl mb-4 leading-tight font-extrabold text-shift-text">
           {article.title[lang] || article.title['en']}
         </h1>
-        <p class="text-lg text-shift-muted leading-relaxed">
+        <p class="text-lg text-shift-muted leading-relaxed mb-8">
           {article.subtitle[lang] || article.subtitle['en']}
         </p>
+        <div class="aspect-[21/9] w-full overflow-hidden rounded-2xl border border-shift-line bg-shift-surface-soft shadow-sm dither-wrap-yellow">
+          <img
+            src={`/images/thinking/${slug}.png`}
+            alt={article.title[lang] || article.title['en']}
+            class="w-full h-full object-cover dither-img"
+          />
+        </div>
       </div>
 
       <!-- Framework Content -->
@@ -840,7 +847,7 @@ const tForm = formTranslations;
       </div>
 
       <!-- 5. Interactive Contact Form -->
-      <div id="cta-form-container" class="mt-20 border-t border-shift-line pt-12">
+      <div id="cta-form-container" class="mt-20 pt-12">
         <div class="mb-8 text-center sm:text-start">
           <h2 class="font-heading font-bold text-2xl text-shift-text mb-2">
             {tForm.title[lang] || tForm.title['en']}

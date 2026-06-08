@@ -2,7 +2,9 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PostHog from '../components/posthog.astro';
 import { isRTL, type Locale } from '../i18n/index';
+import { SEO } from 'astro-seo';
 
 interface Props {
   title: string;
@@ -13,7 +15,9 @@ interface Props {
 
 const { title, description = 'Technology implementation for businesses that need leverage.', lang, ogImage } = Astro.props;
 const dir = isRTL(lang) ? 'rtl' : 'ltr';
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteUrl = Astro.site ? Astro.site.toString() : 'https://shiiift.com';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const finalMetaImage = new URL(ogImage || '/images/themeta.png', siteUrl).toString();
 ---
 
 <!doctype html>
@@ -21,26 +25,41 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
-    <title>{title} — shiiift</title>
-
-    <!-- Open Graph -->
-    <meta property="og:title" content={`${title} — shiiift`} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:type" content="website" />
-    {ogImage && <meta property="og:image" content={ogImage} />}
-
-    <!-- Alternate language links -->
-    <link rel="alternate" hreflang="he" href={`/he${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
-    <link rel="alternate" hreflang="en" href={`/en${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
-    <link rel="alternate" hreflang="es" href={`/es${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
-    <link rel="alternate" hreflang="ru" href={`/ru${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
-    <link rel="alternate" hreflang="x-default" href={`/he${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`} />
-
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <SEO
+      title={`${title} — shiiift`}
+      description={description}
+      canonical={canonicalURL.toString()}
+      openGraph={{
+        basic: {
+          title: `${title} — shiiift`,
+          type: "website",
+          image: finalMetaImage,
+          url: canonicalURL.toString(),
+        },
+        optional: {
+          description: description,
+          siteName: "shiiift",
+        }
+      }}
+      twitter={{
+        card: "summary_large_image",
+        site: "@isaaacme",
+        creator: "@isaaacme",
+      }}
+      extend={{
+        link: [
+          { rel: "alternate", hreflang: "he", href: new URL(`/he${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`, siteUrl).toString() },
+          { rel: "alternate", hreflang: "en", href: new URL(`/en${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`, siteUrl).toString() },
+          { rel: "alternate", hreflang: "es", href: new URL(`/es${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`, siteUrl).toString() },
+          { rel: "alternate", hreflang: "ru", href: new URL(`/ru${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`, siteUrl).toString() },
+          { rel: "alternate", hreflang: "x-default", href: new URL(`/he${Astro.url.pathname.replace(/^\/(he|en|es|ru)/, '')}`, siteUrl).toString() }
+        ]
+      }}
+    />
+
+    <PostHog />
   </head>
   <body class="min-h-screen flex flex-col antialiased">
     <Header lang={lang} />
@@ -101,5 +120,47 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         subtree: true,
       });
     </script>
+
+    <!-- Hidden SVG dither filters -->
+    <svg class="sr-only" xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+      <defs>
+        <filter id="dither-duotone" x="0%" y="0%" width="100%" height="100%">
+          <!-- Grayscale color matrix -->
+          <feColorMatrix type="matrix" values="0.299 0.587 0.114 0 0
+                                               0.299 0.587 0.114 0 0
+                                               0.299 0.587 0.114 0 0
+                                               0 0 0 1 0" result="gray" />
+          <!-- Generate high frequency noise -->
+          <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="1" result="noise" />
+          <!-- Mix noise with the grayscale image -->
+          <feComposite operator="arithmetic" k1="0.5" k2="0.6" k3="0.2" k4="-0.1" in="gray" in2="noise" result="mixed" />
+          <!-- Apply contrast threshold to create dither look -->
+          <feComponentTransfer result="dither">
+            <feFuncR type="discrete" tableValues="0 1" />
+            <feFuncG type="discrete" tableValues="0 1" />
+            <feFuncB type="discrete" tableValues="0 1" />
+          </feComponentTransfer>
+          <!-- Map values: Cobalt Blue (#0047FF) for black and Electric Yellow (#FFE600) for white -->
+          <feComponentTransfer in="dither">
+            <feFuncR type="linear" slope="1" intercept="0" />
+            <feFuncG type="linear" slope="0.622" intercept="0.278" />
+            <feFuncB type="linear" slope="-1" intercept="1" />
+          </feComponentTransfer>
+        </filter>
+        <filter id="dither-mono" x="0%" y="0%" width="100%" height="100%">
+          <feColorMatrix type="matrix" values="0.299 0.587 0.114 0 0
+                                               0.299 0.587 0.114 0 0
+                                               0.299 0.587 0.114 0 0
+                                               0 0 0 1 0" result="gray" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="1" result="noise" />
+          <feComposite operator="arithmetic" k1="0.5" k2="0.6" k3="0.2" k4="-0.1" in="gray" in2="noise" result="mixed" />
+          <feComponentTransfer>
+            <feFuncR type="discrete" tableValues="0 1" />
+            <feFuncG type="discrete" tableValues="0 1" />
+            <feFuncB type="discrete" tableValues="0 1" />
+          </feComponentTransfer>
+        </filter>
+      </defs>
+    </svg>
   </body>
 </html>

@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { getPostHogServer } from '../../lib/posthog-server';
 
 export const prerender = false;
 
@@ -42,6 +43,18 @@ export const POST: APIRoute = async ({ request }) => {
       console.error('MailerLite API returned error:', response.status, errorText);
       return new Response(JSON.stringify({ error: `MailerLite API error: ${response.status}` }), { status: response.status });
     }
+
+    const posthog = getPostHogServer();
+    const sessionId = request.headers.get('X-PostHog-Session-Id');
+    posthog.capture({
+      distinctId: email,
+      event: 'newsletter_subscribed',
+      properties: {
+        $session_id: sessionId || undefined,
+        source,
+      },
+    });
+    posthog.identify({ distinctId: email, properties: { email } });
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,

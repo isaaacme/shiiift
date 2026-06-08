@@ -9,9 +9,8 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section class="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32">
-  <!-- Background grid -->
-  <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(244,241,234,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(244,241,234,0.04)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" aria-hidden="true"></div>
+<section class="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32 bg-grid">
+  <!-- Background grid is handled by bg-grid class -->
 
   <!-- Layered Accent Glows -->
   <div class="absolute top-12 start-1/4 w-[500px] h-[350px] bg-shift-accent/6 rounded-full blur-[120px] pointer-events-none" aria-hidden="true"></div>
@@ -19,93 +18,94 @@ const t = useTranslations(lang);
   <div class="absolute top-48 start-1/3 w-[300px] h-[200px] bg-shift-warm/3 rounded-full blur-[90px] pointer-events-none" aria-hidden="true"></div>
 
   <div class="shift-container relative z-10">
-    <div class="max-w-4xl">
-      <!-- Pre-label -->
-      <div class="inline-flex items-center gap-2 mb-6">
-        <span class="w-1.5 h-1.5 rounded-full bg-shift-accent"></span>
-        <span class="shift-label">shiiift</span>
-      </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <!-- Left: Massive Typography Poster Section -->
+      <div class="lg:col-span-8 flex flex-col items-start">
+        <!-- Pre-label -->
+        <div class="inline-flex items-center gap-2 mb-8 reveal-on-scroll" style="--stagger-index: 0;">
+          <span class="w-2 h-2 bg-shift-yellow rotate-12"></span>
+          <span class="shift-label tracking-widest text-sm font-extrabold text-shift-blue">shiiift console v1.0</span>
+        </div>
 
-      <!-- Headline -->
-      <h1 class="shift-heading-xl text-balance mb-6">
-        {t('hero.headline')}
-      </h1>
+        <!-- Headline -->
+        <h1 class="shift-heading-xl text-balance mb-8 reveal-on-scroll" style="--stagger-index: 1;">
+          {t('hero.headline')}
+        </h1>
 
-      <!-- Subheadline -->
-      <p class="text-lg sm:text-xl text-shift-muted leading-relaxed max-w-2xl mb-10 text-balance">
-        {t('hero.subheadline')}
-      </p>
-
-      <!-- CTAs -->
-      <div class="flex flex-wrap gap-3 items-center">
-        <a href={`/${lang}/tools/business-audit`} class="shift-btn-primary text-base px-6 py-3.5">
-          {t('hero.cta.primary')}
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-        <!-- <a href={`/${lang}/workshop`} class="shift-btn-secondary text-base px-6 py-3.5">
-          {t('hero.cta.secondary')}
-        </a> -->
-        <a href={`/${lang}/thinking`} class="shift-btn-ghost text-base">
-          {t('hero.cta.tertiary')}
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-
-    <!-- Visual system diagram -->
-    <div class="mt-16 lg:mt-20 relative">
-      <div class="shift-card max-w-3xl overflow-hidden backdrop-blur-md bg-opacity-70">
-        <div class="flex items-center justify-between mb-6">
-          <p class="shift-label text-xs">
-            {lang === 'he' ? 'זרימת מערכת תפעולית' : lang === 'ru' ? 'Операционный системный поток' : lang === 'es' ? 'Flujo del sistema operativo' : 'Operational System Flow'}
+        <!-- Staggered Layout for Subheadline & CTAs -->
+        <div class="w-full lg:max-w-2xl reveal-on-scroll lg:ms-8" style="--stagger-index: 2;">
+          <p class="text-lg sm:text-xl text-shift-muted leading-relaxed mb-10 text-balance font-medium">
+            {t('hero.subheadline')}
           </p>
-          <span class="text-[9px] font-mono text-shift-muted/75 uppercase tracking-widest">Console v1.0.4</span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {[
-            { name: { he: 'טפסים', en: 'Forms', es: 'Formularios', ru: 'Формы' }, status: 'READY', color: 'accent' },
-            { name: { he: 'וואטסאפ', en: 'WhatsApp', es: 'WhatsApp', ru: 'WhatsApp' }, status: 'LIVE', color: 'warm' },
-            { name: { he: 'אימייל', en: 'Email', es: 'Email', ru: 'Email' }, status: 'SYNC', color: 'accent-2' },
-            { name: { he: 'CRM', en: 'CRM', es: 'CRM', ru: 'CRM' }, status: 'CONN', color: 'accent' },
-            { name: { he: 'חשבוניות', en: 'Invoices', es: 'Facturas', ru: 'Счета' }, status: 'AUTO', color: 'warm' },
-            { name: { he: 'דוחות', en: 'Reports', es: 'Reportes', ru: 'Отчёты' }, status: 'LIVE', color: 'accent-2' },
-            { name: { he: 'מעקב', en: 'Follow-ups', es: 'Seguimiento', ru: 'Ремаркетинг' }, status: 'RUN', color: 'accent' },
-            { name: { he: 'אנליטיקס', en: 'Analytics', es: 'Analítica', ru: 'Аналитика' }, status: 'OK', color: 'accent-2' },
-          ].map((item, i) => {
-            const dotColor = item.color === 'accent' ? 'bg-shift-accent' : item.color === 'accent-2' ? 'bg-shift-accent-2' : 'bg-shift-warm';
-            const textColor = item.color === 'accent' ? 'text-shift-accent' : item.color === 'accent-2' ? 'text-shift-accent-2' : 'text-shift-warm';
-            const hoverBorder = item.color === 'accent' ? 'group-hover:border-shift-accent/30' : item.color === 'accent-2' ? 'group-hover:border-shift-accent-2/30' : 'group-hover:border-shift-warm/30';
-            return (
-              <div
-                class={`bg-shift-surface-soft/80 border border-shift-line rounded-xl p-3 text-xs font-mono transition-all duration-300 hover:bg-shift-surface hover:-translate-y-0.5 hover:shadow-sm group ${hoverBorder}`}
-                style={`animation-delay: ${i * 80}ms`}
-              >
-                <div class="flex items-center justify-between mb-2">
-                  <span class={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`}></span>
-                  <span class="text-[9px] text-shift-muted/75 font-mono tracking-wider">0{i+1}_SYS</span>
-                </div>
-                <p class="text-shift-text font-medium text-[13px] group-hover:text-shift-text transition-colors">{item.name[lang] ?? item.name.en}</p>
-                <div class="mt-2 flex items-center justify-between pt-1.5 border-t border-white/[0.04]">
-                  <span class={`text-[9px] uppercase tracking-wider font-semibold ${textColor}`}>{item.status}</span>
-                  <span class="text-[8px] text-shift-muted/75">100ms</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div class="mt-5 flex items-center gap-3">
-          <div class="bg-shift-accent/10 border border-shift-accent/30 rounded-lg px-4 py-2 font-mono text-sm text-shift-accent font-medium shadow-inner">
-            {lang === 'he' ? 'מערכת' : lang === 'ru' ? 'Система' : lang === 'es' ? 'Sistema' : 'System'}
+
+          <!-- CTAs with yellow background and rotation -->
+          <div class="flex flex-wrap gap-4 items-center">
+            <a href={`/${lang}/tools/business-audit`} class="shift-btn-primary text-base px-6 py-4 shadow-volume-md hover:shadow-volume-lg hover:-rotate-1">
+              {t('hero.cta.primary')}
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+            <a href={`/${lang}/thinking`} class="shift-btn-ghost text-base font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+              {t('hero.cta.tertiary')}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
           </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-shift-accent rtl:rotate-180">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-          <div class="flex-1 h-px bg-shift-line relative overflow-hidden">
-            <div class={`absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-shift-accent to-transparent animate-[shimmer_2s_ease-in-out_infinite] ${lang === 'he' ? 'end-0 shimmer-rtl' : 'start-0'}`}></div>
+        </div>
+      </div>
+
+      <!-- Right: Interactive flow system, poster-like sidebar -->
+      <div class="lg:col-span-4 w-full lg:mt-16 reveal-on-scroll" style="--stagger-index: 3;">
+        <div class="shift-card w-full overflow-hidden backdrop-blur-md bg-opacity-70 border border-shift-line shadow-volume-lg">
+          <div class="flex items-center justify-between mb-6">
+            <p class="shift-label text-[10px]">
+              {lang === 'he' ? 'זרימת מערכת תפעולית' : lang === 'ru' ? 'Операционный системный поток' : lang === 'es' ? 'Flujo del sistema operativo' : 'Operational System Flow'}
+            </p>
+            <span class="text-[9px] font-mono text-shift-muted/75 uppercase tracking-widest">Console v1.0.4</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            {[
+              { name: { he: 'טפסים', en: 'Forms', es: 'Formularios', ru: 'Формы' }, status: 'READY', color: 'accent' },
+              { name: { he: 'וואטסאפ', en: 'WhatsApp', es: 'WhatsApp', ru: 'WhatsApp' }, status: 'LIVE', color: 'warm' },
+              { name: { he: 'אימייל', en: 'Email', es: 'Email', ru: 'Email' }, status: 'SYNC', color: 'accent-2' },
+              { name: { he: 'CRM', en: 'CRM', es: 'CRM', ru: 'CRM' }, status: 'CONN', color: 'accent' },
+              { name: { he: 'חשבוניות', en: 'Invoices', es: 'Facturas', ru: 'Счета' }, status: 'AUTO', color: 'warm' },
+              { name: { he: 'דוחות', en: 'Reports', es: 'Reportes', ru: 'Отчёты' }, status: 'LIVE', color: 'accent-2' },
+              { name: { he: 'מעקב', en: 'Follow-ups', es: 'Seguimiento', ru: 'Ремаркетинг' }, status: 'RUN', color: 'accent' },
+              { name: { he: 'אנליטיקס', en: 'Analytics', es: 'Analítica', ru: 'Аналитика' }, status: 'OK', color: 'accent-2' },
+            ].map((item, i) => {
+              const dotColor = item.color === 'accent' ? 'bg-shift-blue' : item.color === 'accent-2' ? 'bg-shift-accent-2' : 'bg-shift-yellow';
+              const textColor = item.color === 'accent' ? 'text-shift-blue' : item.color === 'accent-2' ? 'text-shift-accent-2' : 'text-shift-muted';
+              return (
+                <div
+                  class="bg-white border border-shift-line rounded-xl p-3 text-xs font-mono transition-all duration-150 hover:-translate-y-0.5 hover:shadow-volume-sm group"
+                  style={`animation-delay: ${i * 80}ms`}
+                >
+                  <div class="flex items-center justify-between mb-2">
+                    <span class={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`}></span>
+                    <span class="text-[9px] text-shift-muted/75 font-mono tracking-wider">0{i+1}_SYS</span>
+                  </div>
+                  <p class="text-shift-text font-medium text-[13px] group-hover:text-shift-blue transition-colors">{item.name[lang] ?? item.name.en}</p>
+                  <div class="mt-2 flex items-center justify-between pt-1.5 border-t border-[rgba(26,26,24,0.08)]">
+                    <span class={`text-[9px] uppercase tracking-wider font-bold ${textColor}`}>{item.status}</span>
+                    <span class="text-[8px] text-shift-muted/75">100ms</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div class="mt-5 flex items-center gap-3">
+            <div class="bg-shift-blue/10 border border-shift-line rounded-lg px-4 py-2 font-mono text-xs text-shift-blue font-bold shadow-volume-sm">
+              {lang === 'he' ? 'מערכת' : lang === 'ru' ? 'Система' : lang === 'es' ? 'Sistema' : 'System'}
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-shift-blue rtl:rotate-180">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            <div class="flex-1 h-0.5 bg-shift-text/20 relative overflow-hidden">
+              <div class={`absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-shift-blue to-transparent animate-[shimmer_2s_ease-in-out_infinite] ${lang === 'he' ? 'end-0 shimmer-rtl' : 'start-0'}`}></div>
+            </div>
           </div>
         </div>
       </div>

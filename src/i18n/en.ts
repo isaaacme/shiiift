@@ -10,14 +10,14 @@ const en: Record<TranslationKey, string> = {
 
   // Hero
   'hero.headline': 'Spend less time on repetitive work.',
-  'hero.subheadline': 'I build high-performance websites, workflow automations, and practical AI systems that save you precious time. I built these tools so you can identify bottlenecks in your business right now.',
+  'hero.subheadline': "I collaborate with you to build high-performance websites, workflow automations, and practical AI systems that save you precious time. I built these tools so we can find the right perspective for your business right now.",
   'hero.cta.primary': 'Find what\'s slowing you down',
-  'hero.cta.secondary': 'Talk to Isaac',
+  'hero.cta.secondary': "Let's take the first step together",
   'hero.cta.tertiary': 'Read the thinking',
   'hero.new.title': 'Spend less time on repetitive work.',
-  'hero.new.desc': 'I build high-performance websites, workflow automations, and practical AI systems that save you precious time. I built these tools so you can identify bottlenecks in your business right now.',
+  'hero.new.desc': "I collaborate with you to build high-performance websites, workflow automations, and practical AI systems that save you precious time. I built these tools so we can find the right perspective for your business right now.",
   'hero.new.cta.console': 'Choose a tool',
-  'hero.new.cta.start': 'Talk to Isaac',
+  'hero.new.cta.start': "Let's take the first step together",
 
   // Diagnostic Entry
   'diagnostic.title': "What's taking up your time?",
@@ -69,7 +69,7 @@ const en: Record<TranslationKey, string> = {
   'tools.leadFlow.title': 'Fix where leads are falling through the cracks',
   'tools.leadFlow.desc': 'Map your lead process and find where people are dropping off.',
   'tools.leadFlow.time': '4',
-  'tools.leadFlow.output': 'Flow map + weak spot + first fix',
+  'tools.leadFlow.output': 'Open path + first fix',
 
   'tools.pricingCalculator.title': 'Estimate what your project will cost',
   'tools.pricingCalculator.desc': 'Get a rough budget range for your implementation project.',
@@ -149,8 +149,8 @@ const en: Record<TranslationKey, string> = {
 
   // Start / Contact
   'start.title': 'Let\'s talk',
-  'start.desc': "Tell me what's going on in your business and I'll tell you what I'd look at first.",
-  'start.subtitle': "Tell me what's going on in your business and I'll tell you what I'd look at first.",
+  'start.desc': "Tell me about your business, and let's find the right perspective together to start building systems that work for you.",
+  'start.subtitle': "Tell me about your business, and let's find the right perspective together to start building systems that work for you.",
   'start.form.name': 'Name',
   'start.form.namePlaceholder': 'Your name',
   'start.form.company': 'Company',

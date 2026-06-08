@@ -235,6 +235,9 @@ export default function ToolResult({
   function handleNewsletter() {
     if (!email) return;
     setSubscribed(true);
+    if (typeof window !== 'undefined' && (window as any).posthog) {
+      (window as any).posthog.identify(email, { email });
+    }
     trackEvent('newsletter_submitted', { tool: toolId, lang });
     saveNewsletterSignup({ email, tool_id: toolId, lang });
     // Fallback/Log to Netlify Forms

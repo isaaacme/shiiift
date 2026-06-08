@@ -21,6 +21,7 @@ const articles = [
     slug: 'automatable-work',
     category: 'automation',
     color: '#C7FF4A',
+    image: '/images/thinking/automatable-work.png',
     title: {
       he: 'למה עסקים קטנים מפסידים 15+ שעות בשבוע',
       en: 'Why Small Businesses Lose 15+ Hours/Week',
@@ -38,6 +39,7 @@ const articles = [
     slug: 'right-sized-crm',
     category: 'crm',
     color: '#6EE7F9',
+    image: '/images/thinking/right-sized-crm.png',
     title: {
       he: 'אתה לא צריך Salesforce',
       en: "You Don't Need Salesforce",
@@ -55,6 +57,7 @@ const articles = [
     slug: 'website-system',
     category: 'websites',
     color: '#FF7A59',
+    image: '/images/thinking/website-system.png',
     title: {
       he: 'האתר שלך הוא רק עלון שיווקי',
       en: 'Your Website Is a Brochure',
@@ -72,6 +75,7 @@ const articles = [
     slug: 'ai-reality-check',
     category: 'ai',
     color: '#C7FF4A',
+    image: '/images/thinking/ai-reality-check.png',
     title: {
       he: 'מה AI יכול לעשות לעסק שלך',
       en: 'What AI Can Do for Your Business',
@@ -101,27 +105,35 @@ const articles = [
         <p class="shift-body max-w-xl text-lg">{t('thinking.subtitle')}</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         {articles.map((art) => (
           <a
             href={`/${lang}/thinking/${art.slug}`}
-            class="shift-card-hover group flex flex-col gap-4 no-underline"
+            class="shift-card-hover group flex flex-col no-underline overflow-hidden p-0"
           >
-            <div class="flex items-start justify-between gap-2">
-              <span class="font-mono text-xs text-shift-muted border border-shift-line px-2 py-0.5 rounded-md flex-shrink-0">
+            <div class="aspect-[16/9] w-full overflow-hidden border-b border-shift-line relative bg-shift-surface-soft dither-wrap-yellow rounded-b-none">
+              <img
+                src={art.image}
+                alt={art.title[lang] || art.title['en']}
+                class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out dither-img"
+                loading="lazy"
+              />
+              <span class="absolute top-4 right-4 font-mono text-[10px] uppercase tracking-wider text-shift-text bg-shift-bg border border-shift-line px-2.5 py-1 rounded-md shadow-sm">
                 {categories[art.category as keyof typeof categories][lang] || categories[art.category as keyof typeof categories]['en']}
               </span>
             </div>
-            <h2 class="font-heading font-semibold text-shift-text text-xl group-hover:text-shift-accent transition-colors leading-snug">
-              {art.title[lang] || art.title['en']}
-            </h2>
-            <p class="text-sm text-shift-muted leading-relaxed flex-1">
-              {art.desc[lang] || art.desc['en']}
-            </p>
-            <div class="flex items-center justify-between pt-3 border-t border-shift-line">
-              <span class="text-sm font-medium transition-colors" style={`color: ${art.color}`}>
-                {t('thinking.readMore')} →
-              </span>
+            <div class="p-6 flex flex-col flex-1 gap-3">
+              <h2 class="font-heading font-semibold text-shift-text text-xl group-hover:text-shift-accent transition-colors leading-snug line-clamp-2 min-h-[3.5rem] flex items-center">
+                {art.title[lang] || art.title['en']}
+              </h2>
+              <p class="text-sm text-shift-muted leading-relaxed flex-1 line-clamp-3">
+                {art.desc[lang] || art.desc['en']}
+              </p>
+              <div class="flex items-center justify-between pt-4 border-t border-shift-line mt-2">
+                <span class="text-sm font-medium transition-colors" style={`color: ${art.color}`}>
+                  {t('thinking.readMore')} →
+                </span>
+              </div>
             </div>
           </a>
         ))}

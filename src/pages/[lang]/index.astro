@@ -99,16 +99,16 @@ const tProps = {
 
 const heroTitle = {
   he: 'האם המשאבים בעסק שלכם\nמוקצים למקומות הנכונים?',
-  en: 'Spend less time\non repetitive work.',
-  es: 'Dedica menos tiempo\nal trabajo repetitivo.',
-  ru: 'Меньше повторяющейся\nработы. Больше времени.',
+  en: 'Are your business resources\nallocated to the right places?',
+  es: '¿Están los recursos de tu negocio\nasignados a los lugares correctos?',
+  ru: 'Правильно ли распределены ресурсы\nв вашем бизнесе?',
 };
 
 const heroDesc = {
   he: 'אנחנו משלבים ניסיון עסקי, טכנולוגי ותפעולי כדי לזהות איפה העסק שלכם מאבד זמן, כסף ואנרגיה — ולבנות מערכות מותאמות שמחזירות את המשאבים האלה למקומות שבהם הם מייצרים את הערך הגבוה ביותר.',
-  en: 'I build high-performance websites, workflow automations, and practical AI systems that save you precious time. Instead of marketing slogans, I built these tools to help you identify bottlenecks in your business right now. Answer a few questions below and get a realistic technical scope and budget estimate in minutes.',
-  es: 'Construyo sitios web rápidos, automatizaciones y sistemas de IA que te ahorran tiempo valioso. En lugar de promesas de marketing, he creado estas herramientas para que identifiques cuellos de botella en tu negocio hoy mismo. Responde unas preguntas abajo y obtén un presupuesto real en minutos.',
-  ru: 'Я создаю быстрые сайты, автоматизирую процессы и внедряю ИИ-системы, чтобы сэкономить ваше время. Вместо громких лозунгов я сделал эти инструменты для поиска узких мест в вашем бизнесе прямо сейчас. Ответьте на несколько вопросов ниже и получите оценку бюджета за пару минут.',
+  en: 'We combine business, technological, and operational experience to identify where your business is losing time, money, and energy — and build custom systems that return these resources to the places where they generate the highest value.',
+  es: 'Combinamos experiencia comercial, tecnológica y operativa para identificar dónde su empresa pierde tiempo, dinero y energía, y construimos sistemas personalizados que devuelven estos recursos a los lugares donde generan el mayor valor.',
+  ru: 'Мы объединяем деловой, технологический и операционный опыт, чтобы определить, где ваш бизнес теряет время, деньги и энергию, и создаем индивидуальные системы, которые возвращают эти ресурсы туда, где они приносят наибольшую ценность.',
 };
 
 const heroCta = {
@@ -119,10 +119,10 @@ const heroCta = {
 };
 
 const heroCtaSecondary = {
-  he: 'שוחחו עם יצחק',
-  en: 'Talk to Isaac',
-  es: 'Hablar con Isaac',
-  ru: 'Поговорить с Исааком',
+  he: 'בואו נעשה את הצעד הראשון ביחד',
+  en: "Let's take the first step together",
+  es: 'Demos el primer paso juntos',
+  ru: 'Давайте сделаем первый шаг вместе',
 };
 
 const ctaHeadline = {
@@ -147,10 +147,10 @@ const ctaBtn = {
 };
 
 const ctaBtnSecondary = {
-  he: 'שוחחו עם יצחק',
-  en: 'Talk to Isaac',
-  es: 'Hablar con Isaac',
-  ru: 'Поговорить',
+  he: 'בואו נעשה את הצעד הראשון ביחד',
+  en: "Let's take the first step together",
+  es: 'Demos el primer paso juntos',
+  ru: 'Давайте сделаем первый шаг вместе',
 };
 
 const philosophyLabel = {
@@ -183,20 +183,20 @@ const philosophyPara2 = {
 ---
 
 <BaseLayout
-  title={lang === 'he' ? 'האם המשאבים בעסק שלכם מוקצים למקומות הנכונים?' : lang === 'es' ? 'Menos trabajo repetitivo. Más tiempo para lo que importa.' : lang === 'ru' ? 'Меньше рутины. Больше времени.' : 'Spend less time on repetitive work.'}
+  title={lang === 'he' ? 'האם המשאבים בעסק שלכם מוקצים למקומות הנכונים?' : lang === 'es' ? '¿Están los recursos de su negocio asignados a los lugares correctos?' : lang === 'ru' ? 'Правильно ли распределены ресурсы в вашем бизнесе?' : 'Are your business resources allocated to the right places?'}
   description={heroDesc[lang]}
   lang={lang}
 >
 
   <!-- ──────────────────────────── HERO ──────────────────────────── -->
-  <section class="relative overflow-hidden pt-32 pb-24 bg-parallax-grid border-b border-shift-line">
+  <section class="relative overflow-hidden pt-32 pb-24 bg-parallax-grid">
     <!-- Layered decorative glows behind centered content -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-shift-accent/6 via-shift-accent-2/4 to-transparent rounded-full blur-[130px] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-shift-yellow/10 via-shift-accent-2/4 to-transparent rounded-full blur-[130px] pointer-events-none" aria-hidden="true"></div>
     <div class="absolute top-12 left-1/3 w-[300px] h-[300px] bg-shift-warm/3 rounded-full blur-[90px] pointer-events-none" aria-hidden="true"></div>
     
     <div class="shift-container text-center relative z-10">
-      <div class="reveal-on-scroll inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-shift-line/80 shadow-sm text-xs font-mono font-medium text-shift-muted mb-8 tracking-tight" style="--stagger-index: 0;">
-        <span class="w-1.5 h-1.5 rounded-full bg-shift-accent animate-pulse"></span>
+      <div class="reveal-on-scroll inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[rgba(26,26,24,0.12)] shadow-sm text-xs font-mono font-medium text-shift-muted mb-8 tracking-tight" style="--stagger-index: 0;">
+        <span class="w-1.5 h-1.5 rounded-full bg-shift-yellow animate-pulse"></span>
         {lang === 'he' ? 'שותף טכנולוגי ליישום מערכות' : lang === 'es' ? 'Socio de Integración Tecnológica' : lang === 'ru' ? 'Технологический партнер' : 'Technical Integration Partner'}
       </div>
 
@@ -230,7 +230,7 @@ const philosophyPara2 = {
   </section>
 
   <!-- ──────────────────────────── TOOLS CONSOLE ──────────────────────────── -->
-  <section class="pb-20 bg-shift-surface border-y border-shift-line" id="tools-section">
+  <section class="pb-20 bg-shift-surface" id="tools-section">
     <div class="pt-16 pb-2 shift-container max-w-5xl mb-8 reveal-on-scroll">
       <p class="shift-label mb-2">{t('tools.section.title')}</p>
       <p class="text-shift-muted text-sm">{t('tools.section.subtitle')}</p>
@@ -241,7 +241,7 @@ const philosophyPara2 = {
   </section>
 
   <!-- ──────────────────────────── PHILOSOPHY: SITES FOR NOW ──────────────────────────── -->
-  <section class="py-24 bg-shift-bg border-b border-shift-line relative overflow-hidden bg-parallax-grid">
+  <section class="py-24 bg-shift-bg relative overflow-hidden bg-parallax-grid">
     <div class="shift-container max-w-3xl">
       <p class="reveal-on-scroll shift-label mb-3" style="--stagger-index: 0;">{philosophyLabel[lang]}</p>
       <h2 class="reveal-on-scroll font-heading font-extrabold text-3xl sm:text-4xl text-shift-text mb-8 tracking-tight leading-tight" style="--stagger-index: 1;">
@@ -265,7 +265,7 @@ const philosophyPara2 = {
   <AboutFounder lang={lang} />
 
   <!-- ──────────────────────────── CTA ──────────────────────────── -->
-  <section class="py-20 border-t border-shift-line">
+  <section class="py-20">
     <div class="shift-container max-w-2xl text-center mx-auto">
       <h2 class="reveal-on-scroll shift-heading-lg mb-4" style="--stagger-index: 0;">{ctaHeadline[lang]}</h2>
       <p class="reveal-on-scroll shift-body mb-8 text-base" style="--stagger-index: 1;">{ctaSub[lang]}</p>

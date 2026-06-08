@@ -14,6 +14,7 @@ export default {
         'shift-accent-2':     '#3B7E9F',      // richer slate blue
         'shift-warm':         '#B0652F',      // richer warm amber
         'shift-line':         'rgba(26, 26, 24, 0.10)',
+        'shift-yellow':       '#FFE600',
       },
       fontFamily: {
         heading: ['"Inter Tight"', '"Space Grotesk"', 'Sora', 'system-ui', 'sans-serif'],

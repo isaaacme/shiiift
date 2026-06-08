@@ -107,6 +107,7 @@ const t = useTranslations(lang);
           form?.addEventListener('submit', (e) => {
             const email = (document.getElementById('email') as HTMLInputElement)?.value;
             const name = (document.getElementById('name') as HTMLInputElement)?.value;
+            const challenge = (document.getElementById('challenge') as HTMLSelectElement)?.value;
             if (email) {
               fetch('/api/subscribe', {
                 method: 'POST',
@@ -114,6 +115,11 @@ const t = useTranslations(lang);
                 body: JSON.stringify({ email, name, source: 'contact_form' }),
                 keepalive: true
               }).catch(() => {});
+              const ph = (window as any).posthog;
+              if (ph) {
+                ph.identify(email, { email, name });
+                ph.capture('contact_form_submitted', { challenge, source: 'start_page' });
+              }
             }
           });
         </script>

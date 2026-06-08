@@ -84,7 +84,7 @@ const projects = [
   {
     id: 'swu',
     name: 'SWU',
-    url: 'https://isaaac.me/projects/swu',
+    url: null,
     tag:  { he: 'אוטומציה / אדמין', en: 'Automation / Ops', es: 'Automatización / Ops', ru: 'Автоматизация / Операции' },
     desc: { he: 'חיבור טפסי הרשמה, יצירת חשבוניות ואוטומציה של תהליכי קליטת לקוחות — חיסכון של 15 שעות בשבוע.', en: 'Connected client onboarding forms, automatic invoices & data verification — saving 15 hours per week.', es: 'Formularios de onboarding, facturación automática y verificación de datos — ahorro de 15 horas semanales.', ru: 'Формы онбординга, автоматические счета и проверка данных — экономия 15 часов в неделю.' },
     metric: { he: '-15 שעות/שבוע', en: '-15 hours/week', es: '-15 horas/semana', ru: '-15 часов/неделю' },
@@ -92,7 +92,7 @@ const projects = [
 ];
 ---
 
-<section class="py-16 lg:py-24 border-t border-shift-line" id="selected-projects">
+<section class="py-16 lg:py-24" id="selected-projects">
   <div class="shift-container">
 
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
@@ -112,7 +112,7 @@ const projects = [
           data-name={p.name}
           data-tag={gl(p.tag)}
           data-desc={gl(p.desc)}
-          data-url={p.url}
+          data-url={p.url || ''}
           data-view={gl(labels.viewProject)}
           type="button"
           aria-haspopup="dialog"
@@ -123,9 +123,11 @@ const projects = [
           </div>
           <span class="font-heading font-semibold text-shift-text text-sm leading-snug group-hover:text-shift-accent transition-colors">{p.name}</span>
           <span class="text-xs text-shift-muted leading-snug line-clamp-3 flex-1">{gl(p.desc)}</span>
-          <span class="mt-auto font-mono text-xs text-shift-accent group-hover:text-shift-accent transition-colors flex items-center gap-1">
-            {lang === 'he' ? '← ' : ''}{gl(labels.viewProject)}{lang !== 'he' ? ' →' : ''}
-          </span>
+          {p.url && (
+            <span class="mt-auto font-mono text-xs text-shift-accent group-hover:text-shift-accent transition-colors flex items-center gap-1">
+              {lang === 'he' ? '← ' : ''}{gl(labels.viewProject)}{lang !== 'he' ? ' →' : ''}
+            </span>
+          )}
         </button>
       ))}
     </div>
@@ -163,13 +165,24 @@ const projects = [
     const name = card.dataset.name ?? '';
     const tag  = card.dataset.tag  ?? '';
     const desc = card.dataset.desc ?? '';
-    const url  = card.dataset.url  ?? '#';
+    const url  = card.dataset.url  ?? '';
     const view = card.dataset.view ?? 'View project';
     (document.getElementById('lb-name') as HTMLElement).textContent = name;
     (document.getElementById('lb-tag')  as HTMLElement).textContent = tag;
     (document.getElementById('lb-desc') as HTMLElement).textContent = desc;
-    (document.getElementById('lb-cta')  as HTMLElement).textContent = view;
-    (document.getElementById('lb-link') as HTMLAnchorElement).href = url;
+    
+    const lbLink = document.getElementById('lb-link') as HTMLAnchorElement;
+    if (url && url !== '#') {
+      (document.getElementById('lb-cta')  as HTMLElement).textContent = view;
+      lbLink.href = url;
+      lbLink.classList.remove('hidden');
+      lbLink.classList.add('inline-flex');
+    } else {
+      lbLink.href = '#';
+      lbLink.classList.add('hidden');
+      lbLink.classList.remove('inline-flex');
+    }
+
     lb.classList.remove('hidden');
     lb.classList.add('flex');
     document.body.style.overflow = 'hidden';

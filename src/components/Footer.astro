@@ -11,13 +11,17 @@ const year = new Date().getFullYear();
 const currentPath = Astro.url.pathname;
 ---
 
-<footer class="border-t border-shift-line bg-shift-surface mt-16">
+<footer class="bg-shift-surface mt-16">
   <div class="shift-container py-10">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
       <!-- Brand -->
       <div class="md:col-span-2">
-        <a href={`/${lang}`} class="font-heading font-bold text-lg text-shift-text no-underline hover:text-shift-accent transition-colors">
-          shiiift
+        <a href={`/${lang}`} class="font-heading font-bold text-lg text-shift-text no-underline hover:text-shift-accent transition-colors flex items-center gap-2">
+          <svg viewBox="0 0 738 738" class="w-5 h-5 rounded-md overflow-hidden flex-shrink-0 shadow-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="738" height="738" fill="#FFE600"/>
+            <path d="M353.418 436.404L330.543 96.0537H287.139L237.398 381.789H109.88V425.563H255.806L277.371 407.429L299.124 282.466L323.346 642.209H366.833L404.847 388.636L408.726 407.979L430.187 425.563L549.172 424.347L487.62 483.021L518.994 508.556L628.439 401.827L518.994 288.49L487.62 319.024L549.172 380.572L448.122 381.789L423.193 258.529H380.084L353.418 436.404Z" fill="black"/>
+          </svg>
+          <span>shiiift</span>
         </a>
         <p class="mt-2 text-sm text-shift-muted max-w-xs leading-relaxed">
           {t('footer.tagline')}
@@ -69,7 +73,7 @@ const currentPath = Astro.url.pathname;
       </div>
     </div>
 
-    <div class="border-t border-shift-line mt-8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div class="mt-8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
       <p class="text-xs text-shift-muted">
         &copy; {year} shiiift. {t('footer.rights')}.
       </p>

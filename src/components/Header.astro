@@ -14,8 +14,12 @@ const currentPath = Astro.url.pathname;
   <div class="shift-container">
     <nav class="flex items-center justify-between h-16 gap-4">
       <!-- Logo -->
-      <a href={`/${lang}`} class="font-heading font-bold text-xl text-shift-text tracking-tight hover:text-shift-accent transition-colors no-underline flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent rounded-md px-1">
-        shiiift
+      <a href={`/${lang}`} class="font-heading font-bold text-xl text-shift-text tracking-tight hover:text-shift-accent transition-colors no-underline flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent rounded-md px-1 flex items-center gap-2">
+        <svg viewBox="0 0 738 738" class="w-6 h-6 rounded-md overflow-hidden flex-shrink-0 shadow-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="738" height="738" fill="#FFE600"/>
+          <path d="M353.418 436.404L330.543 96.0537H287.139L237.398 381.789H109.88V425.563H255.806L277.371 407.429L299.124 282.466L323.346 642.209H366.833L404.847 388.636L408.726 407.979L430.187 425.563L549.172 424.347L487.62 483.021L518.994 508.556L628.439 401.827L518.994 288.49L487.62 319.024L549.172 380.572L448.122 381.789L423.193 258.529H380.084L353.418 436.404Z" fill="black"/>
+        </svg>
+        <span>shiiift</span>
       </a>
 
       <!-- Desktop Nav -->

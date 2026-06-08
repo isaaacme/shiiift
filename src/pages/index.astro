@@ -7,13 +7,29 @@
     <script is:inline>
       (function() {
         try {
-          const savedLang = localStorage.getItem('shiiift-locale');
           const supported = ['he', 'en', 'es', 'ru'];
+          
+          // 1. Check local storage
+          const savedLang = localStorage.getItem('shiiift-locale');
           if (savedLang && supported.includes(savedLang)) {
             window.location.replace('/' + savedLang);
-          } else {
-            window.location.replace('/he');
+            return;
           }
+          
+          // 2. Check browser language detection
+          const languages = navigator.languages || [navigator.language];
+          if (languages && languages.length) {
+            for (let i = 0; i < languages.length; i++) {
+              const langCode = languages[i].split('-')[0].toLowerCase();
+              if (supported.includes(langCode)) {
+                window.location.replace('/' + langCode);
+                return;
+              }
+            }
+          }
+          
+          // 3. Default to Hebrew
+          window.location.replace('/he');
         } catch (e) {
           window.location.replace('/he');
         }

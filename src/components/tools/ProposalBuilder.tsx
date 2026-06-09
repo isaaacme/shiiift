@@ -334,7 +334,7 @@ export default function ProposalBuilder({ t }: { t: T }) {
         <button
           onClick={() => { if (!selected) return; setSession((s) => ({...s, answers:{...s.answers,[cq.id]:selected}, selected:'', step:s.step+1})); }}
           disabled={!selected}
-          className="px-6 py-2.5 rounded-xl font-heading font-semibold text-sm text-shift-bg bg-shift-accent hover:bg-[#7df0ff] active:scale-95 transition-all shadow-volume-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg cursor-pointer border border-white/15 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-6 py-2.5 rounded-xl font-heading font-semibold text-sm text-shift-bg bg-shift-accent hover:bg-[#7df0ff] hover:text-shift-text active:scale-95 transition-all shadow-volume-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shift-accent focus-visible:ring-offset-2 focus-visible:ring-offset-shift-bg cursor-pointer border border-white/15 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {step === QS.length - 1 ? t.seeResults : t.next} {lang === 'he' ? '←' : '→'}
         </button>

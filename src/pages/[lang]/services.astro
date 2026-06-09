@@ -30,9 +30,12 @@ const models = [
         {models.map((model) => (
           <div class="shift-card flex flex-col gap-5">
             <div>
-              <h2 class="font-heading font-bold text-shift-text text-xl mb-1" style={`color: ${model.color}`}>
-                {t(`services.${model.key}.title` as any)}
-              </h2>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style={`background-color: ${model.color}`}></span>
+                <h2 class="font-heading font-bold text-shift-text text-xl">
+                  {t(`services.${model.key}.title` as any)}
+                </h2>
+              </div>
               <p class="font-mono text-xs text-shift-muted">{t(`services.${model.key}.for` as any)}</p>
             </div>
             <p class="shift-body flex-1">{t(`services.${model.key}.desc` as any)}</p>

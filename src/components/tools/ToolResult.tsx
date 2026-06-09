@@ -150,11 +150,11 @@ function downloadSummary(toolId: string, lang: Lang, findings: string[], quickWi
     findings: { he: 'ממצאים', en: 'Findings', es: 'Hallazgos', ru: 'Выводы' },
     wins: { he: 'ניצחונות מהירים', en: 'Quick Wins', es: 'Victorias rápidas', ru: 'Быстрые победы' },
     next: { he: 'הצעדים הבאים', en: 'Next Actions', es: 'Próximas acciones', ru: 'Следующие шаги' },
-    footer: { he: 'shiiift.com — טכנולוגיה שמפחיתה חיכוך', en: 'shiiift.com — Technology that reduces friction', es: 'shiiift.com — Tecnología que reduce la fricción', ru: 'shiiift.com — Технологии, снижающие трение' },
+    footer: { he: 'shiiift.agency — טכנולוגיה שמפחיתה חיכוך', en: 'shiiift.agency — Technology that reduces friction', es: 'shiiift.agency — Tecnología que reduce la fricción', ru: 'shiiift.agency — Технологии, снижающие трение' },
   };
   const lines: string[] = [
     `${labels.title[lang]} — ${toolId}`,
-    `shiiift.com | ${new Date().toLocaleDateString()}`,
+    `shiiift.agency | ${new Date().toLocaleDateString()}`,
     '',
   ];
   if (findings.length) {

@@ -194,7 +194,7 @@ function generateProposalText(answers: Record<string, string>, lang: Lang): stri
     `4. ${current.budget}`,
     current.budgetText,
     '',
-    `shiiift.com | Generated on ${new Date().toLocaleDateString()}`
+    `shiiift.agency | Generated on ${new Date().toLocaleDateString()}`
   ].join('\n');
 }
 

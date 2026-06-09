@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import netlify from '@astrojs/netlify';
 
 export default defineConfig({
-  site: 'https://shiiift.com',
+  site: 'https://shiiift.agency',
   adapter: netlify(),
   integrations: [
     react(),

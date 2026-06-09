@@ -15,7 +15,7 @@ interface Props {
 
 const { title, description = 'Technology implementation for businesses that need leverage.', lang, ogImage } = Astro.props;
 const dir = isRTL(lang) ? 'rtl' : 'ltr';
-const siteUrl = Astro.site ? Astro.site.toString() : 'https://shiiift.com';
+const siteUrl = Astro.site ? Astro.site.toString() : 'https://shiiift.agency';
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
 const finalMetaImage = new URL(ogImage || '/images/themeta.png', siteUrl).toString();
 ---
@@ -58,6 +58,8 @@ const finalMetaImage = new URL(ogImage || '/images/themeta.png', siteUrl).toStri
         ]
       }}
     />
+
+    <meta property="fb:app_id" content="966878648316281" />
 
     <PostHog />
   </head>

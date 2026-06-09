@@ -32,13 +32,13 @@ function gl(o: Record<string, string>) { return o[lang] ?? o['en'] ?? ''; }
   <div class="shift-container max-w-5xl">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-      <!-- Left Column: Photo Container with yellow dither framing, tilted -->
+      <!-- Left Column: Photo Container with tilted framing -->
       <div class="md:col-span-4 flex justify-center md:justify-start reveal-on-scroll" style="--stagger-index: 1;">
-        <div class="dither-wrap-yellow w-60 h-60 md:w-full md:h-auto md:aspect-square transition-transform duration-300 hover:rotate-2 shadow-volume-lg transform -rotate-2">
+        <div class="w-60 h-60 md:w-full md:h-auto md:aspect-square overflow-hidden rounded-2xl border border-shift-line transition-transform duration-300 hover:rotate-2 shadow-volume-lg transform -rotate-2 bg-white">
           <img
             src="/images/me.jpeg"
             alt={gl(labels.name)}
-            class="dither-img"
+            class="w-full h-full object-cover block"
           />
         </div>
       </div>
